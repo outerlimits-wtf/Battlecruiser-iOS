@@ -16,7 +16,7 @@
 			path = Sources;
 			sourceTree = "<group>";
 		};
-		C80F15D73081675000BD4B86 /* Tests */ = {
+		C8379FCE3081715800801D69 /* Tests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Tests;
 			sourceTree = "<group>";
@@ -36,7 +36,7 @@
 			isa = PBXGroup;
 			children = (
 				000000000000000000000010 /* Sources */,
-				C80F15D73081675000BD4B86 /* Tests */,
+				C8379FCE3081715800801D69 /* Tests */,
 				000000000000000000000020 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -64,7 +64,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				000000000000000000000010 /* Sources */,
-				C80F15D73081675000BD4B86 /* Tests */,
+				C8379FCE3081715800801D69 /* Tests */,
 			);
 			name = Battlecruiser;
 			productName = MyApp;
