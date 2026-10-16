@@ -35,16 +35,32 @@ Battlecruiser is a native iOS app written in Swift and SwiftUI. It is at an earl
 ## Repository layout
 
 ```
+Battlecruiser.xcworkspace/   # Open this, not the .xcodeproj: it holds the app project and the local packages
+Battlecruiser.xcodeproj/     # The app target only: entry point, composition, assets, Info.plist settings
 Sources/
-  MyApp.swift          # @main App entry point, creates WindowGroup
-  ContentView.swift    # Root view, plus #Preview and #Playground
-  Assets.xcassets/     # Asset catalog (AccentColor)
-Tests/                 # Test target location; currently empty
-Battlecruiser.xcodeproj/
-Battlecruiser.xcworkspace/
+  App/
+    BattlecruiserApp.swift   # @main App entry point, creates WindowGroup
+    ContentView.swift        # Root view, plus #Preview and #Playground
+  Assets.xcassets/           # Asset catalog (AccentColor)
+Tests/                       # BattlecruiserTests: app-level tests only (Swift Testing)
+Packages/
+  BattlecruiserKit/          # The one local package (decision D24); modules added as they are built
+    Package.swift
+    Sources/PubDBModels/     # API response types
+    Tests/PubDBModelsTests/  # Decoding tests + Fixtures/ (real production responses; docs/test-fixtures.md)
+docs/                        # Backend guide, decisions, MVP plan
 ```
 
-Keep new source files under `Sources/` and new tests under `Tests/`.
+## Modularisation (decision D24)
+
+The app is modular from the outset. **Code lives in local Swift packages inside the workspace. The app target stays light.**
+
+- New code goes in a module in a local package under `Packages/`, added to `Battlecruiser.xcworkspace`. It never goes straight into the app target, unless it is app wiring: the `@main` entry point, composing modules together, assets and Info.plist settings.
+- Each module has one clear job and declares its dependencies explicitly. Lower-level modules (models, networking, caching) must not import higher-level ones (features, UI).
+- A module's API for other modules is `public`. Everything else stays `internal`.
+- Each module gets its own test target in its package.
+- **Local packages are our own code, so they are not "adding dependencies".** Creating or changing modules inside `Packages/` is normal work, done one piece at a time under the Workflow rules. Adding a **third-party** package still needs the user's explicit approval (decision D8: first-party only).
+- The module layout is in `docs/mvp-plan.md` ("Modules").
 
 ## Environment
 
@@ -58,14 +74,15 @@ Keep new source files under `Sources/` and new tests under `Tests/`.
 - Follow standard Swift API design guidelines: `UpperCamelCase` for types, `lowerCamelCase` for everything else, and clear argument labels.
 - Prefer Swift's modern concurrency (`async`/`await`, `@MainActor` for UI state) over callbacks.
 - Write code that should compile, but do not run a build to check it unless instructed (see Command rules).
-- Keep changes minimal and focused on the request. Do not add dependencies, Swift packages, or third-party libraries without asking first.
+- Keep changes minimal and focused on the request. Do not add third-party dependencies, packages or libraries without asking first. Local packages of our own code are expected (see Modularisation).
 - Do not commit or push unless asked.
 
 ## Testing
 
-- Put unit tests in `Tests/`. Add tests for new logic where practical.
-- There is no test target in the project yet, so the scheme's test action has nothing to run. If you add tests, add the test target in Xcode and make sure it is wired into the `Battlecruiser` scheme.
-- Do not run the test action on your own. When a change needs verifying, say that it has not been built or tested and ask whether to run it.
+- Use Swift Testing (`import Testing`). Add tests for new logic where practical.
+- Module tests live in each local package's own test target. The app's `BattlecruiserTests` target (in `Tests/`, wired into the `Battlecruiser` scheme) is for app-level tests only.
+- Fixtures are real production responses (see `docs/test-fixtures.md`). Test shapes and chosen cases, not exact numbers that drift.
+- Do not run tests. When a change needs verifying, say it has not been built or tested and what to check. The user runs it in Xcode (Workflow rule 6).
 
 ## Things to avoid
 

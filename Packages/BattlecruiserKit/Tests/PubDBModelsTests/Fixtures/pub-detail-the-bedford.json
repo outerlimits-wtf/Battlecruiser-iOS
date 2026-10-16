@@ -1,0 +1,465 @@
+{
+  "id": "node/251526423",
+  "name": "The Bedford",
+  "amenity": {
+    "key": "pub",
+    "label": "Pub",
+    "symbol": {
+      "key": "amenity.pub",
+      "type": "emoji",
+      "emoji": "🍺",
+      "url": null
+    }
+  },
+  "lat": 51.4427243,
+  "lon": -0.1493607,
+  "address": "77 Bedford Hill",
+  "postcode": "SW12 9HD",
+  "brand": "The Three Cheers",
+  "distance": {
+    "metres": 222,
+    "label": "220 m"
+  },
+  "status": {
+    "key": "open",
+    "label": "Open",
+    "symbol": {
+      "key": "status.open",
+      "type": "emoji",
+      "emoji": "🍺",
+      "url": null
+    },
+    "serving": true,
+    "permanent": false,
+    "since": null,
+    "became": null
+  },
+  "open": {
+    "state": "open",
+    "label": "Closes 00:00",
+    "closesAt": 0,
+    "closesAtLabel": "00:00",
+    "minutesUntilClose": 90,
+    "countdownLabel": "1h 30m",
+    "closingSoon": false
+  },
+  "tonight": null,
+  "guinness": {
+    "pence": 730,
+    "formatted": "£7.30",
+    "reports": 1,
+    "updatedAt": "2026-09-11T19:36:46.066Z",
+    "agoLabel": "a month ago"
+  },
+  "rating": 5.5,
+  "reviewCount": 2,
+  "photo": {
+    "url": "http://commons.wikimedia.org/wiki/Special:FilePath/Bedford%2C%20Balham%2C%20SW12%20%287047537277%29.jpg",
+    "thumbUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Bedford%2C%20Balham%2C%20SW12%20%287047537277%29.jpg",
+    "license": null,
+    "attribution": null,
+    "descriptionUrl": "https://www.wikidata.org/wiki/Q21008638"
+  },
+  "features": [
+    {
+      "key": "garden",
+      "label": "Garden",
+      "symbol": {
+        "key": "feature.garden",
+        "type": "emoji",
+        "emoji": "🌳",
+        "url": null
+      },
+      "value": "yes"
+    },
+    {
+      "key": "real_ale",
+      "label": "Real ale",
+      "symbol": {
+        "key": "feature.real_ale",
+        "type": "emoji",
+        "emoji": "🛢️",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "craft_beer",
+      "label": "Craft beer",
+      "symbol": {
+        "key": "feature.craft_beer",
+        "type": "emoji",
+        "emoji": "🍺",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "food",
+      "label": "Kitchen",
+      "symbol": {
+        "key": "feature.food",
+        "type": "emoji",
+        "emoji": "🍴",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "live_music",
+      "label": "Live music",
+      "symbol": {
+        "key": "feature.live_music",
+        "type": "emoji",
+        "emoji": "🎸",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "sports_tv",
+      "label": "Live sports",
+      "symbol": {
+        "key": "feature.sports_tv",
+        "type": "emoji",
+        "emoji": "📺",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "pool_table",
+      "label": "Pool table",
+      "symbol": {
+        "key": "feature.pool_table",
+        "type": "emoji",
+        "emoji": "🎱",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "darts",
+      "label": "Dart board",
+      "symbol": {
+        "key": "feature.darts",
+        "type": "emoji",
+        "emoji": "🎯",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "open_fire",
+      "label": "Open fire",
+      "symbol": {
+        "key": "feature.open_fire",
+        "type": "emoji",
+        "emoji": "🔥",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "vinyl",
+      "label": "Vinyl",
+      "symbol": {
+        "key": "feature.vinyl",
+        "type": "emoji",
+        "emoji": "💿",
+        "url": null
+      },
+      "value": "unknown"
+    }
+  ],
+  "listed": true,
+  "description": null,
+  "city": "London",
+  "checkedAt": "2025-07-12",
+  "lastScrapedAt": "2026-08-26T10:55:09.647Z",
+  "contact": {
+    "phone": null,
+    "website": null,
+    "email": null,
+    "facebook": null,
+    "instagram": null
+  },
+  "operator": null,
+  "brewery": null,
+  "hours": {
+    "raw": "Mo 11:00-23:00; Tu-Th 11:00-00:00; Fr-Sa 11:00-02:00; Su 10:00-22:30",
+    "source": "contribution",
+    "attribution": {
+      "kind": "source",
+      "label": "PubDB",
+      "sourceKey": "pub-times"
+    }
+  },
+  "weekTable": [
+    {
+      "day": 0,
+      "dayLabel": "Mon",
+      "dayLongLabel": "Monday",
+      "isTonight": false,
+      "doorSays": "11:00–23:00",
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 1,
+      "dayLabel": "Tue",
+      "dayLongLabel": "Tuesday",
+      "isTonight": false,
+      "doorSays": "11:00–24:00",
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 2,
+      "dayLabel": "Wed",
+      "dayLongLabel": "Wednesday",
+      "isTonight": false,
+      "doorSays": "11:00–24:00",
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 3,
+      "dayLabel": "Thu",
+      "dayLongLabel": "Thursday",
+      "isTonight": true,
+      "doorSays": "11:00–24:00",
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 4,
+      "dayLabel": "Fri",
+      "dayLongLabel": "Friday",
+      "isTonight": false,
+      "doorSays": "11:00–02:00",
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 5,
+      "dayLabel": "Sat",
+      "dayLongLabel": "Saturday",
+      "isTonight": false,
+      "doorSays": "11:00–02:00",
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 6,
+      "dayLabel": "Sun",
+      "dayLongLabel": "Sunday",
+      "isTonight": false,
+      "doorSays": "10:00–22:30",
+      "bell": null,
+      "out": null
+    }
+  ],
+  "gardenCloses": "22:00",
+  "priceHistory": {
+    "points": [
+      {
+        "pence": 710,
+        "at": "2025-08-01T12:00:00.000Z",
+        "formatted": "£7.10"
+      },
+      {
+        "pence": 690,
+        "at": "2026-01-01T12:00:00.000Z",
+        "formatted": "£6.90"
+      },
+      {
+        "pence": 710,
+        "at": "2026-02-01T12:00:00.000Z",
+        "formatted": "£7.10"
+      },
+      {
+        "pence": 730,
+        "at": "2026-09-11T19:36:46.066Z",
+        "formatted": "£7.30"
+      }
+    ],
+    "minPence": 690,
+    "maxPence": 730
+  },
+  "timeline": [
+    {
+      "name": "The Bedford",
+      "fromLabel": null,
+      "untilLabel": null,
+      "owner": "The Three Cheers",
+      "isCurrent": true,
+      "attribution": {
+        "kind": "source",
+        "label": "OpenStreetMap",
+        "sourceKey": "osm"
+      }
+    }
+  ],
+  "heritage": {
+    "wikidataId": "Q21008638",
+    "designation": "Grade II listed building",
+    "inception": null,
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/The_Bedford,_Balham"
+  },
+  "reviews": [
+    {
+      "id": 74,
+      "rating": 5,
+      "body": "How u kicking me in at 10",
+      "createdAt": "2026-09-11T20:50:07.583Z",
+      "createdAtLabel": "11 Sept 2026",
+      "attribution": {
+        "kind": "user",
+        "label": "@goatloaf",
+        "sourceKey": null
+      }
+    },
+    {
+      "id": 68,
+      "rating": 6,
+      "body": "Okay, probably better for a gig or summat. Good pub quiz. Horatio from Fin VS History spotted, no James corden though",
+      "createdAt": "2026-09-11T19:38:32.853Z",
+      "createdAtLabel": "11 Sept 2026",
+      "attribution": {
+        "kind": "user",
+        "label": "@garden_otter",
+        "sourceKey": null
+      }
+    }
+  ],
+  "contributions": [
+    {
+      "id": 2099,
+      "field": "garden_closes",
+      "fieldLabel": "Garden closes",
+      "value": "22:00",
+      "displayValue": "22:00",
+      "createdAt": "2026-09-11T20:49:41.754Z",
+      "createdAtLabel": "11 Sept 2026",
+      "attribution": {
+        "kind": "user",
+        "label": "@goatloaf",
+        "sourceKey": null
+      }
+    },
+    {
+      "id": 2094,
+      "field": "guinness_price",
+      "fieldLabel": "Guinness price",
+      "value": "730",
+      "displayValue": "£7.30",
+      "createdAt": "2026-09-11T19:36:46.066Z",
+      "createdAtLabel": "11 Sept 2026",
+      "attribution": {
+        "kind": "user",
+        "label": "@garden_otter",
+        "sourceKey": null
+      }
+    },
+    {
+      "id": 1376,
+      "field": "brand",
+      "fieldLabel": "Owner",
+      "value": "The Three Cheers",
+      "displayValue": "The Three Cheers",
+      "createdAt": "2026-07-31T19:26:54.955Z",
+      "createdAtLabel": "31 Jul 2026",
+      "attribution": {
+        "kind": "anonymous",
+        "label": "Anonymous",
+        "sourceKey": null
+      }
+    },
+    {
+      "id": 811,
+      "field": "opening_hours",
+      "fieldLabel": "Opening hours",
+      "value": "Mo 11:00-23:00; Tu-Th 11:00-00:00; Fr-Sa 11:00-02:00; Su 10:00-22:30",
+      "displayValue": "Mo 11:00-23:00; Tu-Th 11:00-00:00; Fr-Sa 11:00-02:00; Su 10:00-22:30",
+      "createdAt": "2026-07-31T15:10:12.113Z",
+      "createdAtLabel": "31 Jul 2026",
+      "attribution": {
+        "kind": "source",
+        "label": "PubDB",
+        "sourceKey": "pub-times"
+      }
+    },
+    {
+      "id": 160,
+      "field": "guinness_price",
+      "fieldLabel": "Guinness price",
+      "value": "710",
+      "displayValue": "£7.10",
+      "createdAt": "2026-02-01T12:00:00.000Z",
+      "createdAtLabel": "1 Feb 2026",
+      "attribution": {
+        "kind": "source",
+        "label": "PubDB",
+        "sourceKey": "Hellcat"
+      }
+    },
+    {
+      "id": 159,
+      "field": "guinness_price",
+      "fieldLabel": "Guinness price",
+      "value": "690",
+      "displayValue": "£6.90",
+      "createdAt": "2026-01-01T12:00:00.000Z",
+      "createdAtLabel": "1 Jan 2026",
+      "attribution": {
+        "kind": "source",
+        "label": "PubDB",
+        "sourceKey": "Hellcat"
+      }
+    },
+    {
+      "id": 152,
+      "field": "guinness_price",
+      "fieldLabel": "Guinness price",
+      "value": "710",
+      "displayValue": "£7.10",
+      "createdAt": "2025-08-01T12:00:00.000Z",
+      "createdAtLabel": "1 Aug 2025",
+      "attribution": {
+        "kind": "source",
+        "label": "PubDB",
+        "sourceKey": "Hellcat"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "key": "osm",
+      "label": "OpenStreetMap",
+      "url": "https://www.openstreetmap.org/node/251526423"
+    },
+    {
+      "key": "wikidata",
+      "label": "Wikidata",
+      "url": null
+    }
+  ],
+  "osmTags": {
+    "addr:city": "London",
+    "addr:housenumber": "77",
+    "addr:postcode": "SW12 9HD",
+    "addr:street": "Bedford Hill",
+    "amenity": "pub",
+    "check_date": "2025-07-12",
+    "fhrs:id": "297565",
+    "indoor_seating": "yes",
+    "live_sport": "yes",
+    "name": "The Bedford",
+    "outdoor_seating": "yes",
+    "source:addr": "FHRS Open Data",
+    "toilets": "yes",
+    "toilets:access": "customers",
+    "wikidata": "Q21008638"
+  }
+}

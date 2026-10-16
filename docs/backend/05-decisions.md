@@ -45,6 +45,12 @@
 | D22 | **The MVP plan ([mvp-plan.md](../mvp-plan.md)) is approved with the suggested answers to R1–R6**: detail as a sheet with detents; Map/List as a segmented control at the top; stay in Swift 5 language mode; skip `/meta` in the MVP; `limit=200` per fetch; Claude may edit the Xcode project file. | |
 | D23 | **Way of working: Claude never runs git commands of any kind.** The user does all git work (branches, commits). Claude does one piece of work at a time, then stops with a summary and a suggested commit message. The user reviews, builds, tests and commits before approving the next piece. | Matches the rules in `.claude/CLAUDE.md`. |
 
+### 2026-10-16, modularisation
+
+| # | Decision | Notes |
+|---|---|---|
+| D24 | **Modular from the outset.** Code lives in local Swift packages inside `Battlecruiser.xcworkspace`, and the app target stays light: entry point, composition, assets. Each module has one job and explicit dependencies. | This is why the project has a workspace. Local packages are our own code, so D8 (first-party only) still holds. Layout approved: one local package, `BattlecruiserKit`, with the modules listed in [mvp-plan.md](../mvp-plan.md), "Modules" (P1, P2). The milestone 1 models now live in its `PubDBModels` module. |
+
 ## Apple developer accounts, briefly
 
 - **Simulator:** no account needed. Build and run from Xcode freely.

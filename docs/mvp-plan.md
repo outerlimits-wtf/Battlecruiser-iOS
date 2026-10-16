@@ -78,33 +78,75 @@ That suits views and the `@Observable` models. Two places need to opt out:
   decoding about 0.5 MB of JSON. A `@concurrent` decode function, or a client
   that is `nonisolated` throughout, handles that.
 
+**With modules (below), this mostly takes care of itself.** Each package module sets its
+own default: the non-UI modules are nonisolated by default, so models, client and cache
+need no annotations, while the UI modules default to the main actor as the app does.
+
 **Swift language mode:** the target is in Swift 5 mode. I suggest **leaving it** for
 the MVP. The main-actor default already removes most concurrency friction, and moving to
 Swift 6 mode later is a one-setting change with warnings to work through. (Decision R3
 below.)
 
-### Folder layout
+### Modules (decision D24, approved)
 
-`Sources/` and `Tests/` are synchronized folders, so new files and subfolders are
-picked up by Xcode without editing the project file.
+The code is split into local Swift packages inside `Battlecruiser.xcworkspace`. The app
+target holds only the entry point and the wiring that puts modules together.
 
 ```
-Sources/
-  App/            BattlecruiserApp.swift (renamed from MyApp), ContentView (the root view; keeps its #Preview/#Playground)
-  API/            PubDBClient, Endpoint, APIError, PubID (path encoding)
-  Models/         PubSummary, PubDetail, Symbol, Photo, …
-  Cache/          ResponseCache
-  State/          PubsModel, DetailModel, LocationModel
-  Features/
-    Map/          PubMapView, ShipPin, MapRegion+BBox
-    List/         PubListView, PubRow
-    Detail/       PubDetailSheet + one small view per section
-  Components/     OpenPill, FreshnessLabel, AttributionFooter, SymbolText
-  Assets.xcassets (AppIcon: the 🚢)
-Tests/
-  Fixtures/       real JSON captured from production
-  …Tests.swift    Swift Testing (`import Testing`)
+Battlecruiser.xcworkspace
+├── Battlecruiser.xcodeproj         app target: @main, composition root, assets, Info.plist
+└── Packages/
+    └── BattlecruiserKit/           one local package, several modules (library products)
+        ├── Package.swift
+        ├── Sources/
+        │   ├── PubDBModels/        Decodable API types. Foundation only.
+        │   ├── PubDBClient/        HTTP client, endpoints, errors, bbox and id encoding
+        │   ├── ResponseCache/      raw-JSON disk cache with fetch times. Foundation only.
+        │   ├── UserLocation/       CLLocationManager wrapper: permission and current location
+        │   ├── DesignSystem/       SwiftUI building blocks: ShipPin, OpenPill, FreshnessLabel, AttributionFooter
+        │   ├── PubsFeature/        PubsModel plus map and list views (shared state, so one module)
+        │   └── PubDetailFeature/   DetailModel plus the detail sheet
+        └── Tests/
+            ├── PubDBModelsTests/   decoding tests and fixtures (moved from the app's Tests/)
+            ├── PubDBClientTests/
+            ├── ResponseCacheTests/
+            ├── PubsFeatureTests/   ordering, pin styling, staleness (the pure functions)
+            └── PubDetailFeatureTests/
 ```
+
+Dependencies only point downwards:
+
+```
+App ──▶ PubsFeature ──┬──▶ PubDetailFeature ──┐
+                      ├──▶ UserLocation        │
+                      └──▶ ResponseCache       ├──▶ DesignSystem ──▶ PubDBModels
+                                               └──▶ PubDBClient ───▶ PubDBModels
+```
+
+Package settings:
+
+- `swift-tools-version: 6.2`, platform `.iOS(.v18)`, Swift 5 language mode
+  (`swiftLanguageModes: [.v5]`), the same as the app (decision R3).
+- **UI modules** (`DesignSystem`, `UserLocation`, both features) set
+  `.defaultIsolation(MainActor.self)`, like the app.
+- **Non-UI modules** (`PubDBModels`, `PubDBClient`, `ResponseCache`) keep Swift's normal
+  nonisolated default, so decoding and networking run off the main thread without
+  annotations.
+- Fixtures move into `PubDBModelsTests` as package resources (`resources: [.copy("Fixtures")]`),
+  loaded with `Bundle.module`.
+- Package test targets are added to the `Battlecruiser` scheme, so Cmd-U runs
+  everything.
+
+What changes compared to the single-target plan:
+
+- Types that other modules use become `public`, with `public` initialisers where
+  other modules or previews build them. Swift's automatic memberwise initialiser is
+  `internal`, so it doesn't cross a module boundary.
+- The milestone 1 models and tests moved from `Sources/Models` and `Tests/` into
+  `PubDBModels` and `PubDBModelsTests`. The app's `BattlecruiserTests` target stays,
+  for app-level tests later.
+
+**Approved** with one package, `BattlecruiserKit` (P1, P2). Modules are added to `Package.swift` as each one is built; `PubDBModels` came first.
 
 ### Key behaviours
 
@@ -217,6 +259,8 @@ small and tested, because everything after them depends on the decoding being ri
 | R4 | Skip `GET /meta` in the MVP? Every label the MVP shows already arrives in the pub payloads, and the spec says to use `meta` for things the MVP doesn't have yet (editors, limits). | Skip it, and add it with contributions. |
 | R5 | Pin count per fetch: `limit=200`? | 200, then adjust after seeing it on screen. |
 | R6 | Can I make the two small project-file changes in milestone 0 (test target, location string) myself, or will you do them in Xcode? | Your call. The project rules prefer you do them in Xcode. |
+| P1 | **One local package with several modules** (above), or **one package per module** (`Packages/PubDBModels/`, `Packages/PubDBClient/`, …)? | One package. A single `Package.swift` where the dependency graph is visible at a glance, with the same enforced boundaries between targets. Split later if one ever needs to be shared or versioned on its own. |
+| P2 | Package name? | `BattlecruiserKit` |
 
 ## Risks and unknowns
 

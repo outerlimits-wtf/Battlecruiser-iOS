@@ -1,0 +1,291 @@
+{
+  "id": "way/1549204034",
+  "name": "The Furzedown",
+  "amenity": {
+    "key": "pub",
+    "label": "Pub",
+    "symbol": {
+      "key": "amenity.pub",
+      "type": "emoji",
+      "emoji": "🍺",
+      "url": null
+    }
+  },
+  "lat": 51.4243853,
+  "lon": -0.1419739,
+  "address": "118 Mitcham Lane",
+  "postcode": "SW16 6NR",
+  "brand": null,
+  "distance": {
+    "metres": 2205,
+    "label": "2.2 km"
+  },
+  "status": {
+    "key": "open",
+    "label": "Open",
+    "symbol": {
+      "key": "status.open",
+      "type": "emoji",
+      "emoji": "🍺",
+      "url": null
+    },
+    "serving": true,
+    "permanent": false,
+    "since": null,
+    "became": null
+  },
+  "open": {
+    "state": "unknown",
+    "label": "Hours unknown",
+    "closesAt": null,
+    "closesAtLabel": null,
+    "minutesUntilClose": null,
+    "countdownLabel": null,
+    "closingSoon": false
+  },
+  "tonight": null,
+  "guinness": null,
+  "rating": null,
+  "reviewCount": 0,
+  "photo": null,
+  "features": [
+    {
+      "key": "garden",
+      "label": "Garden",
+      "symbol": {
+        "key": "feature.garden",
+        "type": "emoji",
+        "emoji": "🌳",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "real_ale",
+      "label": "Real ale",
+      "symbol": {
+        "key": "feature.real_ale",
+        "type": "emoji",
+        "emoji": "🛢️",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "craft_beer",
+      "label": "Craft beer",
+      "symbol": {
+        "key": "feature.craft_beer",
+        "type": "emoji",
+        "emoji": "🍺",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "food",
+      "label": "Kitchen",
+      "symbol": {
+        "key": "feature.food",
+        "type": "emoji",
+        "emoji": "🍴",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "live_music",
+      "label": "Live music",
+      "symbol": {
+        "key": "feature.live_music",
+        "type": "emoji",
+        "emoji": "🎸",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "sports_tv",
+      "label": "Live sports",
+      "symbol": {
+        "key": "feature.sports_tv",
+        "type": "emoji",
+        "emoji": "📺",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "pool_table",
+      "label": "Pool table",
+      "symbol": {
+        "key": "feature.pool_table",
+        "type": "emoji",
+        "emoji": "🎱",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "darts",
+      "label": "Dart board",
+      "symbol": {
+        "key": "feature.darts",
+        "type": "emoji",
+        "emoji": "🎯",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "open_fire",
+      "label": "Open fire",
+      "symbol": {
+        "key": "feature.open_fire",
+        "type": "emoji",
+        "emoji": "🔥",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "vinyl",
+      "label": "Vinyl",
+      "symbol": {
+        "key": "feature.vinyl",
+        "type": "emoji",
+        "emoji": "💿",
+        "url": null
+      },
+      "value": "unknown"
+    }
+  ],
+  "listed": false,
+  "description": null,
+  "city": "London",
+  "checkedAt": null,
+  "lastScrapedAt": "2026-08-26T10:55:09.647Z",
+  "contact": {
+    "phone": null,
+    "website": null,
+    "email": null,
+    "facebook": null,
+    "instagram": null
+  },
+  "operator": null,
+  "brewery": null,
+  "hours": {
+    "raw": null,
+    "source": null,
+    "attribution": null
+  },
+  "weekTable": [
+    {
+      "day": 0,
+      "dayLabel": "Mon",
+      "dayLongLabel": "Monday",
+      "isTonight": false,
+      "doorSays": null,
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 1,
+      "dayLabel": "Tue",
+      "dayLongLabel": "Tuesday",
+      "isTonight": false,
+      "doorSays": null,
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 2,
+      "dayLabel": "Wed",
+      "dayLongLabel": "Wednesday",
+      "isTonight": false,
+      "doorSays": null,
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 3,
+      "dayLabel": "Thu",
+      "dayLongLabel": "Thursday",
+      "isTonight": true,
+      "doorSays": null,
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 4,
+      "dayLabel": "Fri",
+      "dayLongLabel": "Friday",
+      "isTonight": false,
+      "doorSays": null,
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 5,
+      "dayLabel": "Sat",
+      "dayLongLabel": "Saturday",
+      "isTonight": false,
+      "doorSays": null,
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 6,
+      "dayLabel": "Sun",
+      "dayLongLabel": "Sunday",
+      "isTonight": false,
+      "doorSays": null,
+      "bell": null,
+      "out": null
+    }
+  ],
+  "gardenCloses": null,
+  "priceHistory": {
+    "points": [],
+    "minPence": null,
+    "maxPence": null
+  },
+  "timeline": [
+    {
+      "name": "The Furzedown",
+      "fromLabel": null,
+      "untilLabel": null,
+      "owner": null,
+      "isCurrent": true,
+      "attribution": {
+        "kind": "source",
+        "label": "OpenStreetMap",
+        "sourceKey": "osm"
+      }
+    }
+  ],
+  "heritage": null,
+  "reviews": [],
+  "contributions": [],
+  "sources": [
+    {
+      "key": "osm",
+      "label": "OpenStreetMap",
+      "url": "https://www.openstreetmap.org/way/1549204034"
+    }
+  ],
+  "osmTags": {
+    "addr:city": "London",
+    "addr:housenumber": "118",
+    "addr:postcode": "SW16 6NR",
+    "addr:street": "Mitcham Lane",
+    "amenity": "pub",
+    "building": "yes",
+    "fhrs:id": "297078",
+    "name": "The Furzedown",
+    "ref:GB:uprn": "121022754",
+    "source:addr": "FHRS Open Data",
+    "toilets": "yes",
+    "toilets:access": "customers"
+  }
+}

@@ -40,6 +40,16 @@
                ReferencedContainer = "container:Battlecruiser.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "PubDBModelsTests"
+               BuildableName = "PubDBModelsTests"
+               BlueprintName = "PubDBModelsTests"
+               ReferencedContainer = "container:Packages/BattlecruiserKit">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

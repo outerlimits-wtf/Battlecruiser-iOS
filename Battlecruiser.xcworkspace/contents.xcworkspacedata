@@ -4,4 +4,7 @@
    <FileRef
       location = "group:Battlecruiser.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:Packages/BattlecruiserKit">
+   </FileRef>
 </Workspace>

@@ -1,0 +1,497 @@
+{
+  "id": "way/1223071579",
+  "name": "Earl Ferrers",
+  "amenity": {
+    "key": "pub",
+    "label": "Pub",
+    "symbol": {
+      "key": "amenity.pub",
+      "type": "emoji",
+      "emoji": "🍺",
+      "url": null
+    }
+  },
+  "lat": 51.4237778,
+  "lon": -0.1327152,
+  "address": "Earl Ferrers Public House, 22 Ellora Road, London",
+  "postcode": "SW16 6JF",
+  "brand": null,
+  "distance": {
+    "metres": 2549,
+    "label": "2.5 km"
+  },
+  "status": {
+    "key": "open",
+    "label": "Open",
+    "symbol": {
+      "key": "status.open",
+      "type": "emoji",
+      "emoji": "🍺",
+      "url": null
+    },
+    "serving": true,
+    "permanent": false,
+    "since": null,
+    "became": null
+  },
+  "open": {
+    "state": "open",
+    "label": "Closes 23:00",
+    "closesAt": 1380,
+    "closesAtLabel": "23:00",
+    "minutesUntilClose": 30,
+    "countdownLabel": "30 min",
+    "closingSoon": true
+  },
+  "tonight": {
+    "kind": "kicked_out",
+    "label": "Out 11:30",
+    "symbol": {
+      "key": "night.kicked_out",
+      "type": "emoji",
+      "emoji": "🚪",
+      "url": null
+    },
+    "minutes": 690,
+    "reports": 1
+  },
+  "guinness": {
+    "pence": 680,
+    "formatted": "£6.80",
+    "reports": 1,
+    "updatedAt": "2026-07-30T21:34:11.509Z",
+    "agoLabel": "2 months ago"
+  },
+  "rating": null,
+  "reviewCount": 0,
+  "photo": null,
+  "features": [
+    {
+      "key": "garden",
+      "label": "Garden",
+      "symbol": {
+        "key": "feature.garden",
+        "type": "emoji",
+        "emoji": "🌳",
+        "url": null
+      },
+      "value": "no"
+    },
+    {
+      "key": "real_ale",
+      "label": "Real ale",
+      "symbol": {
+        "key": "feature.real_ale",
+        "type": "emoji",
+        "emoji": "🛢️",
+        "url": null
+      },
+      "value": "no"
+    },
+    {
+      "key": "craft_beer",
+      "label": "Craft beer",
+      "symbol": {
+        "key": "feature.craft_beer",
+        "type": "emoji",
+        "emoji": "🍺",
+        "url": null
+      },
+      "value": "no"
+    },
+    {
+      "key": "food",
+      "label": "Kitchen",
+      "symbol": {
+        "key": "feature.food",
+        "type": "emoji",
+        "emoji": "🍴",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "live_music",
+      "label": "Live music",
+      "symbol": {
+        "key": "feature.live_music",
+        "type": "emoji",
+        "emoji": "🎸",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "sports_tv",
+      "label": "Live sports",
+      "symbol": {
+        "key": "feature.sports_tv",
+        "type": "emoji",
+        "emoji": "📺",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "pool_table",
+      "label": "Pool table",
+      "symbol": {
+        "key": "feature.pool_table",
+        "type": "emoji",
+        "emoji": "🎱",
+        "url": null
+      },
+      "value": "no"
+    },
+    {
+      "key": "darts",
+      "label": "Dart board",
+      "symbol": {
+        "key": "feature.darts",
+        "type": "emoji",
+        "emoji": "🎯",
+        "url": null
+      },
+      "value": "no"
+    },
+    {
+      "key": "open_fire",
+      "label": "Open fire",
+      "symbol": {
+        "key": "feature.open_fire",
+        "type": "emoji",
+        "emoji": "🔥",
+        "url": null
+      },
+      "value": "no"
+    },
+    {
+      "key": "vinyl",
+      "label": "Vinyl",
+      "symbol": {
+        "key": "feature.vinyl",
+        "type": "emoji",
+        "emoji": "💿",
+        "url": null
+      },
+      "value": "no"
+    }
+  ],
+  "listed": false,
+  "description": null,
+  "city": null,
+  "checkedAt": null,
+  "lastScrapedAt": "2026-08-26T10:55:09.647Z",
+  "contact": {
+    "phone": null,
+    "website": null,
+    "email": null,
+    "facebook": null,
+    "instagram": null
+  },
+  "operator": null,
+  "brewery": null,
+  "hours": {
+    "raw": "Mo-Th 16:00-23:00; Fr-Su 12:00-00:00",
+    "source": "contribution",
+    "attribution": {
+      "kind": "source",
+      "label": "PubDB",
+      "sourceKey": "pub-times"
+    }
+  },
+  "weekTable": [
+    {
+      "day": 0,
+      "dayLabel": "Mon",
+      "dayLongLabel": "Monday",
+      "isTonight": false,
+      "doorSays": "16:00–23:00",
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 1,
+      "dayLabel": "Tue",
+      "dayLongLabel": "Tuesday",
+      "isTonight": false,
+      "doorSays": "16:00–23:00",
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 2,
+      "dayLabel": "Wed",
+      "dayLongLabel": "Wednesday",
+      "isTonight": false,
+      "doorSays": "16:00–23:00",
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 3,
+      "dayLabel": "Thu",
+      "dayLongLabel": "Thursday",
+      "isTonight": true,
+      "doorSays": "16:00–23:00",
+      "bell": {
+        "minutes": 630,
+        "label": "10:30",
+        "reports": 1,
+        "latestAt": "2026-07-31T09:13:39.912Z",
+        "latestLabel": "31 Jul 2026"
+      },
+      "out": {
+        "minutes": 690,
+        "label": "11:30",
+        "reports": 1,
+        "latestAt": "2026-07-31T09:14:07.985Z",
+        "latestLabel": "31 Jul 2026"
+      }
+    },
+    {
+      "day": 4,
+      "dayLabel": "Fri",
+      "dayLongLabel": "Friday",
+      "isTonight": false,
+      "doorSays": "12:00–24:00",
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 5,
+      "dayLabel": "Sat",
+      "dayLongLabel": "Saturday",
+      "isTonight": false,
+      "doorSays": "12:00–24:00",
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 6,
+      "dayLabel": "Sun",
+      "dayLongLabel": "Sunday",
+      "isTonight": false,
+      "doorSays": "12:00–24:00",
+      "bell": null,
+      "out": null
+    }
+  ],
+  "gardenCloses": "With the pub",
+  "priceHistory": {
+    "points": [
+      {
+        "pence": 680,
+        "at": "2026-07-30T21:34:11.509Z",
+        "formatted": "£6.80"
+      }
+    ],
+    "minPence": 680,
+    "maxPence": 680
+  },
+  "timeline": [
+    {
+      "name": "Earl Ferrers",
+      "fromLabel": null,
+      "untilLabel": null,
+      "owner": null,
+      "isCurrent": true,
+      "attribution": {
+        "kind": "source",
+        "label": "OpenStreetMap",
+        "sourceKey": "osm"
+      }
+    }
+  ],
+  "heritage": null,
+  "reviews": [],
+  "contributions": [
+    {
+      "id": 825,
+      "field": "opening_hours",
+      "fieldLabel": "Opening hours",
+      "value": "Mo-Th 16:00-23:00; Fr-Su 12:00-00:00",
+      "displayValue": "Mo-Th 16:00-23:00; Fr-Su 12:00-00:00",
+      "createdAt": "2026-07-31T15:10:12.241Z",
+      "createdAtLabel": "31 Jul 2026",
+      "attribution": {
+        "kind": "source",
+        "label": "PubDB",
+        "sourceKey": "pub-times"
+      }
+    },
+    {
+      "id": 225,
+      "field": "garden_closes",
+      "fieldLabel": "Garden closes",
+      "value": "With the pub",
+      "displayValue": "With the pub",
+      "createdAt": "2026-07-31T09:14:28.472Z",
+      "createdAtLabel": "31 Jul 2026",
+      "attribution": {
+        "kind": "anonymous",
+        "label": "Anonymous",
+        "sourceKey": null
+      }
+    },
+    {
+      "id": 224,
+      "field": "kicked_out",
+      "fieldLabel": "Kicked out",
+      "value": "Thu 11:30",
+      "displayValue": "Thu 11:30",
+      "createdAt": "2026-07-31T09:14:07.985Z",
+      "createdAtLabel": "31 Jul 2026",
+      "attribution": {
+        "kind": "anonymous",
+        "label": "Anonymous",
+        "sourceKey": null
+      }
+    },
+    {
+      "id": 223,
+      "field": "last_orders",
+      "fieldLabel": "Last orders",
+      "value": "Thu 10:30",
+      "displayValue": "Thu 10:30",
+      "createdAt": "2026-07-31T09:13:39.912Z",
+      "createdAtLabel": "31 Jul 2026",
+      "attribution": {
+        "kind": "anonymous",
+        "label": "Anonymous",
+        "sourceKey": null
+      }
+    },
+    {
+      "id": 205,
+      "field": "pool_table",
+      "fieldLabel": "Pool table",
+      "value": "no",
+      "displayValue": "Pool table: no",
+      "createdAt": "2026-07-30T21:35:16.308Z",
+      "createdAtLabel": "30 Jul 2026",
+      "attribution": {
+        "kind": "anonymous",
+        "label": "Anonymous",
+        "sourceKey": null
+      }
+    },
+    {
+      "id": 204,
+      "field": "darts",
+      "fieldLabel": "Dart board",
+      "value": "no",
+      "displayValue": "Dart board: no",
+      "createdAt": "2026-07-30T21:35:15.579Z",
+      "createdAtLabel": "30 Jul 2026",
+      "attribution": {
+        "kind": "anonymous",
+        "label": "Anonymous",
+        "sourceKey": null
+      }
+    },
+    {
+      "id": 203,
+      "field": "open_fire",
+      "fieldLabel": "Open fire",
+      "value": "no",
+      "displayValue": "Open fire: no",
+      "createdAt": "2026-07-30T21:35:14.220Z",
+      "createdAtLabel": "30 Jul 2026",
+      "attribution": {
+        "kind": "anonymous",
+        "label": "Anonymous",
+        "sourceKey": null
+      }
+    },
+    {
+      "id": 202,
+      "field": "vinyl",
+      "fieldLabel": "Vinyl",
+      "value": "no",
+      "displayValue": "Vinyl: no",
+      "createdAt": "2026-07-30T21:35:13.360Z",
+      "createdAtLabel": "30 Jul 2026",
+      "attribution": {
+        "kind": "anonymous",
+        "label": "Anonymous",
+        "sourceKey": null
+      }
+    },
+    {
+      "id": 201,
+      "field": "real_ale",
+      "fieldLabel": "Real ale",
+      "value": "no",
+      "displayValue": "Real ale: no",
+      "createdAt": "2026-07-30T21:35:04.449Z",
+      "createdAtLabel": "30 Jul 2026",
+      "attribution": {
+        "kind": "anonymous",
+        "label": "Anonymous",
+        "sourceKey": null
+      }
+    },
+    {
+      "id": 200,
+      "field": "craft_beer",
+      "fieldLabel": "Craft beer",
+      "value": "no",
+      "displayValue": "Craft beer: no",
+      "createdAt": "2026-07-30T21:35:03.164Z",
+      "createdAtLabel": "30 Jul 2026",
+      "attribution": {
+        "kind": "anonymous",
+        "label": "Anonymous",
+        "sourceKey": null
+      }
+    },
+    {
+      "id": 199,
+      "field": "guinness_price",
+      "fieldLabel": "Guinness price",
+      "value": "680",
+      "displayValue": "£6.80",
+      "createdAt": "2026-07-30T21:34:11.509Z",
+      "createdAtLabel": "30 Jul 2026",
+      "attribution": {
+        "kind": "anonymous",
+        "label": "Anonymous",
+        "sourceKey": null
+      }
+    },
+    {
+      "id": 198,
+      "field": "garden",
+      "fieldLabel": "Garden",
+      "value": "no",
+      "displayValue": "Garden: no",
+      "createdAt": "2026-07-30T21:23:26.834Z",
+      "createdAtLabel": "30 Jul 2026",
+      "attribution": {
+        "kind": "anonymous",
+        "label": "Anonymous",
+        "sourceKey": null
+      }
+    }
+  ],
+  "sources": [
+    {
+      "key": "osm",
+      "label": "OpenStreetMap",
+      "url": "https://www.openstreetmap.org/way/1223071579"
+    },
+    {
+      "key": "fhrs",
+      "label": "Food Standards Agency",
+      "url": null
+    }
+  ],
+  "osmTags": {
+    "amenity": "pub",
+    "building": "house",
+    "name": "Earl Ferrers",
+    "toilets": "yes",
+    "toilets:access": "customers"
+  }
+}
