@@ -5,6 +5,6 @@
       location = "group:Battlecruiser.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Packages/BattlecruiserKit">
+      location = "group:BattlecruiserKit">
    </FileRef>
 </Workspace>

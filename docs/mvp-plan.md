@@ -89,29 +89,28 @@ below.)
 
 ### Modules (decision D24, approved)
 
-The code is split into local Swift packages inside `Battlecruiser.xcworkspace`. The app
+The code is split into modules of one local Swift package, `BattlecruiserKit/`, which sits at the repository's top level next to the app project and is part of `Battlecruiser.xcworkspace`. The app
 target holds only the entry point and the wiring that puts modules together.
 
 ```
 Battlecruiser.xcworkspace
 ├── Battlecruiser.xcodeproj         app target: @main, composition root, assets, Info.plist
-└── Packages/
-    └── BattlecruiserKit/           one local package, several modules (library products)
-        ├── Package.swift
-        ├── Sources/
-        │   ├── PubDBModels/        Decodable API types. Foundation only.
-        │   ├── PubDBClient/        HTTP client, endpoints, errors, bbox and id encoding
-        │   ├── ResponseCache/      raw-JSON disk cache with fetch times. Foundation only.
-        │   ├── UserLocation/       CLLocationManager wrapper: permission and current location
-        │   ├── DesignSystem/       SwiftUI building blocks: ShipPin, OpenPill, FreshnessLabel, AttributionFooter
-        │   ├── PubsFeature/        PubsModel plus map and list views (shared state, so one module)
-        │   └── PubDetailFeature/   DetailModel plus the detail sheet
-        └── Tests/
-            ├── PubDBModelsTests/   decoding tests and fixtures (moved from the app's Tests/)
-            ├── PubDBClientTests/
-            ├── ResponseCacheTests/
-            ├── PubsFeatureTests/   ordering, pin styling, staleness (the pure functions)
-            └── PubDetailFeatureTests/
+└── BattlecruiserKit/           one local package, several modules (library products)
+    ├── Package.swift
+    ├── Sources/
+    │   ├── PubDBModels/        Decodable API types. Foundation only.
+    │   ├── PubDBClient/        HTTP client, endpoints, errors, bbox and id encoding
+    │   ├── ResponseCache/      raw-JSON disk cache with fetch times. Foundation only.
+    │   ├── UserLocation/       CLLocationManager wrapper: permission and current location
+    │   ├── DesignSystem/       SwiftUI building blocks: ShipPin, OpenPill, FreshnessLabel, AttributionFooter
+    │   ├── PubsFeature/        PubsModel plus map and list views (shared state, so one module)
+    │   └── PubDetailFeature/   DetailModel plus the detail sheet
+    └── Tests/
+        ├── PubDBModelsTests/   decoding tests and fixtures (moved from the app's Tests/)
+        ├── PubDBClientTests/
+        ├── ResponseCacheTests/
+        ├── PubsFeatureTests/   ordering, pin styling, staleness (the pure functions)
+        └── PubDetailFeatureTests/
 ```
 
 Dependencies only point downwards:
@@ -259,7 +258,7 @@ small and tested, because everything after them depends on the decoding being ri
 | R4 | Skip `GET /meta` in the MVP? Every label the MVP shows already arrives in the pub payloads, and the spec says to use `meta` for things the MVP doesn't have yet (editors, limits). | Skip it, and add it with contributions. |
 | R5 | Pin count per fetch: `limit=200`? | 200, then adjust after seeing it on screen. |
 | R6 | Can I make the two small project-file changes in milestone 0 (test target, location string) myself, or will you do them in Xcode? | Your call. The project rules prefer you do them in Xcode. |
-| P1 | **One local package with several modules** (above), or **one package per module** (`Packages/PubDBModels/`, `Packages/PubDBClient/`, …)? | One package. A single `Package.swift` where the dependency graph is visible at a glance, with the same enforced boundaries between targets. Split later if one ever needs to be shared or versioned on its own. |
+| P1 | **One local package with several modules** (above), or **one package per module** (`PubDBModels/`, `PubDBClient/`, … as separate packages)? | One package. A single `Package.swift` where the dependency graph is visible at a glance, with the same enforced boundaries between targets. Split later if one ever needs to be shared or versioned on its own. |
 | P2 | Package name? | `BattlecruiserKit` |
 
 ## Risks and unknowns

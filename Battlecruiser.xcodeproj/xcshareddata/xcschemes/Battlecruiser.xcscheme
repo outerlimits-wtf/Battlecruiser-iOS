@@ -47,7 +47,7 @@
                BlueprintIdentifier = "PubDBModelsTests"
                BuildableName = "PubDBModelsTests"
                BlueprintName = "PubDBModelsTests"
-               ReferencedContainer = "container:Packages/BattlecruiserKit">
+               ReferencedContainer = "container:BattlecruiserKit">
             </BuildableReference>
          </TestableReference>
       </Testables>

@@ -43,11 +43,10 @@ Sources/
     ContentView.swift        # Root view, plus #Preview and #Playground
   Assets.xcassets/           # Asset catalog (AccentColor)
 Tests/                       # BattlecruiserTests: app-level tests only (Swift Testing)
-Packages/
-  BattlecruiserKit/          # The one local package (decision D24); modules added as they are built
-    Package.swift
-    Sources/PubDBModels/     # API response types
-    Tests/PubDBModelsTests/  # Decoding tests + Fixtures/ (real production responses; docs/test-fixtures.md)
+BattlecruiserKit/            # The one local package (decision D24), at the top level; modules added as they are built
+  Package.swift
+  Sources/PubDBModels/       # API response types
+  Tests/PubDBModelsTests/    # Decoding tests + Fixtures/ (real production responses; docs/test-fixtures.md)
 docs/                        # Backend guide, decisions, MVP plan
 ```
 
@@ -55,11 +54,11 @@ docs/                        # Backend guide, decisions, MVP plan
 
 The app is modular from the outset. **Code lives in local Swift packages inside the workspace. The app target stays light.**
 
-- New code goes in a module in a local package under `Packages/`, added to `Battlecruiser.xcworkspace`. It never goes straight into the app target, unless it is app wiring: the `@main` entry point, composing modules together, assets and Info.plist settings.
+- New code goes in a module of the local package `BattlecruiserKit/` (at the repository's top level), which is part of `Battlecruiser.xcworkspace`. It never goes straight into the app target, unless it is app wiring: the `@main` entry point, composing modules together, assets and Info.plist settings.
 - Each module has one clear job and declares its dependencies explicitly. Lower-level modules (models, networking, caching) must not import higher-level ones (features, UI).
 - A module's API for other modules is `public`. Everything else stays `internal`.
 - Each module gets its own test target in its package.
-- **Local packages are our own code, so they are not "adding dependencies".** Creating or changing modules inside `Packages/` is normal work, done one piece at a time under the Workflow rules. Adding a **third-party** package still needs the user's explicit approval (decision D8: first-party only).
+- **Local packages are our own code, so they are not "adding dependencies".** Creating or changing modules inside `BattlecruiserKit/` is normal work, done one piece at a time under the Workflow rules. Adding a **third-party** package still needs the user's explicit approval (decision D8: first-party only).
 - The module layout is in `docs/mvp-plan.md` ("Modules").
 
 ## Environment

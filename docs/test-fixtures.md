@@ -1,6 +1,6 @@
 # Test fixtures
 
-`Packages/BattlecruiserKit/Tests/PubDBModelsTests/Fixtures/` holds real responses from the production PubDB v1 API
+`BattlecruiserKit/Tests/PubDBModelsTests/Fixtures/` holds real responses from the production PubDB v1 API
 (`https://pubdb.outerlimits.wtf/api/v1`), captured on **2026-10-16**. Tests decode these to
 prove the Swift models match what the server actually sends, rather than what the spec
 says it sends (the two differ; see [backend/03-api-reference.md](backend/03-api-reference.md)).

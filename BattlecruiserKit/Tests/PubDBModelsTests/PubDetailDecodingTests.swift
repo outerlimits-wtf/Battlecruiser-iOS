@@ -7,7 +7,8 @@ struct PubDetailDecodingTests {
     @Test func weekTableIsSevenRowsMondayFirstWithOneTonight() throws {
         let detail = try Fixture.decode(PubDetail.self, from: "pub-detail-earl-ferrers")
 
-        #expect(detail.weekTable.map(\.day) == Array(0...6))
+        let days = detail.weekTable.map(\.day)
+        #expect(days == Array(0...6))
         let tonightRows = detail.weekTable.filter(\.isTonight)
         #expect(tonightRows.count == 1)
         // The fixture was captured on a Thursday evening.
@@ -16,7 +17,10 @@ struct PubDetailDecodingTests {
 
     @Test func reportedNightTimesDecodeIntoTheWeekTableAndTonight() throws {
         let detail = try Fixture.decode(PubDetail.self, from: "pub-detail-earl-ferrers")
-        let thursday = try #require(detail.weekTable.first(where: \.isTonight))
+        // Key paths passed to rethrowing functions inside #require/#expect read as
+        // throwing once the macro expands, so work the value out first.
+        let tonightRow = detail.weekTable.first(where: \.isTonight)
+        let thursday = try #require(tonightRow)
 
         #expect(thursday.bell != nil)
         #expect(thursday.out != nil)
@@ -33,7 +37,8 @@ struct PubDetailDecodingTests {
 
         // The Bedford answers "yes" to the garden only.
         let bedford = try Fixture.decode(PubDetail.self, from: "pub-detail-the-bedford")
-        #expect(bedford.summary.features.map(\.key) == ["garden"])
+        let bedfordFeatures = bedford.summary.features.map(\.key)
+        #expect(bedfordFeatures == ["garden"])
     }
 
     @Test func photoAndPriceDecodeWhereTheyExist() throws {
