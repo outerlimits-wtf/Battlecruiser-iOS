@@ -8,6 +8,19 @@ Guidance for Claude Code when working in this repository.
 - Editing and reading files is fine. Do not build, test, or inspect git state on your own initiative.
 - If a build or test would help verify a change, say so and ask the user to run it or to give the go-ahead.
 
+## Workflow: pause after every piece of work (read first)
+
+The user reviews, builds, tests and commits every change themselves. Claude's job ends at edited files.
+
+1. Do **one** piece of work at a time: one plan step, or one milestone sub-step, never several in a row.
+2. When it is done, **stop**. Summarise what changed (the files, and why), say what has not been verified, and give a **suggested commit message** that explains the work.
+3. **Wait for the user's explicit approval** before starting the next piece. "Carry on", "continue" or "that's the process" approve the *next single piece*, not a run of several.
+4. **No git commands of any kind**: no commits, no branches, no `git status`, `git log`, `git diff`, `git mv`. Not even to undo a mistake, unless the user asks for that exact action in that message. If git matters, ask the user or give them the commands to run. Use plain file operations (Write, Edit, `mv`) for moving files.
+5. Wording like "incremental commits are the process" describes **the user's** commits. It is never permission for Claude to commit.
+6. **No Xcode or Swift commands of any kind**, unless the user asks for that exact command in that message. This includes `xcodebuild`, `xcrun` (including `xcrun simctl`), `swift`, `swiftc`, `swift build`/`swift test`/`swift package`, `swift-format`, `xcode-select`, `xed` and `agvtool`. It also includes any tool that builds, runs, tests or launches the app or the Simulator on Claude's behalf, such as the iOS Simulator build and launch tools. Building, running and testing are the user's job. When verification would help, say what should be checked, and the user will do it in Xcode. **Allowed:** `plutil -lint` and `xmllint --noout` to check the syntax of files Claude has edited by hand, such as `project.pbxproj`, schemes and plists.
+
+Why this exists: on 2026-10-16 Claude took "incremental commits with explanations of work done is the process" as permission. It created a branch, made three commits and pushed on through several steps without pausing for review, against both this file and what the user asked.
+
 ## Project overview
 
 Battlecruiser is a native iOS app written in Swift and SwiftUI. It is at an early stage: the app currently shows a placeholder `ContentView` ("Hello, world!").

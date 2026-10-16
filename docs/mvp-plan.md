@@ -1,6 +1,6 @@
 # Battlecruiser MVP: architecture and build order
 
-**Status: draft for review (2026-10-16).** Nothing here is built yet.
+**Status: approved 2026-10-16** (see decisions D22 and D23).
 
 Based on the decisions in [backend/05-decisions.md](backend/05-decisions.md) and the API
 described in [backend/03-api-reference.md](backend/03-api-reference.md).
@@ -90,7 +90,7 @@ picked up by Xcode without editing the project file.
 
 ```
 Sources/
-  App/            BattlecruiserApp.swift (renamed from MyApp), RootView
+  App/            BattlecruiserApp.swift (renamed from MyApp), ContentView (the root view; keeps its #Preview/#Playground)
   API/            PubDBClient, Endpoint, APIError, PubID (path encoding)
   Models/         PubSummary, PubDetail, Symbol, Photo, …
   Cache/          ResponseCache

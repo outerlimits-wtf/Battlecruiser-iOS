@@ -38,6 +38,13 @@
 |---|---|---|
 | D21 | **The map always shows the user's own location**, as Apple Maps and Google Maps do: blue dot with heading, a locate-me button, and the map opening on the user. This is core to the MVP, not polish. | First-party `UserAnnotation` and `MapUserLocationButton`. Falls back to central London without permission. Details in [mvp-plan.md](../mvp-plan.md). |
 
+### 2026-10-16, MVP plan approved
+
+| # | Decision | Notes |
+|---|---|---|
+| D22 | **The MVP plan ([mvp-plan.md](../mvp-plan.md)) is approved with the suggested answers to R1–R6**: detail as a sheet with detents; Map/List as a segmented control at the top; stay in Swift 5 language mode; skip `/meta` in the MVP; `limit=200` per fetch; Claude may edit the Xcode project file. | |
+| D23 | **Way of working: Claude never runs git commands of any kind.** The user does all git work (branches, commits). Claude does one piece of work at a time, then stops with a summary and a suggested commit message. The user reviews, builds, tests and commits before approving the next piece. | Matches the rules in `.claude/CLAUDE.md`. |
+
 ## Apple developer accounts, briefly
 
 - **Simulator:** no account needed. Build and run from Xcode freely.
