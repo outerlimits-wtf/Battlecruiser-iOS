@@ -1,0 +1,74 @@
+default_platform(:ios)
+
+WORKSPACE = "Battlecruiser.xcworkspace"
+SCHEME = "Battlecruiser"
+# Override with SIMULATOR_DEVICE (and SIMULATOR_OS) if the runner has a different simulator.
+SIMULATOR = ENV["SIMULATOR_DEVICE"] || "iPhone 17"
+
+platform :ios do
+  desc "Run the unit tests on a simulator (used by CI on every pull request)"
+  lane :test do
+    run_tests(
+      workspace: WORKSPACE,
+      scheme: SCHEME,
+      device: SIMULATOR,
+      result_bundle: true,
+      output_directory: "fastlane/test_output",
+      clean: false
+    )
+  end
+
+  desc "Build for the simulator without signing (compile check)"
+  lane :build do
+    build_app(
+      workspace: WORKSPACE,
+      scheme: SCHEME,
+      skip_archive: true,
+      skip_codesigning: true,
+      destination: "generic/platform=iOS Simulator"
+    )
+  end
+
+  # ---- Deploy lanes -------------------------------------------------------
+  # Disabled until signing and an App Store Connect API key are set up.
+  # To enable: provide the secrets below and set ENABLE_DEPLOY=1 in the workflow.
+  #   ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_CONTENT (the .p8 contents, base64)
+  #   plus code signing (fastlane match, or a certificate imported on the runner).
+
+  desc "Build and upload to TestFlight (release/* branches)"
+  lane :beta do
+    ensure_deploy_enabled
+    api_key = asc_api_key
+    increment_build_number(
+      build_number: latest_testflight_build_number(api_key: api_key) + 1,
+      xcodeproj: "Battlecruiser.xcodeproj"
+    )
+    build_app(workspace: WORKSPACE, scheme: SCHEME, export_method: "app-store")
+    upload_to_testflight(api_key: api_key, skip_waiting_for_build_processing: true)
+  end
+
+  desc "Build and upload for App Store review (v* tags on main)"
+  lane :release do
+    ensure_deploy_enabled
+    api_key = asc_api_key
+    increment_build_number(
+      build_number: latest_testflight_build_number(api_key: api_key) + 1,
+      xcodeproj: "Battlecruiser.xcodeproj"
+    )
+    build_app(workspace: WORKSPACE, scheme: SCHEME, export_method: "app-store")
+    upload_to_app_store(api_key: api_key, submit_for_review: false, force: true)
+  end
+
+  private_lane :ensure_deploy_enabled do
+    UI.user_error!("Deploy lanes are disabled. Set ENABLE_DEPLOY=1 once signing and the API key exist.") unless ENV["ENABLE_DEPLOY"] == "1"
+  end
+
+  private_lane :asc_api_key do
+    app_store_connect_api_key(
+      key_id: ENV.fetch("ASC_KEY_ID"),
+      issuer_id: ENV.fetch("ASC_ISSUER_ID"),
+      key_content: ENV.fetch("ASC_KEY_CONTENT"),
+      is_key_content_base64: true
+    )
+  end
+end

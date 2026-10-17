@@ -1,0 +1,2 @@
+app_identifier(ENV["APP_IDENTIFIER"] || "wtf.outerlimits.Battlecruiser")
+team_id(ENV["APPLE_TEAM_ID"] || "CT75TQXWJP")
