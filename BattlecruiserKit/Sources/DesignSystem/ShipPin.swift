@@ -20,7 +20,7 @@ public struct ShipPin: View {
             .font(.system(size: emphasis.diameter * 0.55))
             .frame(width: emphasis.diameter, height: emphasis.diameter)
             .background(Circle().fill(.background))
-            .overlay(Circle().strokeBorder(ringColor, lineWidth: ringWidth))
+            .overlay(Circle().strokeBorder(emphasis.tint, lineWidth: ringWidth))
             .shadow(color: .black.opacity(isQuiet ? 0.1 : 0.25), radius: 2, y: 1)
             .grayscale(isQuiet ? 1 : 0)
             .opacity(isQuiet ? 0.6 : 1)
@@ -30,17 +30,6 @@ public struct ShipPin: View {
 
     private var isQuiet: Bool {
         emphasis == .closed
-    }
-
-    private var ringColor: Color {
-        switch emphasis {
-        case .open:
-            .green
-        case .closingSoon:
-            .orange
-        case .unknown, .closed:
-            .gray
-        }
     }
 
     private var ringWidth: CGFloat {

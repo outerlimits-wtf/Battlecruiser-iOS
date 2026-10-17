@@ -5,21 +5,29 @@ import PubDBClient
 import PubDBModels
 
 /// The map: the user's blue dot, a 🚢 for every pub, and the standard controls
-/// (decision D21). Reports the area it settles on; owns no state of its own.
+/// (decision D21). Reports the area it settles on and the pin tapped; owns no
+/// state of its own.
 struct PubMap: View {
     @Binding var position: MapCameraPosition
     let pubs: [PubSummary]
+    /// The pub whose detail is open, drawn a little larger.
+    let selectedID: String?
     let onAreaChange: (BoundingBox) -> Void
+    let onSelect: (PubSummary) -> Void
 
     var body: some View {
         Map(position: $position) {
             ForEach(pinsInDrawOrder) { pub in
                 Annotation(pub.name, coordinate: CLLocationCoordinate2D(latitude: pub.lat, longitude: pub.lon)) {
-                    // ShipPin is decorative; this wrapper is what VoiceOver reads.
-                    ZStack {
+                    // ShipPin is decorative; the button is what VoiceOver reads.
+                    Button {
+                        onSelect(pub)
+                    } label: {
                         ShipPin(emphasis: PinEmphasis(pub))
+                            .scaleEffect(pub.id == selectedID ? 1.3 : 1)
+                            .animation(.snappy, value: selectedID)
                     }
-                    .accessibilityElement(children: .ignore)
+                    .buttonStyle(.plain)
                     .accessibilityLabel("\(pub.name), \(pub.open.label)")
                 }
                 .annotationTitles(.hidden)

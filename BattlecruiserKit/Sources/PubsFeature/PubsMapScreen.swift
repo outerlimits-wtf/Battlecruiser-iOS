@@ -2,12 +2,14 @@ import MapKit
 import SwiftUI
 import UIKit
 import PubDBClient
+import PubDetailFeature
 import UserLocation
 
 /// The app's main screen: the map of pubs around the user.
 ///
-/// Owns the screen's state (pubs and location) and connects them: the user's
-/// position goes to the API for distances, and the map's area drives fetching.
+/// Owns the screen's state (pubs, location, the selected pub) and connects
+/// them: the user's position goes to the API for distances, the map's area
+/// drives fetching, and a tapped pin opens its detail sheet.
 public struct PubsMapScreen: View {
     /// Where the map opens without the user's location: central London, where
     /// all the data is.
@@ -17,19 +19,33 @@ public struct PubsMapScreen: View {
     )
 
     @State private var pubs: PubsModel
+    @State private var detail: PubDetailModel
     @State private var location = LocationModel()
     /// Follows the user once a fix arrives; until then, and if refused, London.
     @State private var position: MapCameraPosition = .userLocation(fallback: .region(PubsMapScreen.fallbackRegion))
     @Environment(\.openURL) private var openURL
 
-    /// - Parameter source: Where pubs come from; the app passes its `PubDBClient`.
-    public init(source: any PubSource) {
+    /// - Parameter source: Where pubs and their details come from; the app
+    ///   passes its `PubDBClient`, which is both.
+    public init(source: any PubSource & PubDetailSource) {
         _pubs = State(initialValue: PubsModel(source: source))
+        _detail = State(initialValue: PubDetailModel(source: source))
     }
 
     public var body: some View {
-        PubMap(position: $position, pubs: pubs.pubs) { area in
-            pubs.areaChanged(to: area)
+        PubMap(
+            position: $position,
+            pubs: pubs.pubs,
+            selectedID: detail.selected?.id,
+            onAreaChange: { area in
+                pubs.areaChanged(to: area)
+            },
+            onSelect: { pub in
+                detail.select(pub, near: userCoordinate)
+            }
+        )
+        .sheet(isPresented: isShowingDetail) {
+            PubDetailSheet(model: detail)
         }
         .overlay(alignment: .top) {
             statusBanner
@@ -47,6 +63,20 @@ public struct PubsMapScreen: View {
         .onChange(of: userCoordinate, initial: true) { _, coordinate in
             pubs.userLocationChanged(to: coordinate)
         }
+    }
+
+    /// The sheet is open while a pub is selected; dismissing it deselects.
+    private var isShowingDetail: Binding<Bool> {
+        Binding(
+            get: {
+                detail.selected != nil
+            },
+            set: { isShowing in
+                if !isShowing {
+                    detail.deselect()
+                }
+            }
+        )
     }
 
     /// The user's position in the client's terms (CoreLocation stays out of it).
