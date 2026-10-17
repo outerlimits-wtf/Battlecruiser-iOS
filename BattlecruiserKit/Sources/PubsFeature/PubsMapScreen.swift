@@ -1,6 +1,7 @@
 import MapKit
 import SwiftUI
 import UIKit
+import DesignSystem
 import PubDBClient
 import PubDetailFeature
 import UserLocation
@@ -46,6 +47,7 @@ public struct PubsMapScreen: View {
     /// Follows the user once a fix arrives; until then, and if refused, London.
     @State private var position: MapCameraPosition = .userLocation(fallback: .region(PubsMapScreen.fallbackRegion))
     @Environment(\.openURL) private var openURL
+    @Environment(\.scenePhase) private var scenePhase
 
     /// - Parameter source: Where pubs and their details come from; the app
     ///   passes its `PubDBClient`, which is both.
@@ -105,6 +107,48 @@ public struct PubsMapScreen: View {
         .onChange(of: userCoordinate, initial: true) { _, coordinate in
             pubs.userLocationChanged(to: coordinate)
         }
+        .onChange(of: scenePhase) { previous, phase in
+            handleScenePhase(from: previous, to: phase)
+        }
+        .task(id: refreshInterval) {
+            await refreshPeriodically()
+        }
+    }
+
+    // MARK: - Freshness
+
+    /// Back from the background, everything on screen may be out of date: open
+    /// states change with the clock. Location updates pause while away.
+    private func handleScenePhase(from previous: ScenePhase, to phase: ScenePhase) {
+        switch phase {
+        case .active:
+            location.start()
+            if previous == .background {
+                pubs.refresh()
+                detail.refresh()
+            }
+        case .background:
+            location.stop()
+        default:
+            break
+        }
+    }
+
+    private var refreshInterval: Duration {
+        Freshness.refreshInterval(for: pubs.pubs)
+    }
+
+    /// Refetch on a timer while the screen is up. Restarted (by `.task(id:)`)
+    /// whenever the interval changes, e.g. when a pub nears closing.
+    private func refreshPeriodically() async {
+        let interval = refreshInterval
+        while !Task.isCancelled {
+            try? await Task.sleep(for: interval)
+            guard !Task.isCancelled else {
+                return
+            }
+            pubs.refresh()
+        }
     }
 
     /// The sheet is open while a pub is selected; dismissing it deselects.
@@ -154,6 +198,11 @@ public struct PubsMapScreen: View {
                         .font(.footnote)
                 }
                 .buttonStyle(.borderedProminent)
+            }
+            TimelineView(.everyMinute) { context in
+                if let fetchedAt = pubs.fetchedAt, Freshness.isStale(fetchedAt: fetchedAt, now: context.date) {
+                    FreshnessLabel(fetchedAt: fetchedAt)
+                }
             }
             if let error = pubs.lastError {
                 Text(error.userMessage)

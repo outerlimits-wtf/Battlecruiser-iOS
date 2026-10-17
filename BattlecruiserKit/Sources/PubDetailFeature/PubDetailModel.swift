@@ -52,6 +52,12 @@ public final class PubDetailModel {
         load(id: pub.id)
     }
 
+    /// Fetch the selected pub again, e.g. on returning to the foreground, when
+    /// its open state may have changed. Does nothing with no pub selected.
+    public func refresh() {
+        retry()
+    }
+
     /// Fetch the selected pub again, e.g. after a failure.
     public func retry() {
         guard let id = selected?.id else {
