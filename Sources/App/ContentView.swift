@@ -1,10 +1,12 @@
 import SwiftUI
 import Playgrounds
+import PubDBClient
+import PubsFeature
 
+/// The composition root: chooses the real server and hands it to the map.
 struct ContentView: View {
     var body: some View {
-        // Temporary until milestone 3 brings the map.
-        DebugPubListView()
+        PubsMapScreen(source: PubDBClient())
     }
 }
 

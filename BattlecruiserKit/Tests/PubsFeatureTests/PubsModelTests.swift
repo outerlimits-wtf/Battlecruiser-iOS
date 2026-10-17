@@ -149,6 +149,30 @@ struct PubsModelTests {
         #expect(source.requests.count == 1)
     }
 
+    @Test func loadIfIdleFetchesWhenNothingHasBeenAskedFor() async {
+        let source = FakePubSource()
+        let model = makeModel(source)
+
+        model.loadIfIdle(in: balham)
+        await model.loadTask?.value
+
+        let areas = source.requests.map { $0.area }
+        #expect(areas == [balham])
+    }
+
+    @Test func loadIfIdleDoesNothingOnceTheMapHasReportedAnArea() async {
+        let source = FakePubSource()
+        let model = makeModel(source)
+        let elsewhere = BoundingBox(west: 0.0, south: 51.5, east: 0.04, north: 51.53)
+        model.areaChanged(to: elsewhere)
+
+        model.loadIfIdle(in: balham)
+        await model.loadTask?.value
+
+        let areas = source.requests.map { $0.area }
+        #expect(areas == [elsewhere])
+    }
+
     // MARK: - Helpers
 
     /// No real waiting: the debounce "sleep" only checks for cancellation, which

@@ -36,12 +36,11 @@ Battlecruiser is a native iOS app written in Swift and SwiftUI. It is at an earl
 
 ```
 Battlecruiser.xcworkspace/   # Open this, not the .xcodeproj: it holds the app project and the local packages
-Battlecruiser.xcodeproj/     # The app target only: entry point, composition, assets, Info.plist settings. Links BattlecruiserKit's products (PubDBClient, PubDBModels)
+Battlecruiser.xcodeproj/     # The app target only: entry point, composition, assets, Info.plist settings. Links BattlecruiserKit's products (PubDBClient, PubsFeature)
 Sources/
   App/
     BattlecruiserApp.swift   # @main App entry point, creates WindowGroup
-    ContentView.swift        # Root view, plus #Preview and #Playground
-    Debug/                   # TEMPORARY milestone-2 screen listing real pubs; delete in milestone 3
+    ContentView.swift        # Composition root: PubsMapScreen(source: PubDBClient()), plus #Preview and #Playground
   Assets.xcassets/           # Asset catalog (AccentColor)
 Tests/                       # BattlecruiserTests: app-level tests only (Swift Testing)
 BattlecruiserKit/            # The one local package (decision D24), at the top level; modules added as they are built
@@ -50,7 +49,7 @@ BattlecruiserKit/            # The one local package (decision D24), at the top 
   Sources/PubDBClient/       # Talks to the v1 API: requests, response checks, PubDBError
   Sources/UserLocation/      # Location permission + current coordinate (main actor)
   Sources/DesignSystem/      # Shared SwiftUI pieces: ShipPin + PinEmphasis (main actor)
-  Sources/PubsFeature/       # PubsModel (follows the map: debounce, cancel, skip), PubOrdering; map/list views next (main actor)
+  Sources/PubsFeature/       # PubsMapScreen + PubMap (MapKit), PubsModel (follows the map), PubOrdering; list view next (main actor)
   Tests/PubDBModelsTests/    # Decoding tests + Fixtures/ (real production responses; docs/test-fixtures.md)
   Tests/PubDBClientTests/    # Request-building and error tests against a fake transport
   Tests/UserLocationTests/   # Permission-flow tests against a fake location manager

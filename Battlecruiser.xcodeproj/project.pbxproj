@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		000000000000000300000001 /* PubDBClient in Frameworks */ = {isa = PBXBuildFile; productRef = 000000000000000310000001 /* PubDBClient */; };
-		000000000000000300000002 /* PubDBModels in Frameworks */ = {isa = PBXBuildFile; productRef = 000000000000000310000002 /* PubDBModels */; };
+		000000000000000300000002 /* PubsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 000000000000000310000002 /* PubsFeature */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,7 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			files = (
 				000000000000000300000001 /* PubDBClient in Frameworks */,
-				000000000000000300000002 /* PubDBModels in Frameworks */,
+				000000000000000300000002 /* PubsFeature in Frameworks */,
 			);
 		};
 		000000000000000230000000 /* Frameworks */ = {
@@ -92,7 +92,7 @@
 			name = Battlecruiser;
 			packageProductDependencies = (
 				000000000000000310000001 /* PubDBClient */,
-				000000000000000310000002 /* PubDBModels */,
+				000000000000000310000002 /* PubsFeature */,
 			);
 			productName = Battlecruiser;
 			productReference = 000000000000000000000120 /* Battlecruiser.app */;
@@ -485,9 +485,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = PubDBClient;
 		};
-		000000000000000310000002 /* PubDBModels */ = {
+		000000000000000310000002 /* PubsFeature */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = PubDBModels;
+			productName = PubsFeature;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

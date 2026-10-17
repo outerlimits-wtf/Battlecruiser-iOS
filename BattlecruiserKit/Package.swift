@@ -48,7 +48,7 @@ let package = Package(
         /// The pubs around the user: state that follows the map, then the map and list views.
         .target(
             name: "PubsFeature",
-            dependencies: ["PubDBClient", "PubDBModels"],
+            dependencies: ["PubDBClient", "PubDBModels", "DesignSystem", "UserLocation"],
             swiftSettings: [.defaultIsolation(MainActor.self)]
         ),
         .testTarget(name: "PubsFeatureTests", dependencies: ["PubsFeature", "PubDBClient", "PubDBModels"]),

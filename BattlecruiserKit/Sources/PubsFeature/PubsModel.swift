@@ -65,6 +65,15 @@ public final class PubsModel {
         load(area, debounced: true)
     }
 
+    /// Fetch `area` only if nothing has been asked for yet: a fallback for when
+    /// the map has not reported an area of its own.
+    public func loadIfIdle(in area: BoundingBox) {
+        guard requestedArea == nil else {
+            return
+        }
+        load(area, debounced: false)
+    }
+
     /// Fetch the current area again now, e.g. on returning to the foreground.
     public func refresh() {
         guard let area = requestedArea else {
