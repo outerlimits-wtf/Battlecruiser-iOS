@@ -16,6 +16,7 @@ let package = Package(
         .library(name: "PubDBModels", targets: ["PubDBModels"]),
         .library(name: "PubDBClient", targets: ["PubDBClient"]),
         .library(name: "UserLocation", targets: ["UserLocation"]),
+        .library(name: "DesignSystem", targets: ["DesignSystem"]),
     ],
     targets: [
         /// The PubDB v1 API's response types. Foundation only.
@@ -33,6 +34,15 @@ let package = Package(
         /// Location permission and the user's current position. UI-facing state, so main actor.
         .target(name: "UserLocation", swiftSettings: [.defaultIsolation(MainActor.self)]),
         .testTarget(name: "UserLocationTests", dependencies: ["UserLocation"]),
+
+        /// Shared SwiftUI building blocks: the ship pin, and later the open pill,
+        /// freshness label and attribution footer.
+        .target(
+            name: "DesignSystem",
+            dependencies: ["PubDBModels"],
+            swiftSettings: [.defaultIsolation(MainActor.self)]
+        ),
+        .testTarget(name: "DesignSystemTests", dependencies: ["DesignSystem", "PubDBModels"]),
     ],
     swiftLanguageModes: [.v5]
 )
