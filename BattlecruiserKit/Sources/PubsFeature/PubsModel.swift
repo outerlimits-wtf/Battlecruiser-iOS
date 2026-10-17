@@ -26,12 +26,23 @@ public final class PubsModel {
         pubs.filter { PubOrdering.rank($0) == 0 }.count
     }
 
+    /// What, if anything, the screen should tell the user about these pubs.
+    public var notice: PubsNotice? {
+        PubsNotice.current(
+            area: requestedArea,
+            pubCount: pubs.count,
+            hasFreshResult: fetchedAt != nil && !isShowingCached,
+            isLoading: isLoading,
+            error: lastError
+        )
+    }
+
     @ObservationIgnored private let source: any PubSource
     @ObservationIgnored private let debounce: Duration
     @ObservationIgnored private let sleep: @Sendable (Duration) async throws -> Void
     @ObservationIgnored private let now: () -> Date
     /// The area most recently asked for: being fetched, or fetched.
-    @ObservationIgnored private var requestedArea: BoundingBox?
+    public private(set) var requestedArea: BoundingBox? = nil
     @ObservationIgnored private var userLocation: Coordinate?
     /// The pending or running load. Internal so tests can await it.
     @ObservationIgnored private(set) var loadTask: Task<Void, Never>?

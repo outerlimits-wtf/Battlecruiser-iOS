@@ -46,6 +46,11 @@ public struct BoundingBox: Hashable, Sendable {
         other.west >= west && other.east <= east && other.south >= south && other.north <= north
     }
 
+    /// Whether the two boxes share any area at all.
+    public func intersects(_ other: BoundingBox) -> Bool {
+        other.west < east && other.east > west && other.south < north && other.north > south
+    }
+
     /// `west,south,east,north`: longitude first. This is what production
     /// accepts; the v1 spec's "south,west,north,east" is wrong
     /// (docs/backend/03-api-reference.md, "Spec vs production").

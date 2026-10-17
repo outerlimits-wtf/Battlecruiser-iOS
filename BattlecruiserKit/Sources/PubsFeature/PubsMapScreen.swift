@@ -76,7 +76,9 @@ public struct PubsMapScreen: View {
                 PubListView(
                     pubs: pubs.pubs,
                     openCount: pubs.openCount,
-                    isLoading: pubs.isLoading,
+                    notice: pubs.notice,
+                    onGoToLondon: goToLondon,
+                    onRetry: pubs.refresh,
                     onSelect: { pub in
                         detail.select(pub, near: userCoordinate)
                     },
@@ -208,12 +210,9 @@ public struct PubsMapScreen: View {
                     FreshnessLabel(fetchedAt: fetchedAt)
                 }
             }
-            if let error = pubs.lastError {
-                Label(error.userMessage, systemImage: error.isOffline ? "wifi.slash" : "exclamationmark.triangle")
-                    .font(.footnote)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(.thinMaterial, in: Capsule())
+            // The list shows its own notice; on the map it is a banner.
+            if mode == .map, let notice = pubs.notice {
+                noticeBanner(notice)
             } else if pubs.isLoading {
                 ProgressView()
                     .padding(8)
@@ -222,6 +221,25 @@ public struct PubsMapScreen: View {
         }
         .padding(.top, 8)
         .padding(.horizontal, 16)
+    }
+
+    private func noticeBanner(_ notice: PubsNotice) -> some View {
+        VStack(spacing: 8) {
+            Label(notice.message, systemImage: notice.systemImage)
+                .font(.footnote)
+            NoticeActions(notice: notice, onGoToLondon: goToLondon, onRetry: pubs.refresh)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 14))
+    }
+
+    /// Back to where the data is, on the map.
+    private func goToLondon() {
+        mode = .map
+        withAnimation {
+            position = .region(Self.fallbackRegion)
+        }
     }
 
     /// Pub data comes from OpenStreetMap (ODbL), which requires this credit

@@ -83,6 +83,16 @@ struct RequestBuildingTests {
         #expect(!outer.contains(overlapping))
     }
 
+    @Test func boundingBoxIntersection() {
+        let london = BoundingBox(west: -0.51, south: 51.28, east: 0.33, north: 51.69)
+        let edgeOfLondon = BoundingBox(west: 0.3, south: 51.5, east: 0.5, north: 51.6)
+        let brighton = BoundingBox(west: -0.2, south: 50.8, east: -0.1, north: 50.85)
+
+        #expect(london.intersects(edgeOfLondon))
+        #expect(edgeOfLondon.intersects(london))
+        #expect(!london.intersects(brighton))
+    }
+
     // MARK: - Helpers
 
     private static let base = URL(string: "https://pubdb.test/api/v1")!

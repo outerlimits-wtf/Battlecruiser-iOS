@@ -6,20 +6,28 @@ import PubDBModels
 struct PubListView: View {
     let pubs: [PubSummary]
     let openCount: Int
-    let isLoading: Bool
+    /// Shown as the empty state, or above the rows when there are pubs.
+    let notice: PubsNotice?
+    let onGoToLondon: () -> Void
+    let onRetry: () -> Void
     let onSelect: (PubSummary) -> Void
     let onRefresh: () async -> Void
 
     var body: some View {
         Group {
-            if pubs.isEmpty && !isLoading {
-                ContentUnavailableView(
-                    "No pubs here",
-                    systemImage: "map",
-                    description: Text("Switch to the map and move it to find some.")
-                )
+            if pubs.isEmpty {
+                emptyState
             } else {
                 List {
+                    if let notice {
+                        Section {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Label(notice.message, systemImage: notice.systemImage)
+                                    .font(.footnote)
+                                NoticeActions(notice: notice, onGoToLondon: onGoToLondon, onRetry: onRetry)
+                            }
+                        }
+                    }
                     Section {
                         ForEach(pubs) { pub in
                             Button {
@@ -42,6 +50,21 @@ struct PubListView: View {
         }
         .refreshable {
             await onRefresh()
+        }
+    }
+
+    @ViewBuilder
+    private var emptyState: some View {
+        if let notice {
+            ContentUnavailableView {
+                Label(notice.message, systemImage: notice.systemImage)
+            } actions: {
+                NoticeActions(notice: notice, onGoToLondon: onGoToLondon, onRetry: onRetry)
+            }
+        } else {
+            // Empty with nothing to explain: the first fetch is still on its way.
+            ProgressView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 
