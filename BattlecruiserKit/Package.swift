@@ -18,6 +18,7 @@ let package = Package(
         .library(name: "UserLocation", targets: ["UserLocation"]),
         .library(name: "DesignSystem", targets: ["DesignSystem"]),
         .library(name: "PubsFeature", targets: ["PubsFeature"]),
+        .library(name: "PubDetailFeature", targets: ["PubDetailFeature"]),
     ],
     targets: [
         /// The PubDB v1 API's response types. Foundation only.
@@ -52,6 +53,14 @@ let package = Package(
             swiftSettings: [.defaultIsolation(MainActor.self)]
         ),
         .testTarget(name: "PubsFeatureTests", dependencies: ["PubsFeature", "PubDBClient", "PubDBModels"]),
+
+        /// One pub in full: the selected pub's state, then the detail sheet.
+        .target(
+            name: "PubDetailFeature",
+            dependencies: ["PubDBClient", "PubDBModels", "DesignSystem"],
+            swiftSettings: [.defaultIsolation(MainActor.self)]
+        ),
+        .testTarget(name: "PubDetailFeatureTests", dependencies: ["PubDetailFeature", "PubDBClient", "PubDBModels"]),
     ],
     swiftLanguageModes: [.v5]
 )

@@ -50,11 +50,13 @@ BattlecruiserKit/            # The one local package (decision D24), at the top 
   Sources/UserLocation/      # Location permission + current coordinate (main actor)
   Sources/DesignSystem/      # Shared SwiftUI pieces: ShipPin + PinEmphasis (main actor)
   Sources/PubsFeature/       # PubsMapScreen + PubMap (MapKit), PubsModel (follows the map), PubOrdering; list view next (main actor)
+  Sources/PubDetailFeature/  # PubDetailModel (selected pub: instant summary, cached + fresh detail); sheet next (main actor)
   Tests/PubDBModelsTests/    # Decoding tests + Fixtures/ (real production responses; docs/test-fixtures.md)
   Tests/PubDBClientTests/    # Request-building and error tests against a fake transport
   Tests/UserLocationTests/   # Permission-flow tests against a fake location manager
   Tests/DesignSystemTests/   # Pin emphasis rules
   Tests/PubsFeatureTests/    # Ordering + PubsModel timing/error tests against a fake PubSource
+  Tests/PubDetailFeatureTests/ # PubDetailModel tests against a fake PubDetailSource
 docs/                        # Backend guide, decisions, MVP plan
 ```
 
