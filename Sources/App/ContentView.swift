@@ -3,8 +3,8 @@ import Playgrounds
 
 struct ContentView: View {
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        // Temporary until milestone 3 brings the map.
+        DebugPubListView()
     }
 }
 

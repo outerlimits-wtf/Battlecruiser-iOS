@@ -6,6 +6,11 @@
 	objectVersion = 90;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		000000000000000300000001 /* PubDBClient in Frameworks */ = {isa = PBXBuildFile; productRef = 000000000000000310000001 /* PubDBClient */; };
+		000000000000000300000002 /* PubDBModels in Frameworks */ = {isa = PBXBuildFile; productRef = 000000000000000310000002 /* PubDBModels */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		000000000000000260000000 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -38,6 +43,8 @@
 		000000000000000130000000 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
+				000000000000000300000001 /* PubDBClient in Frameworks */,
+				000000000000000300000002 /* PubDBModels in Frameworks */,
 			);
 		};
 		000000000000000230000000 /* Frameworks */ = {
@@ -83,6 +90,10 @@
 				000000000000000000000010 /* Sources */,
 			);
 			name = Battlecruiser;
+			packageProductDependencies = (
+				000000000000000310000001 /* PubDBClient */,
+				000000000000000310000002 /* PubDBModels */,
+			);
 			productName = Battlecruiser;
 			productReference = 000000000000000000000120 /* Battlecruiser.app */;
 			productType = "com.apple.product-type.application";
@@ -468,6 +479,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		000000000000000310000001 /* PubDBClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PubDBClient;
+		};
+		000000000000000310000002 /* PubDBModels */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PubDBModels;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 000000000000000000000000 /* Project object */;
 }

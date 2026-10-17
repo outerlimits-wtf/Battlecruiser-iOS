@@ -36,11 +36,12 @@ Battlecruiser is a native iOS app written in Swift and SwiftUI. It is at an earl
 
 ```
 Battlecruiser.xcworkspace/   # Open this, not the .xcodeproj: it holds the app project and the local packages
-Battlecruiser.xcodeproj/     # The app target only: entry point, composition, assets, Info.plist settings
+Battlecruiser.xcodeproj/     # The app target only: entry point, composition, assets, Info.plist settings. Links BattlecruiserKit's products (PubDBClient, PubDBModels)
 Sources/
   App/
     BattlecruiserApp.swift   # @main App entry point, creates WindowGroup
     ContentView.swift        # Root view, plus #Preview and #Playground
+    Debug/                   # TEMPORARY milestone-2 screen listing real pubs; delete in milestone 3
   Assets.xcassets/           # Asset catalog (AccentColor)
 Tests/                       # BattlecruiserTests: app-level tests only (Swift Testing)
 BattlecruiserKit/            # The one local package (decision D24), at the top level; modules added as they are built
