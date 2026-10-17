@@ -15,6 +15,7 @@ let package = Package(
     products: [
         .library(name: "PubDBModels", targets: ["PubDBModels"]),
         .library(name: "PubDBClient", targets: ["PubDBClient"]),
+        .library(name: "ResponseCache", targets: ["ResponseCache"]),
         .library(name: "UserLocation", targets: ["UserLocation"]),
         .library(name: "DesignSystem", targets: ["DesignSystem"]),
         .library(name: "PubsFeature", targets: ["PubsFeature"]),
@@ -32,6 +33,10 @@ let package = Package(
         /// Talks to the PubDB v1 API: builds requests, checks responses, maps errors.
         .target(name: "PubDBClient", dependencies: ["PubDBModels"]),
         .testTarget(name: "PubDBClientTests", dependencies: ["PubDBClient", "PubDBModels"]),
+
+        /// Raw server responses on disk, with the time they were fetched. Foundation only.
+        .target(name: "ResponseCache"),
+        .testTarget(name: "ResponseCacheTests", dependencies: ["ResponseCache"]),
 
         /// Location permission and the user's current position. UI-facing state, so main actor.
         .target(name: "UserLocation", swiftSettings: [.defaultIsolation(MainActor.self)]),
