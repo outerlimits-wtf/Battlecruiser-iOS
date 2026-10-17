@@ -56,3 +56,4 @@ jobs:
           name: test-results
           path: fastlane/test_output
           if-no-files-found: ignore
+          retention-days: 7
