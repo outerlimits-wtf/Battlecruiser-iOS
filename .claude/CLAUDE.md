@@ -82,6 +82,7 @@ The app is modular from the outset. **Code lives in local Swift packages inside 
 ## Working conventions
 
 - Use SwiftUI for UI. Keep views small and composable; split a view into its own file once it stops being trivial.
+- Accessibility is part of done: custom controls get a VoiceOver label (and a hint if tapping does something), layouts stack at accessibility text sizes (`dynamicTypeSize.isAccessibilitySize`), animations respect Reduce Motion, and colour never carries meaning alone. Where server text reads badly aloud, rephrase it for VoiceOver only (see `Spoken` in PubDetailFeature); the screen still shows the server's label.
 - Follow standard Swift API design guidelines: `UpperCamelCase` for types, `lowerCamelCase` for everything else, and clear argument labels.
 - Prefer Swift's modern concurrency (`async`/`await`, `@MainActor` for UI state) over callbacks.
 - Write code that should compile, but do not run a build to check it unless instructed (see Command rules).

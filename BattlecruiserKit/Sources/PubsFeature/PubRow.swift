@@ -7,15 +7,19 @@ import PubDBModels
 struct PubRow: View {
     let pub: PubSummary
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             ShipPin(emphasis: emphasis)
                 .frame(width: 40, height: 40)
             VStack(alignment: .leading, spacing: 6) {
-                HStack(alignment: .firstTextBaseline) {
+                nameLayout {
                     Text(pub.name)
                         .font(.headline)
-                    Spacer(minLength: 8)
+                    if !dynamicTypeSize.isAccessibilitySize {
+                        Spacer(minLength: 8)
+                    }
                     if let distance = pub.distance {
                         Text(distance.label)
                             .font(.subheadline)
@@ -38,6 +42,14 @@ struct PubRow: View {
         // Closed pubs stay in the list but step back, like their pins.
         .opacity(emphasis == .closed ? 0.6 : 1)
         .accessibilityElement(children: .combine)
+        .accessibilityHint("Shows details")
+    }
+
+    /// Name and distance side by side, or stacked at accessibility text sizes.
+    private var nameLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 2))
+            : AnyLayout(HStackLayout(alignment: .firstTextBaseline))
     }
 
     private var emphasis: PinEmphasis {

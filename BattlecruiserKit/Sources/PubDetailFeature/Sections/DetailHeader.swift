@@ -6,6 +6,8 @@ struct DetailHeader: View {
     let summary: PubSummary
     let city: String?
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             if let photo = summary.photo {
@@ -13,17 +15,20 @@ struct DetailHeader: View {
             }
             Text(summary.name)
                 .font(.title2.bold())
+                .accessibilityAddTraits(.isHeader)
             if !addressLine.isEmpty {
                 Text(addressLine)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
-            HStack(spacing: 12) {
+            metaLayout {
                 if let distance = summary.distance {
                     Label(distance.label, systemImage: "figure.walk")
                 }
                 if let rating = summary.rating {
-                    Label("\(rating.formatted(.number.precision(.fractionLength(0...1))))/10 (\(summary.reviewCount))", systemImage: "star")
+                    let score = rating.formatted(.number.precision(.fractionLength(0...1)))
+                    Label("\(score)/10 (\(summary.reviewCount))", systemImage: "star")
+                        .accessibilityLabel("Rated \(score) out of 10 from \(summary.reviewCount) reviews")
                 }
             }
             .font(.subheadline)
@@ -35,6 +40,13 @@ struct DetailHeader: View {
                     .foregroundStyle(.orange)
             }
         }
+    }
+
+    /// Distance and rating side by side, or stacked at accessibility text sizes.
+    private var metaLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+            : AnyLayout(HStackLayout(spacing: 12))
     }
 
     private var addressLine: String {

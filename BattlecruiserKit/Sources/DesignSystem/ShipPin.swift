@@ -11,6 +11,8 @@ public struct ShipPin: View {
 
     private let emphasis: PinEmphasis
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     public init(emphasis: PinEmphasis) {
         self.emphasis = emphasis
     }
@@ -24,7 +26,7 @@ public struct ShipPin: View {
             .shadow(color: .black.opacity(isQuiet ? 0.1 : 0.25), radius: 2, y: 1)
             .grayscale(isQuiet ? 1 : 0)
             .opacity(isQuiet ? 0.6 : 1)
-            .animation(.snappy, value: emphasis)
+            .animation(reduceMotion ? nil : .snappy, value: emphasis)
             .accessibilityHidden(true)
     }
 

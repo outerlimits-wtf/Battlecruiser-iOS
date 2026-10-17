@@ -48,6 +48,7 @@ public struct PubsMapScreen: View {
     @State private var position: MapCameraPosition = .userLocation(fallback: .region(PubsMapScreen.fallbackRegion))
     @Environment(\.openURL) private var openURL
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     /// - Parameter source: Where pubs and their details come from; the app
     ///   passes its `PubDBClient`, which is both.
@@ -237,7 +238,7 @@ public struct PubsMapScreen: View {
     /// Back to where the data is, on the map.
     private func goToLondon() {
         mode = .map
-        withAnimation {
+        withAnimation(reduceMotion ? nil : .default) {
             position = .region(Self.fallbackRegion)
         }
     }

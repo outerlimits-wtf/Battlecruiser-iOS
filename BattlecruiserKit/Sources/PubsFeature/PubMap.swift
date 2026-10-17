@@ -15,6 +15,8 @@ struct PubMap: View {
     let onAreaChange: (BoundingBox) -> Void
     let onSelect: (PubSummary) -> Void
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     var body: some View {
         Map(position: $position) {
             ForEach(pinsInDrawOrder) { pub in
@@ -25,10 +27,11 @@ struct PubMap: View {
                     } label: {
                         ShipPin(emphasis: PinEmphasis(pub))
                             .scaleEffect(pub.id == selectedID ? 1.3 : 1)
-                            .animation(.snappy, value: selectedID)
+                            .animation(reduceMotion ? nil : .snappy, value: selectedID)
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("\(pub.name), \(pub.open.label)")
+                    .accessibilityLabel(accessibilityLabel(for: pub))
+                    .accessibilityHint("Shows details")
                 }
                 .annotationTitles(.hidden)
             }
@@ -43,6 +46,13 @@ struct PubMap: View {
         .onMapCameraChange(frequency: .onEnd) { context in
             onAreaChange(BoundingBox(context.region))
         }
+    }
+
+    /// "The Harp, Closes 23:00, Out 24:40": what the pin's colour and size say.
+    private func accessibilityLabel(for pub: PubSummary) -> String {
+        [pub.name, pub.open.label, pub.tonight?.label]
+            .compactMap { $0 }
+            .joined(separator: ", ")
     }
 
     /// Later annotations draw on top, so quiet pins go first and open ones last.

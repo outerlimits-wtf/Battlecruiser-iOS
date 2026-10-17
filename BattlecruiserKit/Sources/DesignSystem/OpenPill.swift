@@ -29,6 +29,9 @@ public struct OpenPill: View {
         .padding(.horizontal, 10)
         .padding(.vertical, 4)
         .background(emphasis.tint.opacity(0.15), in: Capsule())
+        // The dot is decoration; the label is the whole message.
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(label)
     }
 }
 

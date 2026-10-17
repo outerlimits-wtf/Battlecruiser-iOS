@@ -10,27 +10,38 @@ struct ContactSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             SectionTitle("Get there")
-            HStack(spacing: 10) {
-                if let directions {
-                    Link(destination: directions) {
-                        Label("Walk there", systemImage: "figure.walk")
-                    }
-                    .buttonStyle(.borderedProminent)
+            // A row of buttons when they fit; a column at large text sizes.
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 10) {
+                    buttons
                 }
-                if let phone = contact.phone, let call = phoneURL(phone) {
-                    Link(destination: call) {
-                        Label("Call", systemImage: "phone")
-                    }
-                    .buttonStyle(.bordered)
-                }
-                if let website = contact.websiteURL {
-                    Link(destination: website) {
-                        Label("Website", systemImage: "safari")
-                    }
-                    .buttonStyle(.bordered)
+                VStack(alignment: .leading, spacing: 10) {
+                    buttons
                 }
             }
             .font(.subheadline)
+        }
+    }
+
+    @ViewBuilder
+    private var buttons: some View {
+        if let directions {
+            Link(destination: directions) {
+                Label("Walk there", systemImage: "figure.walk")
+            }
+            .buttonStyle(.borderedProminent)
+        }
+        if let phone = contact.phone, let call = phoneURL(phone) {
+            Link(destination: call) {
+                Label("Call", systemImage: "phone")
+            }
+            .buttonStyle(.bordered)
+        }
+        if let website = contact.websiteURL {
+            Link(destination: website) {
+                Label("Website", systemImage: "safari")
+            }
+            .buttonStyle(.bordered)
         }
     }
 
