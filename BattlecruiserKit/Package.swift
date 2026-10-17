@@ -15,6 +15,7 @@ let package = Package(
     products: [
         .library(name: "PubDBModels", targets: ["PubDBModels"]),
         .library(name: "PubDBClient", targets: ["PubDBClient"]),
+        .library(name: "UserLocation", targets: ["UserLocation"]),
     ],
     targets: [
         /// The PubDB v1 API's response types. Foundation only.
@@ -28,6 +29,10 @@ let package = Package(
         /// Talks to the PubDB v1 API: builds requests, checks responses, maps errors.
         .target(name: "PubDBClient", dependencies: ["PubDBModels"]),
         .testTarget(name: "PubDBClientTests", dependencies: ["PubDBClient", "PubDBModels"]),
+
+        /// Location permission and the user's current position. UI-facing state, so main actor.
+        .target(name: "UserLocation", swiftSettings: [.defaultIsolation(MainActor.self)]),
+        .testTarget(name: "UserLocationTests", dependencies: ["UserLocation"]),
     ],
     swiftLanguageModes: [.v5]
 )

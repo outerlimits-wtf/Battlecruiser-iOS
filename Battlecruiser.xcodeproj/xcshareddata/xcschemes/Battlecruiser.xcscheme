@@ -60,6 +60,16 @@
                ReferencedContainer = "container:BattlecruiserKit">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "UserLocationTests"
+               BuildableName = "UserLocationTests"
+               BlueprintName = "UserLocationTests"
+               ReferencedContainer = "container:BattlecruiserKit">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
