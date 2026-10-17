@@ -18,6 +18,8 @@ public final class PubsModel {
     public private(set) var lastError: PubDBError? = nil
     /// When `pubs` was fetched. Open states are true only for that moment.
     public private(set) var fetchedAt: Date? = nil
+    /// True while `pubs` came from the disk cache rather than this session's fetch.
+    public private(set) var isShowingCached = false
 
     /// How many of `pubs` can serve you right now.
     public var openCount: Int {
@@ -55,6 +57,21 @@ public final class PubsModel {
         self.debounce = debounce
         self.sleep = sleep
         self.now = now
+    }
+
+    /// Show the last list saved on disk, if nothing has been fetched yet: the app
+    /// opens with something on screen, marked with its age, while it fetches.
+    public func loadCached() async {
+        guard fetchedAt == nil, let cached = await source.cachedPubs() else {
+            return
+        }
+        // A fetch may have finished while the cache was being read.
+        guard fetchedAt == nil else {
+            return
+        }
+        pubs = PubOrdering.forDisplay(cached.value.pubs)
+        fetchedAt = cached.fetchedAt
+        isShowingCached = true
     }
 
     /// The map settled on a new area.
@@ -120,6 +137,7 @@ public final class PubsModel {
                 try Task.checkCancellation()
                 pubs = PubOrdering.forDisplay(list.pubs)
                 fetchedAt = now()
+                isShowingCached = false
                 lastError = nil
                 isLoading = false
             } catch is CancellationError {

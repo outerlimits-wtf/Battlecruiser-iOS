@@ -31,8 +31,8 @@ let package = Package(
         ),
 
         /// Talks to the PubDB v1 API: builds requests, checks responses, maps errors.
-        .target(name: "PubDBClient", dependencies: ["PubDBModels"]),
-        .testTarget(name: "PubDBClientTests", dependencies: ["PubDBClient", "PubDBModels"]),
+        .target(name: "PubDBClient", dependencies: ["PubDBModels", "ResponseCache"]),
+        .testTarget(name: "PubDBClientTests", dependencies: ["PubDBClient", "PubDBModels", "ResponseCache"]),
 
         /// Raw server responses on disk, with the time they were fetched. Foundation only.
         .target(name: "ResponseCache"),

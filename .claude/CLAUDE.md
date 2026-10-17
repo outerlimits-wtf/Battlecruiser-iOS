@@ -46,7 +46,7 @@ Tests/                       # BattlecruiserTests: app-level tests only (Swift T
 BattlecruiserKit/            # The one local package (decision D24), at the top level; modules added as they are built
   Package.swift
   Sources/PubDBModels/       # API response types
-  Sources/PubDBClient/       # Talks to the v1 API: requests, response checks, PubDBError
+  Sources/PubDBClient/       # Talks to the v1 API: requests, response checks, PubDBError; saves/reads responses via ResponseCache; live() for the app
   Sources/ResponseCache/     # Raw responses on disk (Caches/), fetch time = file date, bounded (actor)
   Sources/UserLocation/      # Location permission + current coordinate (main actor)
   Sources/DesignSystem/      # Shared SwiftUI pieces: ShipPin, OpenPill, FreshnessLabel, PinEmphasis + its tint (main actor)

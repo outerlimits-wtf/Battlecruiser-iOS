@@ -7,6 +7,16 @@ struct Endpoint: Equatable, Sendable {
     /// Path segments after the base URL, not yet percent-encoded.
     var path: [String]
     var query: [URLQueryItem]
+    /// Where a successful response is saved, if it is worth saving.
+    var cacheKey: String? = nil
+
+    /// Only the latest list is kept: areas vary, and on launch the last one
+    /// the user saw is the useful one.
+    static let lastPubsCacheKey = "pubs/last"
+
+    static func pubCacheKey(_ id: String) -> String {
+        "pub/\(id)"
+    }
 
     static func pubs(in area: BoundingBox, near location: Coordinate?, amenity: String, limit: Int) -> Endpoint {
         Endpoint(
@@ -15,12 +25,13 @@ struct Endpoint: Equatable, Sendable {
                 URLQueryItem(name: "bbox", value: area.queryValue),
                 URLQueryItem(name: "amenity", value: amenity),
                 URLQueryItem(name: "limit", value: String(limit)),
-            ] + locationItems(location)
+            ] + locationItems(location),
+            cacheKey: lastPubsCacheKey
         )
     }
 
     static func pub(id: String, near location: Coordinate?) -> Endpoint {
-        Endpoint(path: ["pubs", id], query: locationItems(location))
+        Endpoint(path: ["pubs", id], query: locationItems(location), cacheKey: pubCacheKey(id))
     }
 
     static func similar(to id: String, near location: Coordinate?) -> Endpoint {

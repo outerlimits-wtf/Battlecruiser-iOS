@@ -13,6 +13,7 @@ final class FakeDetailSource: PubDetailSource, @unchecked Sendable {
     private let lock = NSLock()
     private var recorded: [Request] = []
     private var respond: (String) throws -> PubDetail
+    private var saved: [String: Cached<PubDetail>] = [:]
 
     init(respond: @escaping (String) throws -> PubDetail = { DetailFixtures.detail(id: $0) }) {
         self.respond = respond
@@ -20,6 +21,15 @@ final class FakeDetailSource: PubDetailSource, @unchecked Sendable {
 
     var requests: [Request] {
         lock.withLock { recorded }
+    }
+
+    /// What `cachedPub(id:)` returns for `id`: the detail "saved on disk".
+    func setCached(_ cached: Cached<PubDetail>, for id: String) {
+        lock.withLock { saved[id] = cached }
+    }
+
+    func cachedPub(id: String) async -> Cached<PubDetail>? {
+        lock.withLock { saved[id] }
     }
 
     /// Change what the next fetches return.

@@ -5,6 +5,8 @@ import PubDBModels
 /// in tests, so the model's timing and error handling can be tested offline.
 public protocol PubSource {
     func fetchPubs(in area: BoundingBox, near location: Coordinate?) async throws -> PubList
+    /// The last list fetched, saved on disk; nil if there is none.
+    func cachedPubs() async -> Cached<PubList>?
 }
 
 extension PubDBClient: PubSource {

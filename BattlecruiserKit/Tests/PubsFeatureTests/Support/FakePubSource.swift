@@ -13,6 +13,7 @@ final class FakePubSource: PubSource, @unchecked Sendable {
     private let lock = NSLock()
     private var recorded: [Request] = []
     private var respond: (BoundingBox) throws -> PubList
+    private var saved: Cached<PubList>?
 
     init(respond: @escaping (BoundingBox) throws -> PubList = { _ in PubFixtures.list([]) }) {
         self.respond = respond
@@ -20,6 +21,15 @@ final class FakePubSource: PubSource, @unchecked Sendable {
 
     var requests: [Request] {
         lock.withLock { recorded }
+    }
+
+    /// What `cachedPubs()` returns: the list "saved on disk".
+    func setCached(_ cached: Cached<PubList>?) {
+        lock.withLock { saved = cached }
+    }
+
+    func cachedPubs() async -> Cached<PubList>? {
+        lock.withLock { saved }
     }
 
     /// Change what the next fetches return.

@@ -118,6 +118,36 @@ struct PubDetailModelTests {
         #expect(!model.isLoading)
     }
 
+    @Test func aPubSavedOnDiskShowsWithItsAgeUntilTheFreshDetailArrives() async {
+        let source = FakeDetailSource { DetailFixtures.detail(id: $0, name: "Fresh") }
+        let savedAt = Date(timeIntervalSince1970: 1_760_560_200)
+        source.setCached(Cached(value: DetailFixtures.detail(id: "node/1", name: "Saved"), fetchedAt: savedAt), for: "node/1")
+        let model = PubDetailModel(source: source)
+
+        model.select(DetailFixtures.summary(id: "node/1"), near: nil)
+        await model.loadTask?.value
+
+        let freshName = model.detail?.summary.name
+        #expect(freshName == "Fresh")
+        #expect(model.showingCachedFrom == nil)
+    }
+
+    @Test func offlineAPubSavedOnDiskStaysShownWithItsAge() async {
+        let offline = PubDBError.transport(URLError(.notConnectedToInternet))
+        let source = FakeDetailSource { _ in throw offline }
+        let savedAt = Date(timeIntervalSince1970: 1_760_560_200)
+        source.setCached(Cached(value: DetailFixtures.detail(id: "node/1", name: "Saved"), fetchedAt: savedAt), for: "node/1")
+        let model = PubDetailModel(source: source)
+
+        model.select(DetailFixtures.summary(id: "node/1"), near: nil)
+        await model.loadTask?.value
+
+        let savedName = model.detail?.summary.name
+        #expect(savedName == "Saved")
+        #expect(model.showingCachedFrom == savedAt)
+        #expect(model.lastError == offline)
+    }
+
     @Test func theCacheForgetsTheLeastRecentlyFetchedPubBeyondItsLimit() async {
         let model = PubDetailModel(source: FakeDetailSource(), cacheLimit: 2)
         for id in ["node/1", "node/2", "node/3"] {

@@ -116,11 +116,14 @@ Battlecruiser.xcworkspace
 Dependencies only point downwards:
 
 ```
-App ──▶ PubsFeature ──┬──▶ PubDetailFeature ──┐
+App ──▶ PubsFeature ──┬──▶ PubDetailFeature ──┬──▶ DesignSystem ──▶ PubDBModels
                       ├──▶ UserLocation        │
-                      └──▶ ResponseCache       ├──▶ DesignSystem ──▶ PubDBModels
-                                               └──▶ PubDBClient ───▶ PubDBModels
+                      ├──▶ DesignSystem        └──▶ PubDBClient ──┬──▶ PubDBModels
+                      └──▶ PubDBClient                            └──▶ ResponseCache
 ```
+
+(As built. The cache sits under the client rather than the features, because
+only the client sees the raw response bytes the cache stores. Milestone 7c.)
 
 Package settings:
 

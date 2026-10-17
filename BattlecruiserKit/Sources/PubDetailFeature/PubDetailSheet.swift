@@ -1,4 +1,5 @@
 import SwiftUI
+import DesignSystem
 import PubDBModels
 
 /// One pub in full, shown in a sheet over the map.
@@ -18,6 +19,10 @@ public struct PubDetailSheet: View {
             if let summary = model.summary {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
+                        if let savedAt = model.showingCachedFrom {
+                            // A copy from an earlier session: say how old it is.
+                            FreshnessLabel(fetchedAt: savedAt)
+                        }
                         DetailHeader(summary: summary, city: model.detail?.city)
                         TonightSection(summary: summary, gardenCloses: model.detail?.gardenCloses)
                         loadingOrError

@@ -173,6 +173,58 @@ struct PubsModelTests {
         #expect(areas == [elsewhere])
     }
 
+    @Test func launchShowsTheSavedListWithItsAgeUntilAFetchReplacesIt() async {
+        let source = FakePubSource { _ in PubFixtures.list([("fresh", "open", 10)]) }
+        let savedAt = fixedNow.addingTimeInterval(-3600)
+        source.setCached(Cached(value: PubFixtures.list([("saved", "open", 10)]), fetchedAt: savedAt))
+        let model = makeModel(source)
+
+        await model.loadCached()
+
+        let savedIDs = model.pubs.map { $0.id }
+        #expect(savedIDs == ["saved"])
+        #expect(model.fetchedAt == savedAt)
+        #expect(model.isShowingCached)
+
+        model.areaChanged(to: balham)
+        await model.loadTask?.value
+
+        let freshIDs = model.pubs.map { $0.id }
+        #expect(freshIDs == ["fresh"])
+        #expect(model.fetchedAt == fixedNow)
+        #expect(!model.isShowingCached)
+    }
+
+    @Test func theSavedListNeverReplacesAFreshOne() async {
+        let source = FakePubSource { _ in PubFixtures.list([("fresh", "open", 10)]) }
+        source.setCached(Cached(value: PubFixtures.list([("saved", "open", 10)]), fetchedAt: fixedNow))
+        let model = makeModel(source)
+        model.areaChanged(to: balham)
+        await model.loadTask?.value
+
+        await model.loadCached()
+
+        let ids = model.pubs.map { $0.id }
+        #expect(ids == ["fresh"])
+        #expect(!model.isShowingCached)
+    }
+
+    @Test func offlineWithASavedListKeepsShowingIt() async {
+        let offline = PubDBError.transport(URLError(.notConnectedToInternet))
+        let source = FakePubSource { _ in throw offline }
+        source.setCached(Cached(value: PubFixtures.list([("saved", "open", 10)]), fetchedAt: fixedNow))
+        let model = makeModel(source)
+        await model.loadCached()
+
+        model.areaChanged(to: balham)
+        await model.loadTask?.value
+
+        let ids = model.pubs.map { $0.id }
+        #expect(ids == ["saved"])
+        #expect(model.isShowingCached)
+        #expect(model.lastError?.isOffline == true)
+    }
+
     // MARK: - Helpers
 
     /// No real waiting: the debounce "sleep" only checks for cancellation, which

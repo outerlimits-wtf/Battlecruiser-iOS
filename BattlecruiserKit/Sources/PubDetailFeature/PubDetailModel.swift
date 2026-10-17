@@ -19,6 +19,9 @@ public final class PubDetailModel {
     public private(set) var isLoading = false
     /// The last fetch's failure, cleared by the next selection or success.
     public private(set) var lastError: PubDBError? = nil
+    /// When the shown detail was fetched, while it comes from the disk cache;
+    /// nil once this session's fetch arrives.
+    public private(set) var showingCachedFrom: Date? = nil
 
     /// The best summary available: the fresh one inside the detail, else the tapped one.
     public var summary: PubSummary? {
@@ -47,6 +50,7 @@ public final class PubDetailModel {
         loadTask?.cancel()
         selected = pub
         detail = cache[pub.id]
+        showingCachedFrom = nil
         lastError = nil
         self.location = location
         load(id: pub.id)
@@ -74,6 +78,7 @@ public final class PubDetailModel {
         loadTask = nil
         selected = nil
         detail = nil
+        showingCachedFrom = nil
         isLoading = false
         lastError = nil
     }
@@ -87,12 +92,21 @@ public final class PubDetailModel {
             guard !Task.isCancelled else {
                 return
             }
+            // Nothing in memory: show the copy saved on disk while fetching.
+            if detail == nil, let saved = await source.cachedPub(id: id) {
+                guard !Task.isCancelled else {
+                    return
+                }
+                detail = saved.value
+                showingCachedFrom = saved.fetchedAt
+            }
             isLoading = true
             do {
                 let fresh = try await source.fetchPub(id: id, near: location)
                 try Task.checkCancellation()
                 remember(fresh)
                 detail = fresh
+                showingCachedFrom = nil
                 isLoading = false
             } catch is CancellationError {
                 if !Task.isCancelled {

@@ -5,6 +5,8 @@ import PubDBModels
 /// app; a scripted fake in tests.
 public protocol PubDetailSource {
     func fetchPub(id: String, near location: Coordinate?) async throws -> PubDetail
+    /// The last detail fetched for this pub, saved on disk; nil if there is none.
+    func cachedPub(id: String) async -> Cached<PubDetail>?
 }
 
 extension PubDBClient: PubDetailSource {

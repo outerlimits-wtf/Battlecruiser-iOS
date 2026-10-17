@@ -98,6 +98,9 @@ public struct PubsMapScreen: View {
             PubDetailSheet(model: detail)
         }
         .task {
+            // Last session's pubs first, marked with their age, so the screen
+            // is never empty while the first fetch is under way.
+            await pubs.loadCached()
             location.start()
             // The map normally reports its area as soon as it appears. If it
             // hasn't after a second, show London rather than an empty map.
@@ -200,12 +203,13 @@ public struct PubsMapScreen: View {
                 .buttonStyle(.borderedProminent)
             }
             TimelineView(.everyMinute) { context in
-                if let fetchedAt = pubs.fetchedAt, Freshness.isStale(fetchedAt: fetchedAt, now: context.date) {
+                if let fetchedAt = pubs.fetchedAt,
+                   pubs.isShowingCached || Freshness.isStale(fetchedAt: fetchedAt, now: context.date) {
                     FreshnessLabel(fetchedAt: fetchedAt)
                 }
             }
             if let error = pubs.lastError {
-                Text(error.userMessage)
+                Label(error.userMessage, systemImage: error.isOffline ? "wifi.slash" : "exclamationmark.triangle")
                     .font(.footnote)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
