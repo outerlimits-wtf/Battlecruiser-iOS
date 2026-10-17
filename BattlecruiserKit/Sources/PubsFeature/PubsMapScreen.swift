@@ -46,6 +46,8 @@ public struct PubsMapScreen: View {
     @State private var mode: Mode = .map
     /// Follows the user once a fix arrives; until then, and if refused, London.
     @State private var position: MapCameraPosition = .userLocation(fallback: .region(PubsMapScreen.fallbackRegion))
+    /// Whether the map has been brought to the user's first fix this launch.
+    @State private var hasCenteredOnUser = false
     @Environment(\.openURL) private var openURL
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -112,6 +114,7 @@ public struct PubsMapScreen: View {
         }
         .onChange(of: userCoordinate, initial: true) { _, coordinate in
             pubs.userLocationChanged(to: coordinate)
+            centerOnUserIfNeeded(at: coordinate)
         }
         .onChange(of: scenePhase) { previous, phase in
             handleScenePhase(from: previous, to: phase)
@@ -169,6 +172,29 @@ public struct PubsMapScreen: View {
                 }
             }
         )
+    }
+
+    // MARK: - Opening on the user
+
+    /// How much of the map shows around the user on opening: street level,
+    /// with the nearby pubs in view.
+    static let openingSpanMetres: CLLocationDistance = 1500
+
+    /// Bring the map to the user's first position. MapKit's follow-the-user
+    /// camera does not reliably move when the first fix arrives after the map
+    /// is on screen (the first-launch case: permission prompt, then a fix), so
+    /// this moves it explicitly. Once per launch, and never if the user has
+    /// already moved the map themselves.
+    private func centerOnUserIfNeeded(at coordinate: Coordinate?) {
+        guard let coordinate, !hasCenteredOnUser, !position.positionedByUser else {
+            return
+        }
+        hasCenteredOnUser = true
+        position = .region(MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
+            latitudinalMeters: Self.openingSpanMetres,
+            longitudinalMeters: Self.openingSpanMetres
+        ))
     }
 
     /// The user's position in the client's terms (CoreLocation stays out of it).

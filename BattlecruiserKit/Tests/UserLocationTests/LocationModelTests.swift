@@ -95,6 +95,42 @@ struct LocationModelTests {
         #expect(manager.delegate === model)
     }
 
+    @Test func aRecentKnownPositionIsUsedStraightAway() {
+        let recent = CLLocation(
+            coordinate: CLLocationCoordinate2D(latitude: 51.4431, longitude: -0.1525),
+            altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 10,
+            timestamp: Date().addingTimeInterval(-60)
+        )
+        let manager = FakeLocationManager(status: .authorizedWhenInUse, location: recent)
+
+        let model = LocationModel(manager: manager)
+
+        let latitude = model.coordinate?.latitude
+        #expect(latitude == 51.4431)
+    }
+
+    @Test func anOldKnownPositionIsIgnored() {
+        let stale = CLLocation(
+            coordinate: CLLocationCoordinate2D(latitude: 51.4431, longitude: -0.1525),
+            altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 10,
+            timestamp: Date().addingTimeInterval(-3600)
+        )
+        let manager = FakeLocationManager(status: .authorizedWhenInUse, location: stale)
+
+        let model = LocationModel(manager: manager)
+
+        #expect(model.coordinate == nil)
+    }
+
+    @Test func aKnownPositionIsIgnoredWithoutPermission() {
+        let recent = CLLocation(latitude: 51.4431, longitude: -0.1525)
+        let manager = FakeLocationManager(status: .denied, location: recent)
+
+        let model = LocationModel(manager: manager)
+
+        #expect(model.coordinate == nil)
+    }
+
     @Test func everyStatusMapsToWhatTheUICaresAbout() {
         #expect(LocationAuthorization(.notDetermined) == .notDetermined)
         #expect(LocationAuthorization(.authorizedWhenInUse) == .authorized)
@@ -107,12 +143,14 @@ struct LocationModelTests {
 /// Records what the model asks of it instead of touching Core Location.
 final class FakeLocationManager: LocationManaging {
     var authorizationStatus: CLAuthorizationStatus
+    var location: CLLocation?
     weak var delegate: (any CLLocationManagerDelegate)?
     private(set) var permissionRequests = 0
     private(set) var isUpdating = false
 
-    init(status: CLAuthorizationStatus) {
+    init(status: CLAuthorizationStatus, location: CLLocation? = nil) {
         authorizationStatus = status
+        self.location = location
     }
 
     func requestWhenInUseAuthorization() { permissionRequests += 1 }
