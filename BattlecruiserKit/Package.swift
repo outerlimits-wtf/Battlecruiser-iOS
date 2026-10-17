@@ -14,6 +14,7 @@ let package = Package(
     platforms: [.iOS(.v18)],
     products: [
         .library(name: "PubDBModels", targets: ["PubDBModels"]),
+        .library(name: "PubDBClient", targets: ["PubDBClient"]),
     ],
     targets: [
         /// The PubDB v1 API's response types. Foundation only.
@@ -23,6 +24,10 @@ let package = Package(
             dependencies: ["PubDBModels"],
             resources: [.copy("Fixtures")]
         ),
+
+        /// Talks to the PubDB v1 API: builds requests, checks responses, maps errors.
+        .target(name: "PubDBClient", dependencies: ["PubDBModels"]),
+        .testTarget(name: "PubDBClientTests", dependencies: ["PubDBClient", "PubDBModels"]),
     ],
     swiftLanguageModes: [.v5]
 )

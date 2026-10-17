@@ -13,4 +13,10 @@ public struct APIErrorDetail: Decodable, Hashable, Sendable {
     public let message: String
     /// The input at fault, when there was one.
     public let field: String?
+
+    public init(code: String, message: String, field: String? = nil) {
+        self.code = code
+        self.message = message
+        self.field = field
+    }
 }

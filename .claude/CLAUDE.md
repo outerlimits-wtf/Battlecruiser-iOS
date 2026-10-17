@@ -46,7 +46,9 @@ Tests/                       # BattlecruiserTests: app-level tests only (Swift T
 BattlecruiserKit/            # The one local package (decision D24), at the top level; modules added as they are built
   Package.swift
   Sources/PubDBModels/       # API response types
+  Sources/PubDBClient/       # Talks to the v1 API: requests, response checks, PubDBError
   Tests/PubDBModelsTests/    # Decoding tests + Fixtures/ (real production responses; docs/test-fixtures.md)
+  Tests/PubDBClientTests/    # Request-building and error tests against a fake transport
 docs/                        # Backend guide, decisions, MVP plan
 ```
 
