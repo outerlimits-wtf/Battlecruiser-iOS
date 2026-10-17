@@ -5,12 +5,32 @@ import PubDBClient
 import PubDetailFeature
 import UserLocation
 
-/// The app's main screen: the map of pubs around the user.
+/// The app's main screen: the pubs around the user, on a map or as a list.
 ///
 /// Owns the screen's state (pubs, location, the selected pub) and connects
 /// them: the user's position goes to the API for distances, the map's area
-/// drives fetching, and a tapped pin opens its detail sheet.
+/// drives fetching, and a tapped pin or row opens its detail sheet. The list
+/// shows the map's current area, so it sits over the map rather than replacing
+/// it: switching back keeps the map exactly where it was (decision D18).
 public struct PubsMapScreen: View {
+    enum Mode: String, CaseIterable, Identifiable {
+        case map = "Map"
+        case list = "List"
+
+        var id: Self {
+            self
+        }
+
+        var systemImage: String {
+            switch self {
+            case .map:
+                "map"
+            case .list:
+                "list.bullet"
+            }
+        }
+    }
+
     /// Where the map opens without the user's location: central London, where
     /// all the data is.
     static let fallbackRegion = MKCoordinateRegion(
@@ -21,6 +41,8 @@ public struct PubsMapScreen: View {
     @State private var pubs: PubsModel
     @State private var detail: PubDetailModel
     @State private var location = LocationModel()
+    /// The map first, always (decision D18).
+    @State private var mode: Mode = .map
     /// Follows the user once a fix arrives; until then, and if refused, London.
     @State private var position: MapCameraPosition = .userLocation(fallback: .region(PubsMapScreen.fallbackRegion))
     @Environment(\.openURL) private var openURL
@@ -33,25 +55,45 @@ public struct PubsMapScreen: View {
     }
 
     public var body: some View {
-        PubMap(
-            position: $position,
-            pubs: pubs.pubs,
-            selectedID: detail.selected?.id,
-            onAreaChange: { area in
-                pubs.areaChanged(to: area)
-            },
-            onSelect: { pub in
-                detail.select(pub, near: userCoordinate)
+        ZStack {
+            PubMap(
+                position: $position,
+                pubs: pubs.pubs,
+                selectedID: detail.selected?.id,
+                onAreaChange: { area in
+                    pubs.areaChanged(to: area)
+                },
+                onSelect: { pub in
+                    detail.select(pub, near: userCoordinate)
+                }
+            )
+            .overlay(alignment: .bottom) {
+                attribution
             }
-        )
-        .sheet(isPresented: isShowingDetail) {
-            PubDetailSheet(model: detail)
+            if mode == .list {
+                PubListView(
+                    pubs: pubs.pubs,
+                    openCount: pubs.openCount,
+                    isLoading: pubs.isLoading,
+                    onSelect: { pub in
+                        detail.select(pub, near: userCoordinate)
+                    },
+                    onRefresh: {
+                        pubs.refresh()
+                        await pubs.loadTask?.value
+                    }
+                )
+                .background(.background)
+            }
         }
         .overlay(alignment: .top) {
             statusBanner
         }
-        .overlay(alignment: .bottom) {
-            attribution
+        .safeAreaInset(edge: .top) {
+            modePicker
+        }
+        .sheet(isPresented: isShowingDetail) {
+            PubDetailSheet(model: detail)
         }
         .task {
             location.start()
@@ -85,6 +127,19 @@ public struct PubsMapScreen: View {
     }
 
     // MARK: - Overlays
+
+    private var modePicker: some View {
+        Picker("Show pubs as", selection: $mode) {
+            ForEach(Mode.allCases) { mode in
+                Label(mode.rawValue, systemImage: mode.systemImage)
+                    .tag(mode)
+            }
+        }
+        .pickerStyle(.segmented)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
+        .background(.bar)
+    }
 
     @ViewBuilder
     private var statusBanner: some View {
