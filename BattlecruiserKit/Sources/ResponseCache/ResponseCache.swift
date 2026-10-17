@@ -59,7 +59,8 @@ public actor ResponseCache {
     /// The response stored under `key`, if any.
     public func load(_ key: String) -> CachedResponse? {
         let file = fileURL(for: key)
-        guard let data = try? Data(contentsOf: file), let fetchedAt = modificationDate(of: file) else {
+        guard let data = try? Data(contentsOf: file),
+              let fetchedAt = modificationDate(of: file) else {
             return nil
         }
         return CachedResponse(data: data, fetchedAt: fetchedAt)
