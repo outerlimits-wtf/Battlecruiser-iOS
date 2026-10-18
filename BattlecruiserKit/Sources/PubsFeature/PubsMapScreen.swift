@@ -72,7 +72,7 @@ public struct PubsMapScreen: View {
                     detail.select(pub, near: userCoordinate)
                 }
             )
-            .overlay(alignment: .bottom) {
+            .overlay(alignment: .bottomTrailing) {
                 attribution
             }
             if mode == .list {
@@ -270,15 +270,16 @@ public struct PubsMapScreen: View {
     }
 
     /// Pub data comes from OpenStreetMap (ODbL), which requires this credit
-    /// wherever it is shown, including on Apple's map.
+    /// wherever it is shown, including on Apple's map. Fine print in the corner
+    /// opposite Apple's own "Legal" label and styled to match it: small secondary
+    /// text with no background, so it reads as a map credit rather than a notice
+    /// (decision D25). The detail sheet sits over the map, so this covers it too.
     private var attribution: some View {
-        Text("Pub data © OpenStreetMap contributors")
+        Text("© OpenStreetMap contributors")
             .font(.caption2)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 3)
-            .background(.thinMaterial, in: Capsule())
-            // Clear of Apple's own "Legal" label in the bottom corner.
-            .padding(.bottom, 32)
+            .foregroundStyle(.secondary)
+            .padding(.trailing, 8)
+            .padding(.bottom, 4)
     }
 }
 

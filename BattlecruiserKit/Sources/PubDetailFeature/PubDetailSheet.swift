@@ -31,7 +31,6 @@ public struct PubDetailSheet: View {
                             ContactSection(summary: summary, contact: detail.contact)
                             FeaturesSection(features: detail.features)
                             HistorySection(timeline: detail.timeline)
-                            SourcesSection(sources: detail.sources)
                         }
                     }
                     .padding()

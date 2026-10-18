@@ -207,9 +207,9 @@ more than 5 minutes old.
 Request location. Fetch fresh results for the user's area, or for the cached or default
 region (central London) if location is refused.
 
-**Attribution (licence conditions).** "© OpenStreetMap contributors" stays visible on the
-map. Photo attribution and licence sit under every photo. The detail view ends with the
-pub's `sources`.
+**Attribution (licence conditions).** "© OpenStreetMap contributors" stays visible as fine
+print on the map and in the list's footer. Photo attribution and licence sit under every
+photo. The detail sheet does not repeat the OSM credit (decision D25).
 
 **Errors.** One `APIError` type: a transport failure (offline, timeout), an HTTP
 error with the server's `code`/`message`, an "unexpected content" error (HTML where JSON
