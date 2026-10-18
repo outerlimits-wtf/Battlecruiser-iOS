@@ -51,6 +51,12 @@
 |---|---|---|
 | D24 | **Modular from the outset.** Code lives in local Swift packages inside `Battlecruiser.xcworkspace`, and the app target stays light: entry point, composition, assets. Each module has one job and explicit dependencies. | This is why the project has a workspace. Local packages are our own code, so D8 (first-party only) still holds. Layout approved: one local package, `BattlecruiserKit`, with the modules listed in [mvp-plan.md](../mvp-plan.md), "Modules" (P1, P2). The milestone 1 models now live in its `PubDBModels` module. |
 
+### 2026-10-18, attribution
+
+| # | Decision | Notes |
+|---|---|---|
+| D25 | **The OpenStreetMap credit is fine print, not a notice.** "© OpenStreetMap contributors" sits in the map's bottom-right corner (opposite Apple's "Legal") and in the list's footer. The detail sheet no longer repeats it: the sheet sits over the map, whose credit covers the screen. | ODbL requires crediting OSM where its data is shown; this meets it without overstating it. **Photo credits stay under each photo**: Commons photos are CC BY / BY-SA, which require crediting each photographer, and a general credit cannot do that. The API's per-pub `sources` are still decoded but not shown. |
+
 ## Apple developer accounts, briefly
 
 - **Simulator:** no account needed. Build and run from Xcode freely.
