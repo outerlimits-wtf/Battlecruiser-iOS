@@ -18,6 +18,8 @@ public struct PubDetail: Decodable, Hashable, Sendable, Identifiable {
     public let timeline: [TimelineStop]
     /// Every feature with its yes/no/unknown answer. `summary.features` keeps only the yeses.
     public let features: [FeatureAnswer]
+    /// Drinkers' reviews, in the server's order (newest first).
+    public let reviews: [Review]
     /// Where the data came from. Displaying these is a licence condition.
     public let sources: [DataSource]
 
@@ -25,7 +27,7 @@ public struct PubDetail: Decodable, Hashable, Sendable, Identifiable {
 
     private enum CodingKeys: String, CodingKey {
         case description, city, `operator`, brewery, contact, hours, weekTable,
-             gardenCloses, timeline, features, sources
+             gardenCloses, timeline, features, reviews, sources
     }
 
     public init(from decoder: any Decoder) throws {
@@ -40,6 +42,7 @@ public struct PubDetail: Decodable, Hashable, Sendable, Identifiable {
         gardenCloses = try container.decodeIfPresent(String.self, forKey: .gardenCloses)
         timeline = try container.decode([TimelineStop].self, forKey: .timeline)
         features = try container.decode([FeatureAnswer].self, forKey: .features)
+        reviews = try Self.decodeReviews(from: container)
         sources = try container.decode([DataSource].self, forKey: .sources)
 
         // The detail payload's `features` carries every answer, so decoding a
@@ -50,6 +53,47 @@ public struct PubDetail: Decodable, Hashable, Sendable, Identifiable {
             .filter { $0.value == .yes }
             .map { LabelledSymbol(key: $0.key, label: $0.label, symbol: $0.symbol) }
         self.summary = summary
+    }
+
+    /// Reviews are extra to the core of a pub: a missing list, or one review
+    /// that can't be read, must not cost the user the whole detail. Lossy in
+    /// the same way as `PubList`.
+    private static func decodeReviews(from container: KeyedDecodingContainer<CodingKeys>) throws -> [Review] {
+        guard container.contains(.reviews), try !container.decodeNil(forKey: .reviews) else {
+            return []
+        }
+        var elements = try container.nestedUnkeyedContainer(forKey: .reviews)
+        var reviews: [Review] = []
+        while !elements.isAtEnd {
+            do {
+                reviews.append(try elements.decode(Review.self))
+            } catch {
+                _ = try elements.decode(SkippedElement.self)
+            }
+        }
+        return reviews
+    }
+}
+
+/// One drinker's review: a score out of 10 and, usually, a few words.
+public struct Review: Decodable, Hashable, Sendable, Identifiable {
+    public let id: Int
+    /// 1–10. Reviews from before August 2026, rated out of 5, were deleted.
+    public let rating: Int
+    /// What they wrote; nil or empty when they only gave a score.
+    public let body: String?
+    public let createdAt: String
+    /// Ready to show, e.g. "11 Sept 2026".
+    public let createdAtLabel: String
+    /// Who wrote it, e.g. "@goatloaf".
+    public let attribution: Attribution
+
+    /// The text to show, or nil when there is none worth showing.
+    public var text: String? {
+        guard let trimmed = body?.trimmingCharacters(in: .whitespacesAndNewlines), !trimmed.isEmpty else {
+            return nil
+        }
+        return trimmed
     }
 }
 

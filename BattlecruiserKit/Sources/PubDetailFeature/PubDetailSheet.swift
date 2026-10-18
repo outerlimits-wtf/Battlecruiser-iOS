@@ -29,6 +29,8 @@ public struct PubDetailSheet: View {
                         if let detail = model.detail {
                             WeekSection(rows: detail.weekTable, hoursAttribution: detail.hours.attribution)
                             ContactSection(summary: summary, contact: detail.contact)
+                            ReviewsSection(reviews: detail.reviews)
+                                .id(detail.id)
                             FeaturesSection(features: detail.features)
                             HistorySection(timeline: detail.timeline)
                         }
