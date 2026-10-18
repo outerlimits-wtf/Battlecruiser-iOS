@@ -57,6 +57,12 @@
 |---|---|---|
 | D25 | **The OpenStreetMap credit is fine print, not a notice.** "© OpenStreetMap contributors" sits in the map's bottom-right corner (opposite Apple's "Legal") and in the list's footer. The detail sheet no longer repeats it: the sheet sits over the map, whose credit covers the screen. | ODbL requires crediting OSM where its data is shown; this meets it without overstating it. **Photo credits stay under each photo**: Commons photos are CC BY / BY-SA, which require crediting each photographer, and a general credit cannot do that. The API's per-pub `sources` are still decoded but not shown. |
 
+### 2026-10-18, reviews
+
+| # | Decision | Notes |
+|---|---|---|
+| D26 | **The detail sheet shows drinkers' reviews, read-only.** Score out of 10, byline, date and text, newest first; the first three, then "Show all". Hidden when a pub has none. | Narrows D5: reading reviews is in the MVP, writing them is not. Reviews are public in `GET /pubs/{id}`, so this needs no sign-in. Writing ("commenting") is `POST /pubs/{id}/reviews` and needs a signed-in session, so it waits for the first phase of D19 (Q5). Reviews decode lossily: a bad one is skipped, not the whole pub. |
+
 ## Apple developer accounts, briefly
 
 - **Simulator:** no account needed. Build and run from Xcode freely.

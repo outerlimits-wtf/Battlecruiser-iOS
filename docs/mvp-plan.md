@@ -15,8 +15,8 @@ A read-only iPhone app showing London pubs from PubDB's production API:
   they are open now.
 - **List**: the same pubs as the visible map area, open first, then by distance.
 - **Pub detail**: tap a pin or a row to see open/closing time, tonight's last orders or
-  kicked-out time, Guinness price, the week's opening hours, contact links, features,
-  name history, photo and sources.
+  kicked-out time, Guinness price, the week's opening hours, contact links, drinkers'
+  reviews (read-only, D26), features, name history and photo.
 - **Honest about freshness**: refetches when it goes stale, and says "as of 22:41" when
   showing older data.
 
