@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [develop, main, "release/**", "hotfix/**"]
   push:
-    branches: [develop, main]
+    branches: [develop]
 
 # A newer push to the same branch or PR cancels the run in progress.
 concurrency:
