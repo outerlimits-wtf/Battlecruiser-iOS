@@ -30,37 +30,52 @@ platform :ios do
   end
 
   # ---- Deploy lanes -------------------------------------------------------
-  # Disabled until signing and an App Store Connect API key are set up.
-  # To enable: provide the secrets below and set ENABLE_DEPLOY=1 in the workflow.
-  #   ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_CONTENT (the .p8 contents, base64)
-  #   plus code signing (fastlane match, or a certificate imported on the runner).
+  # Run by .github/workflows/deploy.yml inside the `testflight` environment.
+  # They refuse to run unless ENABLE_DEPLOY=1, which only that workflow sets.
+  # Needs: ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_CONTENT (the .p8, base64), and the
+  # signing certificate and profile already installed on the machine, with
+  # PROFILE_NAME set to the profile's name (the workflow does all of that).
 
-  desc "Build and upload to TestFlight (release/* branches)"
+  desc "Build and upload to TestFlight (every push to main)"
   lane :beta do
     ensure_deploy_enabled
     api_key = asc_api_key
-    increment_build_number(
-      build_number: latest_testflight_build_number(api_key: api_key) + 1,
-      xcodeproj: "Battlecruiser.xcodeproj"
-    )
-    build_app(workspace: WORKSPACE, scheme: SCHEME, export_method: "app-store")
+    signed_build(api_key: api_key)
     upload_to_testflight(api_key: api_key, skip_waiting_for_build_processing: true)
   end
 
-  desc "Build and upload for App Store review (v* tags on main)"
-  lane :release do
-    ensure_deploy_enabled
-    api_key = asc_api_key
-    increment_build_number(
-      build_number: latest_testflight_build_number(api_key: api_key) + 1,
-      xcodeproj: "Battlecruiser.xcodeproj"
-    )
-    build_app(workspace: WORKSPACE, scheme: SCHEME, export_method: "app-store")
-    upload_to_app_store(api_key: api_key, submit_for_review: false, force: true)
+  private_lane :ensure_deploy_enabled do
+    UI.user_error!("Deploy lanes are disabled. They run only from the deploy workflow (ENABLE_DEPLOY=1).") unless ENV["ENABLE_DEPLOY"] == "1"
   end
 
-  private_lane :ensure_deploy_enabled do
-    UI.user_error!("Deploy lanes are disabled. Set ENABLE_DEPLOY=1 once signing and the API key exist.") unless ENV["ENABLE_DEPLOY"] == "1"
+  # Archives and exports an App Store build with manual signing. The signing
+  # change is made to the checkout on the runner only and is never committed.
+  # The build number is passed as a build setting, so no project file is edited.
+  private_lane :signed_build do |options|
+    app_id = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
+    team_id = CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
+    profile = ENV.fetch("PROFILE_NAME")
+    build_number = latest_testflight_build_number(api_key: options[:api_key], initial_build_number: 0) + 1
+
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "Battlecruiser.xcodeproj",
+      targets: [SCHEME],
+      team_id: team_id,
+      code_sign_identity: "Apple Distribution",
+      profile_name: profile,
+      bundle_identifier: app_id
+    )
+
+    build_app(
+      workspace: WORKSPACE,
+      scheme: SCHEME,
+      configuration: "Release",
+      export_method: "app-store",
+      export_options: { provisioningProfiles: { app_id => profile } },
+      xcargs: "CURRENT_PROJECT_VERSION=#{build_number}",
+      xcodebuild_formatter: ""
+    )
   end
 
   private_lane :asc_api_key do
