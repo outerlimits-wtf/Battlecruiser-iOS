@@ -69,6 +69,33 @@ struct PubDetailDecodingTests {
         #expect(detail.weekTable.allSatisfy { $0.doorSays == nil })
     }
 
+    @Test func reviewsDecodeWithScoreBylineAndText() throws {
+        let detail = try Fixture.decode(PubDetail.self, from: "pub-detail-the-bedford")
+        let review = try #require(detail.reviews.first)
+
+        #expect((1...10).contains(review.rating))
+        #expect(review.attribution.label.hasPrefix("@"))
+        #expect(!review.createdAtLabel.isEmpty)
+        #expect(review.text != nil)
+    }
+
+    @Test func pubWithoutReviewsHasAnEmptyList() throws {
+        let detail = try Fixture.decode(PubDetail.self, from: "pub-detail-earl-ferrers")
+
+        #expect(detail.reviews.isEmpty)
+    }
+
+    @Test func blankReviewBodyHasNoText() throws {
+        let json = Data("""
+        { "id": 1, "rating": 7, "body": "  ", "createdAt": "2026-09-11T20:50:07.583Z",
+          "createdAtLabel": "11 Sept 2026",
+          "attribution": { "kind": "user", "label": "@someone", "sourceKey": null } }
+        """.utf8)
+        let review = try JSONDecoder().decode(Review.self, from: json)
+
+        #expect(review.text == nil)
+    }
+
     @Test func timelineStartsOnTheCurrentName() throws {
         let detail = try Fixture.decode(PubDetail.self, from: "pub-detail-the-bedford")
 

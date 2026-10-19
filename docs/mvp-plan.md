@@ -15,8 +15,8 @@ A read-only iPhone app showing London pubs from PubDB's production API:
   they are open now.
 - **List**: the same pubs as the visible map area, open first, then by distance.
 - **Pub detail**: tap a pin or a row to see open/closing time, tonight's last orders or
-  kicked-out time, Guinness price, the week's opening hours, contact links, features,
-  name history, photo and sources.
+  kicked-out time, Guinness price, the week's opening hours, contact links, drinkers'
+  reviews (read-only, D26), features, name history and photo.
 - **Honest about freshness**: refetches when it goes stale, and says "as of 22:41" when
   showing older data.
 
@@ -207,9 +207,9 @@ more than 5 minutes old.
 Request location. Fetch fresh results for the user's area, or for the cached or default
 region (central London) if location is refused.
 
-**Attribution (licence conditions).** "© OpenStreetMap contributors" stays visible on the
-map. Photo attribution and licence sit under every photo. The detail view ends with the
-pub's `sources`.
+**Attribution (licence conditions).** "© OpenStreetMap contributors" stays visible as fine
+print on the map and in the list's footer. Photo attribution and licence sit under every
+photo. The detail sheet does not repeat the OSM credit (decision D25).
 
 **Errors.** One `APIError` type: a transport failure (offline, timeout), an HTTP
 error with the server's `code`/`message`, an "unexpected content" error (HTML where JSON

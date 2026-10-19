@@ -48,11 +48,20 @@ public final class LocationModel: NSObject {
         self.init(manager: manager)
     }
 
+    /// A position iOS already knows is used at once if it is at most this old,
+    /// so a returning user's map opens where they are rather than in London.
+    static let recentEnough: TimeInterval = 10 * 60
+
     init(manager: any LocationManaging) {
         self.manager = manager
         authorization = LocationAuthorization(manager.authorizationStatus)
         super.init()
         manager.delegate = self
+        if authorization == .authorized,
+           let known = manager.location,
+           Date().timeIntervalSince(known.timestamp) <= Self.recentEnough {
+            coordinate = known.coordinate
+        }
     }
 
     /// Start following the user: asks for permission the first time, and starts
@@ -118,6 +127,8 @@ extension LocationModel: CLLocationManagerDelegate {
 /// The parts of `CLLocationManager` the model uses, so tests can substitute a fake.
 protocol LocationManaging: AnyObject {
     var authorizationStatus: CLAuthorizationStatus { get }
+    /// The most recent position iOS knows, possibly from before this launch.
+    var location: CLLocation? { get }
     var delegate: (any CLLocationManagerDelegate)? { get set }
     func requestWhenInUseAuthorization()
     func startUpdatingLocation()

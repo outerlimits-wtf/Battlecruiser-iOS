@@ -40,8 +40,9 @@ Battlecruiser.xcodeproj/     # The app target only: entry point, composition, as
 Sources/
   App/
     BattlecruiserApp.swift   # @main App entry point, creates WindowGroup
-    ContentView.swift        # Composition root: PubsMapScreen(source: PubDBClient()), plus #Preview and #Playground
+    ContentView.swift        # Composition root: PubsMapScreen(source: PubDBClient.live()), plus #Preview and #Playground
   Assets.xcassets/           # Asset catalog (AccentColor)
+  PrivacyInfo.xcprivacy      # Privacy manifest for the whole binary (see Working conventions)
 Tests/                       # BattlecruiserTests: app-level tests only (Swift Testing)
 BattlecruiserKit/            # The one local package (decision D24), at the top level; modules added as they are built
   Package.swift
@@ -83,6 +84,7 @@ The app is modular from the outset. **Code lives in local Swift packages inside 
 
 - Use SwiftUI for UI. Keep views small and composable; split a view into its own file once it stops being trivial.
 - Accessibility is part of done: custom controls get a VoiceOver label (and a hint if tapping does something), layouts stack at accessibility text sizes (`dynamicTypeSize.isAccessibilitySize`), animations respect Reduce Motion, and colour never carries meaning alone. Where server text reads badly aloud, rephrase it for VoiceOver only (see `Spoken` in PubDetailFeature); the screen still shows the server's label.
+- Keep `Sources/PrivacyInfo.xcprivacy` in step with the code, in the same change: it declares every required-reason API used anywhere in the binary (today only file timestamps, in ResponseCache) and every kind of data sent off the device (today only location, to the PubDB API). Adding `UserDefaults`, sign-in, analytics or anything similar means updating it.
 - Follow standard Swift API design guidelines: `UpperCamelCase` for types, `lowerCamelCase` for everything else, and clear argument labels.
 - Prefer Swift's modern concurrency (`async`/`await`, `@MainActor` for UI state) over callbacks.
 - Write code that should compile, but do not run a build to check it unless instructed (see Command rules).
