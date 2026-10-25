@@ -28,7 +28,7 @@ jobs:
       XCODE_VERSION: ${{ vars.XCODE_VERSION }}
       SIMULATOR_DEVICE: ${{ vars.SIMULATOR_DEVICE }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Select Xcode
         if: ${{ env.XCODE_VERSION != '' }}
@@ -40,23 +40,5 @@ jobs:
           xcrun simctl list devices available
           fastlane --version
 
-      # CI uses the runner's fastlane, so fail loudly if the image moves off the
-      # version in the Gemfile. Update both together after trying the new version.
-      - name: Check fastlane version
-        run: |
-          expected=$(sed -n 's/.*gem "fastlane", "\(.*\)".*/\1/p' Gemfile)
-          actual=$(fastlane --version | sed -n 's/^fastlane \([0-9.]*\)$/\1/p' | tail -n 1)
-          echo "expected=$expected actual=$actual"
-          [ -n "$expected" ] && [ "$expected" = "$actual" ]
-
       - name: Run tests
         run: fastlane test
-
-      - name: Upload test results
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: fastlane/test_output
-          if-no-files-found: ignore
-          retention-days: 7

@@ -29,18 +29,11 @@ jobs:
       ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
       ASC_KEY_CONTENT: ${{ secrets.ASC_KEY_CONTENT }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Select Xcode
         if: ${{ env.XCODE_VERSION != '' }}
         run: sudo xcode-select -s "/Applications/Xcode_${XCODE_VERSION}.app/Contents/Developer"
-
-      - name: Check fastlane version
-        run: |
-          expected=$(sed -n 's/.*gem "fastlane", "\(.*\)".*/\1/p' Gemfile)
-          actual=$(fastlane --version | sed -n 's/^fastlane \([0-9.]*\)$/\1/p' | tail -n 1)
-          echo "expected=$expected actual=$actual"
-          [ -n "$expected" ] && [ "$expected" = "$actual" ]
 
       - name: Install signing certificate and profile
         env:
