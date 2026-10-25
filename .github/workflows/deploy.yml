@@ -2,9 +2,12 @@ name: Deploy
 
 # Every push to main (a merged release or hotfix PR) builds and uploads to TestFlight.
 # Submitting that build for App Store review is done by hand in App Store Connect.
+# It can also be run by hand (Actions tab, or `gh workflow run deploy.yml --ref <branch>`);
+# a manual run uploads too, and waits for approval if the environment requires it.
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 # Never cancel a deploy half way through, but do not run two at once.
 concurrency:
