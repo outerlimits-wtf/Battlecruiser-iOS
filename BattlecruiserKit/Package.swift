@@ -21,6 +21,7 @@ let package = Package(
         .library(name: "DesignSystem", targets: ["DesignSystem"]),
         .library(name: "PubsFeature", targets: ["PubsFeature"]),
         .library(name: "PubDetailFeature", targets: ["PubDetailFeature"]),
+        .library(name: "Root", targets: ["Root"]),
     ],
     targets: [
         /// The PubDB v1 API's response types. Foundation only.
@@ -63,7 +64,7 @@ let package = Package(
         /// The pubs around the user: state that follows the map, then the map and list views.
         .target(
             name: "PubsFeature",
-            dependencies: ["PubDBClient", "PubDBModels", "AppEnvironment", "DesignSystem", "UserLocation", "PubDetailFeature"],
+            dependencies: ["PubDBClient", "PubDBModels", "AppEnvironment", "DesignSystem"],
             swiftSettings: [.defaultIsolation(MainActor.self)]
         ),
         .testTarget(name: "PubsFeatureTests", dependencies: ["PubsFeature", "PubDBClient", "PubDBModels"]),
@@ -75,6 +76,17 @@ let package = Package(
             swiftSettings: [.defaultIsolation(MainActor.self)]
         ),
         .testTarget(name: "PubDetailFeatureTests", dependencies: ["PubDetailFeature", "PubDBClient", "PubDBModels"]),
+
+        /// The whole app: owns shared state and wires the features together, so
+        /// features never import each other. The only module that imports features.
+        .target(
+            name: "Root",
+            dependencies: [
+                "AppEnvironment", "DesignSystem", "PubDBClient", "PubDBModels",
+                "PubDetailFeature", "PubsFeature", "UserLocation",
+            ],
+            swiftSettings: [.defaultIsolation(MainActor.self)]
+        ),
     ],
     swiftLanguageModes: [.v5]
 )
