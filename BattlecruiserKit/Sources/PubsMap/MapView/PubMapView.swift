@@ -14,6 +14,7 @@ public struct PubMapView: UIViewRepresentable {
     let onSelect: (Pin) -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var colorScheme
 
     public init(
         pins: [Pin],
@@ -52,7 +53,7 @@ public struct PubMapView: UIViewRepresentable {
         let coordinator = context.coordinator
         coordinator.onViewportChange = onViewportChange
         coordinator.onSelect = onSelect
-        coordinator.update(pins: pins, selectedID: selectedID)
+        coordinator.update(pins: pins, selectedID: selectedID, colorScheme: colorScheme)
         if let request = cameraRequest {
             request.apply(to: mapView, animated: !reduceMotion)
             DispatchQueue.main.async { cameraRequest = nil }
