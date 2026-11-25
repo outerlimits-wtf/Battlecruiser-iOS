@@ -32,6 +32,7 @@ one consistent evening:
 | `pubs-similar-the-bedford.json` | `GET /pubs/node%2F251526423/similar?…` | 200 | `{ "pubs": [...] }` with 6 summaries |
 | `error-not-found.json` | `GET /pubs/node%2F1?…` | 404 | Error body without `field` |
 | `error-invalid-at.json` | `GET /pubs?at=not-a-time` | 400 | Error body with `field: "at"` |
+| `meta.json` | `GET /meta` (captured 2026-11-26, no `at`) | 200 | Every list the UI is driven by: amenities, venue kinds, features, weekdays, contributable fields and their kinds, boards, photo kinds, report reasons, `clients.ios.minVersion`, limits |
 
 ## Things to know
 
