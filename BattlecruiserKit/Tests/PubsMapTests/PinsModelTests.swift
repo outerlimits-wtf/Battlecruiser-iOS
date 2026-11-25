@@ -51,9 +51,9 @@ struct PinsModelTests {
 
     @Test func sameFiltersDoNotRefetch() async {
         let source = FakePinsSource([])
-        let model = PinsModel(source: source, amenity: "pub")
+        let model = PinsModel(source: source)
 
-        model.filtersChanged(amenity: "pub")
+        model.queryChanged(PubQuery())
         await model.loadTask?.value
 
         #expect(source.calls == 0)
@@ -61,9 +61,11 @@ struct PinsModelTests {
 
     @Test func newFiltersFetchWithThem() async {
         let source = FakePinsSource([.changed(PinCollection(pins: []))])
-        let model = PinsModel(source: source, amenity: "pub")
+        let model = PinsModel(source: source)
+        var bars = PubQuery()
+        bars.amenity = "bar"
 
-        model.filtersChanged(amenity: "bar")
+        model.queryChanged(bars)
         await model.loadTask?.value
 
         #expect(source.amenities == ["bar"])
@@ -84,9 +86,9 @@ private final class FakePinsSource: PinsSource, @unchecked Sendable {
     var calls: Int { lock.withLock { recorded.count } }
     var amenities: [String] { lock.withLock { recorded } }
 
-    func fetchPins(amenity: String) async throws -> Conditional<PinCollection> {
+    func fetchPins(matching query: PubQuery) async throws -> Conditional<PinCollection> {
         let next: Conditional<PinCollection>? = lock.withLock {
-            recorded.append(amenity)
+            recorded.append(query.amenity ?? "both")
             return answers.isEmpty ? nil : answers.removeFirst()
         }
         if let next { return next }

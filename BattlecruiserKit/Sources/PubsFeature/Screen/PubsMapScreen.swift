@@ -23,6 +23,8 @@ public struct PubsMapScreen<Panel: View>: View {
     let panel: Panel?
 
     @State var detent: SheetDetent = .half
+    /// The search and filters, shared by the list and the pins.
+    @State var query = PubQuery()
     @State var cameraRequest: MapCameraRequest?
     /// Whether the person has moved the map themselves this launch.
     @State var userHasMovedMap = false
@@ -73,24 +75,40 @@ public struct PubsMapScreen<Panel: View>: View {
                         count: pubs.pubs.count,
                         openCount: pubs.openCount,
                         isLoading: pubs.isLoading,
-                        knowsLocation: userCoordinate != nil
+                        knowsLocation: userCoordinate != nil,
+                        isEverywhere: !query.usesArea,
+                        onTurnOffEverywhere: query.everywhere ? { query.everywhere = false } : nil
                     )
                 }
             } content: {
                 if let panel {
                     panel
                 } else {
-                    ResultsList(pubs: pubs, selectedID: selectedID, onGoToLondon: goToLondon, onSelect: onSelectPub)
+                    ResultsList(
+                        pubs: pubs,
+                        selectedID: selectedID,
+                        onGoToLondon: goToLondon,
+                        onSelect: onSelectPub,
+                        onSearchEverywhere: query.everywhere ? nil : { query.everywhere = true }
+                    )
                 }
             }
         }
         .overlay(alignment: .top) {
-            StatusBanner(
-                pubs: pubs,
-                isLocationDenied: isLocationDenied,
-                showsNotice: detent == .peek,
-                onGoToLondon: goToLondon
-            )
+            VStack(spacing: Metrics.s) {
+                SearchBar { text in query.search = text }
+                    .padding(.horizontal, Metrics.m)
+                StatusBanner(
+                    pubs: pubs,
+                    isLocationDenied: isLocationDenied,
+                    showsNotice: detent == .peek,
+                    onGoToLondon: goToLondon
+                )
+            }
+        }
+        .onChange(of: query) { _, query in
+            pubs.queryChanged(query)
+            pins.queryChanged(query)
         }
         .task {
             // Last session's pubs first, marked with their age, so the screen

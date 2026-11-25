@@ -8,8 +8,25 @@ struct ResultsHeader: View {
     let openCount: Int
     let isLoading: Bool
     let knowsLocation: Bool
+    /// Searching or "everywhere": the list isn't limited to the map.
+    let isEverywhere: Bool
+    let onTurnOffEverywhere: (() -> Void)?
 
     var body: some View {
+        HStack(alignment: .top) {
+            lines
+            Spacer(minLength: Metrics.s)
+            if let onTurnOffEverywhere {
+                Button("🌍 Everywhere ✕", action: onTurnOffEverywhere)
+                    .buttonStyle(ChipStyle(isSelected: true))
+                    .accessibilityLabel("Stop searching everywhere")
+            }
+        }
+        .padding(.horizontal, Metrics.l)
+        .padding(.bottom, Metrics.s)
+    }
+
+    private var lines: some View {
         VStack(alignment: .leading, spacing: 2) {
             HStack(spacing: 0) {
                 if isLoading && count == 0 {
@@ -24,14 +41,16 @@ struct ResultsHeader: View {
             }
             .font(Typography.rowTitle)
             .foregroundStyle(Palette.ink)
-            Text(knowsLocation ? "Near you, open ones first" : "In the area you are looking at")
+            Text(scope)
                 .font(Typography.secondary)
                 .foregroundStyle(Palette.inkMuted)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, Metrics.l)
-        .padding(.bottom, Metrics.s)
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(.isHeader)
+    }
+
+    private var scope: String {
+        if isEverywhere { return "Across everywhere we know" }
+        return knowsLocation ? "Near you, open ones first" : "In the area you are looking at"
     }
 }

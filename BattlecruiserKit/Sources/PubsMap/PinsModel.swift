@@ -20,31 +20,31 @@ public final class PinsModel {
 
     @ObservationIgnored private let source: any PinsSource
     @ObservationIgnored private let now: () -> Date
-    @ObservationIgnored private var amenity: String
+    @ObservationIgnored private var query: PubQuery
     @ObservationIgnored private(set) var loadTask: Task<Void, Never>?
 
-    public init(source: any PinsSource, amenity: String = PubDBClient.defaultAmenity, now: @escaping () -> Date = { Date() }) {
+    public init(source: any PinsSource, query: PubQuery = PubQuery(), now: @escaping () -> Date = { Date() }) {
         self.source = source
-        self.amenity = amenity
+        self.query = query
         self.now = now
     }
 
     /// The filters changed: fetch for the new ones. The old pins stay until
     /// the new ones arrive.
-    public func filtersChanged(amenity: String) {
-        guard amenity != self.amenity else { return }
-        self.amenity = amenity
+    public func queryChanged(_ query: PubQuery) {
+        guard query != self.query else { return }
+        self.query = query
         refresh()
     }
 
     /// Ask again now; most answers are `304`.
     public func refresh() {
         loadTask?.cancel()
-        let amenity = amenity
+        let query = query
         loadTask = Task {
             isLoading = true
             do {
-                let answer = try await source.fetchPins(amenity: amenity)
+                let answer = try await source.fetchPins(matching: query)
                 try Task.checkCancellation()
                 if case .changed(let collection) = answer {
                     pins = collection.pins

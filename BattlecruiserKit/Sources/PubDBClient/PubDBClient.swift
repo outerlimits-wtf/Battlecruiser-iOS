@@ -20,8 +20,6 @@ public struct PubDBClient: Sendable {
     /// local `bun dev`. Production when absent.
     public static let baseURLInfoKey = "PubDBBaseURL"
 
-    /// Pubs are asked for by default; bars only when the user wants them (decision D4).
-    public static let defaultAmenity = "pub"
     /// Enough to fill the visible map without flooding it (decision R5).
     public static let defaultLimit = 200
 

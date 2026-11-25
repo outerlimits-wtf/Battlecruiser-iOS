@@ -29,7 +29,7 @@ public final class PubsModel {
     /// What, if anything, the screen should tell the user about these pubs.
     public var notice: PubsNotice? {
         PubsNotice.current(
-            area: requestedArea,
+            area: query.usesArea ? requestedArea : nil,
             pubCount: pubs.count,
             hasFreshResult: fetchedAt != nil && !isShowingCached,
             isLoading: isLoading,
@@ -43,6 +43,8 @@ public final class PubsModel {
     @ObservationIgnored private let now: () -> Date
     /// The area most recently asked for: being fetched, or fetched.
     public private(set) var requestedArea: BoundingBox? = nil
+    /// The search and filters the list is for.
+    public private(set) var query = PubQuery()
     @ObservationIgnored private var userLocation: Coordinate?
     /// The pending or running load. Internal so tests can await it.
     @ObservationIgnored private(set) var loadTask: Task<Void, Never>?
@@ -85,12 +87,24 @@ public final class PubsModel {
         isShowingCached = true
     }
 
-    /// The map settled on a new area.
+    /// The map settled on a new area. A search or "everywhere" ignores it.
     public func areaChanged(to area: BoundingBox) {
+        guard query.usesArea else {
+            requestedArea = area
+            return
+        }
         guard shouldFetch(area) else {
             return
         }
         load(area, debounced: true)
+    }
+
+    /// The search or filters changed: fetch again with them.
+    public func queryChanged(_ query: PubQuery) {
+        guard query != self.query else { return }
+        self.query = query
+        lastError = nil
+        load(requestedArea, debounced: true)
     }
 
     /// Fetch `area` only if nothing has been asked for yet: a fallback for when
@@ -104,10 +118,10 @@ public final class PubsModel {
 
     /// Fetch the current area again now, e.g. on returning to the foreground.
     public func refresh() {
-        guard let area = requestedArea else {
+        guard requestedArea != nil || !query.usesArea else {
             return
         }
-        load(area, debounced: false)
+        load(requestedArea, debounced: false)
     }
 
     /// The user's position changed. The first fix refetches, so distances appear.
@@ -133,17 +147,19 @@ public final class PubsModel {
         return !requested.contains(area) || zoomedWellIn
     }
 
-    private func load(_ area: BoundingBox, debounced: Bool) {
+    private func load(_ area: BoundingBox?, debounced: Bool) {
         loadTask?.cancel()
-        requestedArea = area
+        if let area { requestedArea = area }
         let location = userLocation
+        let query = query
+        let fetchArea = query.usesArea ? area : nil
         loadTask = Task { [debounce, sleep] in
             do {
                 if debounced {
                     try await sleep(debounce)
                 }
                 isLoading = true
-                let list = try await source.fetchPubs(in: area, near: location)
+                let list = try await source.fetchPubs(matching: query, in: fetchArea, near: location)
                 // A newer request may have started while this one was in flight.
                 try Task.checkCancellation()
                 pubs = PubOrdering.forDisplay(list.pubs)

@@ -10,14 +10,12 @@ extension Endpoint {
         "pub/\(id)"
     }
 
-    static func pubs(in area: BoundingBox, near location: Coordinate?, amenity: String, limit: Int) -> Endpoint {
-        Endpoint(
+    /// The list. `area` is left out when the query searches or looks everywhere.
+    static func pubs(matching query: PubQuery, in area: BoundingBox?, near location: Coordinate?, limit: Int) -> Endpoint {
+        let areaItems = query.usesArea ? area.map { [URLQueryItem(name: "bbox", value: $0.queryValue)] } ?? [] : []
+        return Endpoint(
             path: ["pubs"],
-            query: [
-                URLQueryItem(name: "bbox", value: area.queryValue),
-                URLQueryItem(name: "amenity", value: amenity),
-                URLQueryItem(name: "limit", value: String(limit)),
-            ] + QueryItems.location(location),
+            query: areaItems + query.items + [URLQueryItem(name: "limit", value: String(limit))] + QueryItems.location(location),
             cacheKey: lastPubsCacheKey
         )
     }

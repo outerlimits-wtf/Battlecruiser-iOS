@@ -37,11 +37,22 @@ final class FakePubSource: PubSource, @unchecked Sendable {
         lock.withLock { self.respond = respond }
     }
 
-    func fetchPubs(in area: BoundingBox, near location: Coordinate?) async throws -> PubList {
+    /// A search with no area is recorded with this one, so tests can still compare areas.
+    static let noArea = BoundingBox(west: 0, south: 0, east: 0, north: 0)
+
+    func fetchPubs(matching query: PubQuery, in area: BoundingBox?, near location: Coordinate?) async throws -> PubList {
+        let area = area ?? Self.noArea
         let respond = lock.withLock {
             recorded.append(Request(area: area, location: location))
+            queries.append(query)
             return self.respond
         }
         return try respond(area)
+    }
+
+    private var queries: [PubQuery] = []
+
+    var receivedQueries: [PubQuery] {
+        lock.withLock { queries }
     }
 }

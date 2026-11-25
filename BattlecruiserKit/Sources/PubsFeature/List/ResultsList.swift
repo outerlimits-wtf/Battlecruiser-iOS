@@ -10,6 +10,8 @@ struct ResultsList: View {
     let selectedID: String?
     let onGoToLondon: () -> Void
     let onSelect: (PubSummary) -> Void
+    /// Nil when already searching everywhere.
+    let onSearchEverywhere: (() -> Void)?
 
     var body: some View {
         ScrollView {
@@ -38,6 +40,12 @@ struct ResultsList: View {
         }
     }
 
+    private var emptyMessage: String {
+        pubs.query.activeFilterCount > 0
+            ? "Nothing round here fits all that. Have you considered lowering your standards?"
+            : "No pubs round here. Bleak, frankly."
+    }
+
     @ViewBuilder
     private var placeholder: some View {
         if let notice = pubs.notice, notice != .nothingHere {
@@ -48,7 +56,12 @@ struct ResultsList: View {
             StateView(.loading())
                 .padding(.top, Metrics.s)
         } else {
-            StateView(.empty(emoji: "🍺", title: "Nothing doing", body: "No pubs round here. Bleak, frankly."))
+            StateView(.empty(emoji: "🍺", title: "Nothing doing", body: emptyMessage)) {
+                if let onSearchEverywhere {
+                    Button("🌍 Search everywhere", action: onSearchEverywhere)
+                        .buttonStyle(ChipStyle())
+                }
+            }
         }
     }
 }

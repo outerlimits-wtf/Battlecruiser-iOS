@@ -3,15 +3,15 @@ import PubDBModels
 
 /// Pub lists and pub details, live and from the cache.
 extension PubDBClient {
-    /// Pubs inside `area`, nearest its centre first. Pass the user's `location`
-    /// to get a distance on each pub.
+    /// Pubs matching `query`, inside `area` unless the query searches or
+    /// looks everywhere. Pass the user's `location` to get a distance on each.
     public func pubs(
-        in area: BoundingBox,
+        matching query: PubQuery = PubQuery(),
+        in area: BoundingBox?,
         near location: Coordinate? = nil,
-        amenity: String = PubDBClient.defaultAmenity,
         limit: Int = PubDBClient.defaultLimit
     ) async throws -> PubList {
-        try await send(.pubs(in: area, near: location, amenity: amenity, limit: limit))
+        try await send(.pubs(matching: query, in: area, near: location, limit: limit))
     }
 
     /// One pub in full.
