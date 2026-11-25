@@ -39,6 +39,9 @@ public struct RootView: View {
         .task {
             meta.load()
             location.start()
+            if let id = DebugLaunch.pubToOpen {
+                detail.select(id: id, name: "…", near: nil)
+            }
         }
         .onChange(of: scenePhase) { previous, phase in
             handleScenePhase(from: previous, to: phase)
@@ -73,7 +76,7 @@ public struct RootView: View {
             selectedID: detail.selectedID,
             onSelectPin: select,
             onSelectPub: { pub in detail.select(pub, near: userCoordinate) },
-            panel: detail.selectedID == nil ? nil : PubDetailPanel(model: detail, onClose: detail.deselect),
+            panel: detail.selectedID == nil ? nil : PubDetailPanel(model: detail, meta: meta.meta, onClose: detail.deselect),
             meta: meta.meta
         )
     }
