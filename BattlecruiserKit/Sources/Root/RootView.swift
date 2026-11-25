@@ -4,6 +4,7 @@ import PubDBClient
 import PubDBModels
 import PubDetailFeature
 import PubsFeature
+import PubsMap
 import UserLocation
 
 /// The whole app. Owns the state features share (the server's lists, the
@@ -13,6 +14,7 @@ public struct RootView: View {
     @State private var meta: MetaStore
     @State private var location = LocationModel()
     @State private var pubs: PubsModel
+    @State private var pins: PinsModel
     @State private var detail: PubDetailModel
     @Environment(\.scenePhase) private var scenePhase
 
@@ -21,6 +23,7 @@ public struct RootView: View {
     public init(dependencies: AppDependencies) {
         _meta = State(initialValue: MetaStore(source: dependencies.client))
         _pubs = State(initialValue: PubsModel(source: dependencies.client))
+        _pins = State(initialValue: PinsModel(source: dependencies.client))
         _detail = State(initialValue: PubDetailModel(source: dependencies.client))
     }
 
@@ -31,10 +34,12 @@ public struct RootView: View {
             } else {
                 PubsMapScreen(
                     pubs: pubs,
+                    pins: pins,
                     userCoordinate: userCoordinate,
                     isLocationDenied: location.authorization == .denied,
-                    selectedID: detail.selected?.id,
-                    onSelect: { pub in detail.select(pub, near: userCoordinate) }
+                    selectedID: detail.selectedID,
+                    onSelectPin: select,
+                    onSelectPub: { pub in detail.select(pub, near: userCoordinate) }
                 )
                 .sheet(isPresented: isShowingDetail) {
                     PubDetailSheet(model: detail)
@@ -58,6 +63,7 @@ public struct RootView: View {
             location.start()
             if previous == .background {
                 meta.refresh()
+                pins.refresh()
                 pubs.refresh()
                 detail.refresh()
             }
@@ -71,11 +77,21 @@ public struct RootView: View {
     /// The sheet is open while a pub is selected; dismissing it deselects.
     private var isShowingDetail: Binding<Bool> {
         Binding(
-            get: { detail.selected != nil },
+            get: { detail.selectedID != nil },
             set: { isShowing in
                 if !isShowing { detail.deselect() }
             }
         )
+    }
+
+    /// A pin was tapped. Use its summary if the list already has it, so the
+    /// sheet opens full; otherwise open on the name and load the rest.
+    private func select(_ pin: Pin) {
+        if let summary = pubs.pubs.first(where: { $0.id == pin.id }) {
+            detail.select(summary, near: userCoordinate)
+        } else {
+            detail.select(id: pin.id, name: pin.name, near: userCoordinate)
+        }
     }
 
     /// The user's position in the client's terms (CoreLocation stays out of it).

@@ -7,6 +7,11 @@ public struct MapViewport: Equatable, Sendable {
     /// Metres one screen point covers. Small means zoomed in.
     public let metresPerPoint: Double
 
+    init(area: BoundingBox, metresPerPoint: Double) {
+        self.area = area
+        self.metresPerPoint = metresPerPoint
+    }
+
     init(_ mapView: MKMapView) {
         let region = mapView.region
         area = BoundingBox(

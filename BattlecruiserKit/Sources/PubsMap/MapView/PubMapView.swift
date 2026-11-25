@@ -53,9 +53,10 @@ public struct PubMapView: UIViewRepresentable {
         let coordinator = context.coordinator
         coordinator.onViewportChange = onViewportChange
         coordinator.onSelect = onSelect
+        coordinator.reduceMotion = reduceMotion
         coordinator.update(pins: pins, selectedID: selectedID, colorScheme: colorScheme)
         if let request = cameraRequest {
-            request.apply(to: mapView, animated: !reduceMotion)
+            coordinator.perform(request, animated: !reduceMotion)
             DispatchQueue.main.async { cameraRequest = nil }
         }
     }

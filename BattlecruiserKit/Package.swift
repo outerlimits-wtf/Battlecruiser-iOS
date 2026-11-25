@@ -58,6 +58,7 @@ let package = Package(
         .target(
             name: "DesignSystem",
             dependencies: ["PubDBModels"],
+            resources: [.process("Resources")],
             swiftSettings: [.defaultIsolation(MainActor.self)]
         ),
         .testTarget(name: "DesignSystemTests", dependencies: ["DesignSystem", "PubDBModels"]),
@@ -74,7 +75,7 @@ let package = Package(
         /// The pubs around the user: state that follows the map, then the map and list views.
         .target(
             name: "PubsFeature",
-            dependencies: ["PubDBClient", "PubDBModels", "AppEnvironment", "DesignSystem"],
+            dependencies: ["PubDBClient", "PubDBModels", "AppEnvironment", "DesignSystem", "PubsMap"],
             swiftSettings: [.defaultIsolation(MainActor.self)]
         ),
         .testTarget(name: "PubsFeatureTests", dependencies: ["PubsFeature", "PubDBClient", "PubDBModels"]),
@@ -93,7 +94,7 @@ let package = Package(
             name: "Root",
             dependencies: [
                 "AppEnvironment", "DesignSystem", "PubDBClient", "PubDBModels",
-                "PubDetailFeature", "PubsFeature", "UserLocation",
+                "PubDetailFeature", "PubsFeature", "PubsMap", "UserLocation",
             ],
             swiftSettings: [.defaultIsolation(MainActor.self)]
         ),

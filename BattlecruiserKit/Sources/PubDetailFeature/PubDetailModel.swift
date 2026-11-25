@@ -13,8 +13,14 @@ import PubDBModels
 /// already shown.
 @Observable
 public final class PubDetailModel {
-    /// The summary the user tapped. Shown until the detail arrives.
+    /// The summary the user tapped, when there was one (a list row). Shown
+    /// until the detail arrives.
     public private(set) var selected: PubSummary? = nil
+    /// The selected pub's id, however it was chosen.
+    public private(set) var selectedID: String? = nil
+    /// The name to show while nothing else is known, when the pub was chosen
+    /// from a map pin, which carries no summary.
+    public private(set) var placeholderName: String? = nil
     /// The full detail for `selected`: cached, then fresh. Nil until either exists.
     public private(set) var detail: PubDetail? = nil
     public private(set) var isLoading = false
@@ -46,13 +52,26 @@ public final class PubDetailModel {
 
     /// Show `pub`, and fetch its full detail. Pass the user's location for distances.
     public func select(_ pub: PubSummary, near location: Coordinate?) {
+        start(id: pub.id, summary: pub, name: pub.name, near: location)
+    }
+
+    /// Show the pub with this id, e.g. from a map pin: its name at once, the
+    /// rest when the detail arrives.
+    public func select(id: String, name: String, near location: Coordinate?) {
+        start(id: id, summary: nil, name: name, near: location)
+    }
+
+    private func start(id: String, summary: PubSummary?, name: String, near location: Coordinate?) {
         loadTask?.cancel()
-        selected = pub
-        detail = cache[pub.id]
+        selected = summary
+        selectedID = id
+        placeholderName = name
+        detail = cache[id]
         showingCachedFrom = nil
         lastError = nil
+        isLoading = false
         self.location = location
-        load(id: pub.id)
+        load(id: id)
     }
 
     /// Fetch the selected pub again, e.g. on returning to the foreground, when
@@ -63,7 +82,7 @@ public final class PubDetailModel {
 
     /// Fetch the selected pub again, e.g. after a failure.
     public func retry() {
-        guard let id = selected?.id else {
+        guard let id = selectedID else {
             return
         }
         loadTask?.cancel()
@@ -76,6 +95,8 @@ public final class PubDetailModel {
         loadTask?.cancel()
         loadTask = nil
         selected = nil
+        selectedID = nil
+        placeholderName = nil
         detail = nil
         showingCachedFrom = nil
         isLoading = false

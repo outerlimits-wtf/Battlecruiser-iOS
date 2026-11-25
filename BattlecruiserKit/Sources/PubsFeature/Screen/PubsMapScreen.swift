@@ -1,54 +1,64 @@
-import MapKit
 import SwiftUI
 import DesignSystem
 import PubDBClient
 import PubDBModels
+import PubsMap
 
 /// The pubs around the user, on a map or as a list.
 ///
-/// Draws `PubsModel` and reports what the user does: a tapped pin or row goes
-/// to `onSelect`, which the app uses to open the pub. It knows nothing of the
-/// detail sheet, location permission or app lifecycle; the root owns those. The
-/// list shows the map's current area, so it sits over the map rather than
-/// replacing it: switching back keeps the map exactly where it was (D18).
+/// The map draws every pin (`PinsModel`, from `/pins`); the list draws the
+/// pubs in the map's area (`PubsModel`, from `/pubs`). A tapped pin or row goes
+/// to the root, which opens the pub. It knows nothing of the detail sheet,
+/// location permission or app lifecycle; the root owns those.
 public struct PubsMapScreen: View {
     let pubs: PubsModel
+    let pins: PinsModel
     let userCoordinate: Coordinate?
     let isLocationDenied: Bool
     let selectedID: String?
-    let onSelect: (PubSummary) -> Void
+    let onSelectPin: (Pin) -> Void
+    let onSelectPub: (PubSummary) -> Void
 
     /// The map first, always (decision D18).
     @State var mode: PubsMode = .map
-    /// Follows the user once a fix arrives; until then, and if refused, London.
-    @State var position: MapCameraPosition = .userLocation(fallback: .region(PubsMapScreen.fallbackRegion))
+    @State var cameraRequest: MapCameraRequest?
+    /// How many times the map has settled. The first is where it opened; any
+    /// later one before a location fix means the user moved it themselves.
+    @State var settledCount = 0
     /// Whether the map has been brought to the user's first fix this launch.
     @State var hasCenteredOnUser = false
-    @Environment(\.accessibilityReduceMotion) var reduceMotion
 
     public init(
         pubs: PubsModel,
+        pins: PinsModel,
         userCoordinate: Coordinate?,
         isLocationDenied: Bool,
         selectedID: String?,
-        onSelect: @escaping (PubSummary) -> Void
+        onSelectPin: @escaping (Pin) -> Void,
+        onSelectPub: @escaping (PubSummary) -> Void
     ) {
         self.pubs = pubs
+        self.pins = pins
         self.userCoordinate = userCoordinate
         self.isLocationDenied = isLocationDenied
         self.selectedID = selectedID
-        self.onSelect = onSelect
+        self.onSelectPin = onSelectPin
+        self.onSelectPub = onSelectPub
     }
 
     public var body: some View {
         ZStack {
-            PubMap(
-                position: $position,
-                pubs: pubs.pubs,
+            PubMapView(
+                pins: pins.pins,
                 selectedID: selectedID,
-                onAreaChange: { area in pubs.areaChanged(to: area) },
-                onSelect: onSelect
+                cameraRequest: $cameraRequest,
+                onViewportChange: { viewport in
+                    settledCount += 1
+                    pubs.areaChanged(to: viewport.area)
+                },
+                onSelect: onSelectPin
             )
+            .ignoresSafeArea()
             .overlay(alignment: .bottomTrailing) {
                 MapAttribution()
             }
@@ -59,7 +69,7 @@ public struct PubsMapScreen: View {
                     notice: pubs.notice,
                     onGoToLondon: goToLondon,
                     onRetry: pubs.refresh,
-                    onSelect: onSelect,
+                    onSelect: onSelectPub,
                     onRefresh: {
                         pubs.refresh()
                         await pubs.loadTask?.value
@@ -84,9 +94,13 @@ public struct PubsMapScreen: View {
             // is never empty while the first fetch is under way.
             await pubs.loadCached()
             // The map normally reports its area as soon as it appears. If it
-            // hasn't after a second, show London rather than an empty map.
+            // hasn't after a second, show London rather than an empty list.
             try? await Task.sleep(for: .seconds(1))
-            pubs.loadIfIdle(in: BoundingBox(Self.fallbackRegion))
+            pubs.loadIfIdle(in: Self.fallbackArea)
+        }
+        .task {
+            pins.refresh()
+            await pins.refreshPeriodically()
         }
         .onChange(of: userCoordinate, initial: true) { _, coordinate in
             pubs.userLocationChanged(to: coordinate)
@@ -101,9 +115,11 @@ public struct PubsMapScreen: View {
 #Preview("Live data") {
     PubsMapScreen(
         pubs: PubsModel(source: PubDBClient()),
+        pins: PinsModel(source: PubDBClient()),
         userCoordinate: nil,
         isLocationDenied: false,
         selectedID: nil,
-        onSelect: { _ in }
+        onSelectPin: { _ in },
+        onSelectPub: { _ in }
     )
 }

@@ -37,6 +37,16 @@ public struct PubDetailSheet: View {
                     }
                     .padding()
                 }
+            } else if let name = model.placeholderName {
+                // Chosen from a map pin: the name now, the rest on arrival.
+                VStack(alignment: .leading, spacing: 24) {
+                    Text(name)
+                        .font(.title2.bold())
+                        .accessibilityAddTraits(.isHeader)
+                    loadingOrError
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
             }
         }
         .presentationDetents([.medium, .large])
