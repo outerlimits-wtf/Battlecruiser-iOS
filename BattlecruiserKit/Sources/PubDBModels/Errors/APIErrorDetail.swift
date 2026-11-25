@@ -1,11 +1,5 @@
 import Foundation
 
-/// The body of every non-2xx response:
-/// `{ "error": { "code": "not_found", "message": "…", "field": "at" } }`.
-public struct APIErrorBody: Decodable, Hashable, Sendable {
-    public let error: APIErrorDetail
-}
-
 public struct APIErrorDetail: Decodable, Hashable, Sendable {
     /// What to switch on: "invalid_request", "not_found", "rate_limited", …
     public let code: String

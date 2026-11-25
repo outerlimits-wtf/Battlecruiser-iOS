@@ -2,17 +2,6 @@ import Foundation
 import PubDBModels
 import ResponseCache
 
-/// A value read back from the cache, and when the server sent it.
-public struct Cached<Value: Sendable>: Sendable {
-    public let value: Value
-    public let fetchedAt: Date
-
-    public init(value: Value, fetchedAt: Date) {
-        self.value = value
-        self.fetchedAt = fetchedAt
-    }
-}
-
 /// Reads pubs from the PubDB v1 API (docs/backend/03-api-reference.md).
 ///
 /// Read-only for the MVP: no sign-in, no writes. Callers cancel by cancelling
