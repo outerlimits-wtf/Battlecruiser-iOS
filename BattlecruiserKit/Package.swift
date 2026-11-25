@@ -51,14 +51,14 @@ let package = Package(
         .target(name: "UserLocation", swiftSettings: [.defaultIsolation(MainActor.self)]),
         .testTarget(name: "UserLocationTests", dependencies: ["UserLocation"]),
 
-        /// App-wide state every feature reads: the server's lists (/meta), and the
-        /// shared loading plumbing (Loadable, LRUCache). Main actor.
+        /// App-wide state every feature reads: the server's lists (/meta), who is
+        /// signed in (/me), and the shared loading plumbing. Main actor.
         .target(
             name: "AppEnvironment",
-            dependencies: ["PubDBClient", "PubDBModels"],
+            dependencies: ["Auth", "PubDBClient", "PubDBModels"],
             swiftSettings: [.defaultIsolation(MainActor.self)]
         ),
-        .testTarget(name: "AppEnvironmentTests", dependencies: ["AppEnvironment", "PubDBClient", "PubDBModels"]),
+        .testTarget(name: "AppEnvironmentTests", dependencies: ["AppEnvironment", "Auth", "PubDBClient", "PubDBModels"]),
 
         /// Shared SwiftUI building blocks: pins, pills, labels.
         .target(
