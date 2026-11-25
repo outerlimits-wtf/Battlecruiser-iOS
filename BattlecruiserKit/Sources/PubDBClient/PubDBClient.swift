@@ -29,6 +29,8 @@ public struct PubDBClient: Sendable {
     let transport: any HTTPTransport
     let now: @Sendable () -> Date
     let cache: ResponseCache?
+    /// Shared by copies of this client, so every caller benefits from a tag.
+    let etags = ETagStore()
 
     /// - Parameters:
     ///   - baseURL: The API root, ending `/api/v1`.

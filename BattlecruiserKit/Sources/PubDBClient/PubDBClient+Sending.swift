@@ -22,10 +22,18 @@ extension PubDBClient {
         return decoded
     }
 
-    /// Sends the request and checks the response: a 2xx with JSON, or a thrown error.
-    func exchange(_ endpoint: Endpoint, at requestedAt: Date) async throws -> (Data, HTTPURLResponse) {
-        guard let request = endpoint.request(baseURL: baseURL, now: requestedAt) else {
+    /// Sends the request and checks the response: a 2xx with JSON, a `304`
+    /// (only possible when `headers` asked for one), or a thrown error.
+    func exchange(
+        _ endpoint: Endpoint,
+        at requestedAt: Date,
+        headers: [String: String] = [:]
+    ) async throws -> (Data, HTTPURLResponse) {
+        guard var request = endpoint.request(baseURL: baseURL, now: requestedAt) else {
             throw PubDBError.http(status: 0)
+        }
+        for (name, value) in headers {
+            request.setValue(value, forHTTPHeaderField: name)
         }
 
         let data: Data
@@ -48,6 +56,9 @@ extension PubDBClient {
         let isJSON = contentType?.lowercased().contains("json") ?? false
         let detail = isJSON ? (try? JSONCoding.decoder.decode(APIErrorBody.self, from: data))?.error : nil
 
+        if status == 304 {
+            return (data, http)
+        }
         if status == 429 {
             throw PubDBError.rateLimited(retryAfter: Self.retryAfter(http), detail)
         }
