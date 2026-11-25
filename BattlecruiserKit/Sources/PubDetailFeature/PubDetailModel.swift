@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+import AppEnvironment
 import PubDBClient
 import PubDBModels
 
@@ -29,10 +30,8 @@ public final class PubDetailModel {
     }
 
     @ObservationIgnored private let source: any PubDetailSource
-    @ObservationIgnored private let cacheLimit: Int
-    @ObservationIgnored private var cache: [String: PubDetail] = [:]
-    /// Pub ids in the cache, least recently fetched first.
-    @ObservationIgnored private var cacheOrder: [String] = []
+    /// Recently fetched details, so reopening a pub shows it at once.
+    @ObservationIgnored private var cache: LRUCache<String, PubDetail>
     @ObservationIgnored private var location: Coordinate?
     /// The running fetch. Internal so tests can await it.
     @ObservationIgnored private(set) var loadTask: Task<Void, Never>?
@@ -42,7 +41,7 @@ public final class PubDetailModel {
     ///   - cacheLimit: How many recently opened pubs to keep in memory.
     public init(source: any PubDetailSource, cacheLimit: Int = 50) {
         self.source = source
-        self.cacheLimit = cacheLimit
+        cache = LRUCache(limit: cacheLimit)
     }
 
     /// Show `pub`, and fetch its full detail. Pass the user's location for distances.
@@ -104,31 +103,19 @@ public final class PubDetailModel {
             do {
                 let fresh = try await source.fetchPub(id: id, near: location)
                 try Task.checkCancellation()
-                remember(fresh)
+                cache.store(fresh, for: fresh.id)
                 detail = fresh
                 showingCachedFrom = nil
                 isLoading = false
-            } catch is CancellationError {
-                if !Task.isCancelled {
+            } catch {
+                // A cancellation is a newer fetch taking over: leave it the state.
+                if let shown = PubDBError.wrapping(error) {
+                    lastError = shown
+                    isLoading = false
+                } else if !Task.isCancelled {
                     isLoading = false
                 }
-            } catch let error as PubDBError {
-                lastError = error
-                isLoading = false
-            } catch {
-                lastError = .transport(URLError(.unknown))
-                isLoading = false
             }
-        }
-    }
-
-    private func remember(_ fresh: PubDetail) {
-        cache[fresh.id] = fresh
-        cacheOrder.removeAll { $0 == fresh.id }
-        cacheOrder.append(fresh.id)
-        while cacheOrder.count > cacheLimit {
-            let oldest = cacheOrder.removeFirst()
-            cache[oldest] = nil
         }
     }
 }

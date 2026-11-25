@@ -3,12 +3,12 @@ import PackageDescription
 
 // Battlecruiser's modules (decision D24). The app target only wires these
 // together. Modules are added here as each one is built; the planned set and
-// their dependencies are in docs/mvp-plan.md ("Modules"). Dependencies only
+// their dependencies are in docs/parity-plan.md ("Target architecture"). Dependencies only
 // point downwards: features → design system / client / cache → models.
 //
 // Non-UI modules keep Swift's default (nonisolated) so decoding and networking
-// stay off the main actor. UI modules, when added, set
-// `.defaultIsolation(MainActor.self)` to match the app target.
+// stay off the main actor. UI modules set `.defaultIsolation(MainActor.self)`
+// to match the app target.
 let package = Package(
     name: "BattlecruiserKit",
     platforms: [.iOS(.v18)],
@@ -17,6 +17,7 @@ let package = Package(
         .library(name: "PubDBClient", targets: ["PubDBClient"]),
         .library(name: "ResponseCache", targets: ["ResponseCache"]),
         .library(name: "UserLocation", targets: ["UserLocation"]),
+        .library(name: "AppEnvironment", targets: ["AppEnvironment"]),
         .library(name: "DesignSystem", targets: ["DesignSystem"]),
         .library(name: "PubsFeature", targets: ["PubsFeature"]),
         .library(name: "PubDetailFeature", targets: ["PubDetailFeature"]),
@@ -42,8 +43,16 @@ let package = Package(
         .target(name: "UserLocation", swiftSettings: [.defaultIsolation(MainActor.self)]),
         .testTarget(name: "UserLocationTests", dependencies: ["UserLocation"]),
 
-        /// Shared SwiftUI building blocks: the ship pin, and later the open pill,
-        /// freshness label and attribution footer.
+        /// App-wide state every feature reads: the server's lists (/meta), and the
+        /// shared loading plumbing (Loadable, LRUCache). Main actor.
+        .target(
+            name: "AppEnvironment",
+            dependencies: ["PubDBClient", "PubDBModels"],
+            swiftSettings: [.defaultIsolation(MainActor.self)]
+        ),
+        .testTarget(name: "AppEnvironmentTests", dependencies: ["AppEnvironment", "PubDBClient", "PubDBModels"]),
+
+        /// Shared SwiftUI building blocks: pins, pills, labels.
         .target(
             name: "DesignSystem",
             dependencies: ["PubDBModels"],
@@ -54,7 +63,7 @@ let package = Package(
         /// The pubs around the user: state that follows the map, then the map and list views.
         .target(
             name: "PubsFeature",
-            dependencies: ["PubDBClient", "PubDBModels", "DesignSystem", "UserLocation", "PubDetailFeature"],
+            dependencies: ["PubDBClient", "PubDBModels", "AppEnvironment", "DesignSystem", "UserLocation", "PubDetailFeature"],
             swiftSettings: [.defaultIsolation(MainActor.self)]
         ),
         .testTarget(name: "PubsFeatureTests", dependencies: ["PubsFeature", "PubDBClient", "PubDBModels"]),
@@ -62,7 +71,7 @@ let package = Package(
         /// One pub in full: the selected pub's state, then the detail sheet.
         .target(
             name: "PubDetailFeature",
-            dependencies: ["PubDBClient", "PubDBModels", "DesignSystem"],
+            dependencies: ["PubDBClient", "PubDBModels", "AppEnvironment", "DesignSystem"],
             swiftSettings: [.defaultIsolation(MainActor.self)]
         ),
         .testTarget(name: "PubDetailFeatureTests", dependencies: ["PubDetailFeature", "PubDBClient", "PubDBModels"]),

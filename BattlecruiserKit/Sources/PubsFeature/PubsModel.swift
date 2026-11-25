@@ -151,18 +151,15 @@ public final class PubsModel {
                 isShowingCached = false
                 lastError = nil
                 isLoading = false
-            } catch is CancellationError {
-                // Superseded: the newer load owns `isLoading`. If nothing
-                // superseded it, stop showing a spinner.
-                if !Task.isCancelled {
+            } catch {
+                if let shown = PubDBError.wrapping(error) {
+                    lastError = shown
+                    isLoading = false
+                } else if !Task.isCancelled {
+                    // Superseded: the newer load owns `isLoading`. If nothing
+                    // superseded it, stop showing a spinner.
                     isLoading = false
                 }
-            } catch let error as PubDBError {
-                lastError = error
-                isLoading = false
-            } catch {
-                lastError = .transport(URLError(.unknown))
-                isLoading = false
             }
         }
     }
