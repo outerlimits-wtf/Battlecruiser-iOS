@@ -12,12 +12,19 @@ public struct PubDetailPanel: View {
     private let model: PubDetailModel
     private let meta: Meta?
     private let onClose: () -> Void
+    private let onSelectPub: (PubSummary) -> Void
     @State private var tab: PanelTab = .overview
 
-    public init(model: PubDetailModel, meta: Meta?, onClose: @escaping () -> Void) {
+    public init(
+        model: PubDetailModel,
+        meta: Meta?,
+        onClose: @escaping () -> Void,
+        onSelectPub: @escaping (PubSummary) -> Void
+    ) {
         self.model = model
         self.meta = meta
         self.onClose = onClose
+        self.onSelectPub = onSelectPub
     }
 
     public var body: some View {
@@ -68,12 +75,7 @@ public struct PubDetailPanel: View {
         VStack(alignment: .leading, spacing: Metrics.xl) {
             switch tab {
             case .overview:
-                TonightSection(summary: summary, gardenCloses: model.detail?.gardenCloses)
-                if let detail = model.detail {
-                    FeaturesSection(features: detail.features)
-                    WeekSection(rows: detail.weekTable, hoursAttribution: detail.hours.attribution)
-                    ContactSection(summary: summary, contact: detail.contact)
-                }
+                OverviewTab(summary: summary, detail: model.detail, nearby: model.similar, onSelectPub: onSelectPub)
             case .reviews:
                 if let detail = model.detail {
                     ReviewsSection(reviews: detail.reviews).id(detail.id)

@@ -109,12 +109,15 @@ public struct PubsMapScreen<Panel: View>: View {
                 if let openPanel {
                     FilterPanelCard(panel: openPanel, query: $query, meta: meta) { self.openPanel = nil }
                 }
-                StatusBanner(
-                    pubs: pubs,
-                    isLocationDenied: isLocationDenied,
-                    showsNotice: detent == .peek,
-                    onGoToLondon: goToLondon
-                )
+                // About the map, so not over a sheet that covers it.
+                if detent != .full {
+                    StatusBanner(
+                        pubs: pubs,
+                        isLocationDenied: isLocationDenied,
+                        showsNotice: detent == .peek,
+                        onGoToLondon: goToLondon
+                    )
+                }
             }
         }
         .onChange(of: query) { _, query in
@@ -131,6 +134,10 @@ public struct PubsMapScreen<Panel: View>: View {
             pubs.loadIfIdle(in: MapPlaces.fallbackArea)
         }
         .task {
+            #if DEBUG
+            // For looking at the sheet's contents in the Simulator.
+            if ProcessInfo.processInfo.arguments.contains("-sheetFull") { detent = .full }
+            #endif
             pins.refresh()
             await pins.refreshPeriodically()
         }

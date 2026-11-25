@@ -26,6 +26,8 @@ public final class PubDetailModel {
     public private(set) var isLoading = false
     /// The last fetch's failure, cleared by the next selection or success.
     public private(set) var lastError: PubDBError? = nil
+    /// The nearest other pubs, for "Nearby". Empty until fetched.
+    public private(set) var similar: [PubSummary] = []
     /// When the shown detail was fetched, while it comes from the disk cache;
     /// nil once this session's fetch arrives.
     public private(set) var showingCachedFrom: Date? = nil
@@ -67,6 +69,7 @@ public final class PubDetailModel {
         selectedID = id
         placeholderName = name
         detail = cache[id]
+        similar = []
         showingCachedFrom = nil
         lastError = nil
         isLoading = false
@@ -98,6 +101,7 @@ public final class PubDetailModel {
         selectedID = nil
         placeholderName = nil
         detail = nil
+        similar = []
         showingCachedFrom = nil
         isLoading = false
         lastError = nil
@@ -128,6 +132,10 @@ public final class PubDetailModel {
                 detail = fresh
                 showingCachedFrom = nil
                 isLoading = false
+                // Extra, so after the pub itself, and never an error on screen.
+                if let nearby = try? await source.fetchSimilar(to: id, near: location), !Task.isCancelled {
+                    similar = nearby.pubs
+                }
             } catch {
                 // A cancellation is a newer fetch taking over: leave it the state.
                 if let shown = PubDBError.wrapping(error) {
