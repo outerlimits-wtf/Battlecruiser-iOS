@@ -78,11 +78,11 @@ public struct PubDetailPanel: View {
                 OverviewTab(summary: summary, detail: model.detail, nearby: model.similar, onSelectPub: onSelectPub)
             case .reviews:
                 if let detail = model.detail {
-                    ReviewsSection(reviews: detail.reviews).id(detail.id)
+                    ReviewsTab(reviews: detail.reviews).id(detail.id)
                 }
             case .about:
                 if let detail = model.detail {
-                    HistorySection(timeline: detail.timeline)
+                    AboutTab(detail: detail)
                 }
             }
         }
