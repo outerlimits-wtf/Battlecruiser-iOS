@@ -22,12 +22,28 @@ public struct PubDetail: Decodable, Hashable, Sendable, Identifiable {
     public let reviews: [Review]
     /// Where the data came from. Displaying these is a licence condition.
     public let sources: [DataSource]
+    /// Every photo, gallery order, the cover photo first. Empty with none.
+    public let photos: [Photo]
+    public let priceHistory: PriceHistory?
+    public let heritage: Heritage?
+    /// Facts drinkers added, newest first.
+    public let contributions: [Contribution]
+    /// Short weekdays ("Tue") for quiz and karaoke night, when known.
+    public let quizNightDay: String?
+    public let karaokeNightDay: String?
+    /// When someone last confirmed the details, and when the scrape last ran.
+    public let checkedAt: String?
+    public let lastScrapedAt: String?
+    /// The raw OpenStreetMap tags, for "Everything else we know".
+    public let osmTags: [String: String]
 
     public var id: String { summary.id }
 
     private enum CodingKeys: String, CodingKey {
         case description, city, `operator`, brewery, contact, hours, weekTable,
-             gardenCloses, timeline, features, reviews, sources
+             gardenCloses, timeline, features, reviews, sources, photos, priceHistory,
+             heritage, contributions, quizNightDay, karaokeNightDay, checkedAt,
+             lastScrapedAt, osmTags
     }
 
     public init(from decoder: any Decoder) throws {
@@ -44,6 +60,16 @@ public struct PubDetail: Decodable, Hashable, Sendable, Identifiable {
         features = try container.decode([FeatureAnswer].self, forKey: .features)
         reviews = try Self.decodeReviews(from: container)
         sources = try container.decode([DataSource].self, forKey: .sources)
+        // Extras: missing or unreadable, they cost a section, never the pub.
+        photos = (try? container.decodeIfPresent([Photo].self, forKey: .photos)) ?? []
+        priceHistory = try? container.decodeIfPresent(PriceHistory.self, forKey: .priceHistory)
+        heritage = try? container.decodeIfPresent(Heritage.self, forKey: .heritage)
+        contributions = (try? container.decodeIfPresent([Contribution].self, forKey: .contributions)) ?? []
+        quizNightDay = try? container.decodeIfPresent(String.self, forKey: .quizNightDay)
+        karaokeNightDay = try? container.decodeIfPresent(String.self, forKey: .karaokeNightDay)
+        checkedAt = try? container.decodeIfPresent(String.self, forKey: .checkedAt)
+        lastScrapedAt = try? container.decodeIfPresent(String.self, forKey: .lastScrapedAt)
+        osmTags = (try? container.decodeIfPresent([String: String].self, forKey: .osmTags)) ?? [:]
 
         // The detail payload's `features` carries every answer, so decoding a
         // summary from it would wrongly list "no" and "unknown" as features the

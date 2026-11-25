@@ -12,6 +12,12 @@ public struct Review: Decodable, Hashable, Sendable, Identifiable {
     public let createdAtLabel: String
     /// Who wrote it, e.g. "@goatloaf".
     public let attribution: Attribution
+    /// The writer's picture, if they have one.
+    public let avatarUrl: String?
+    /// Whether the signed-in person may delete it.
+    public let canRemove: Bool?
+
+    public var avatarURL: URL? { avatarUrl.flatMap(URL.init(string:)) }
 
     /// The text to show, or nil when there is none worth showing.
     public var text: String? {

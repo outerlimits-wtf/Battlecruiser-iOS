@@ -9,7 +9,7 @@ public struct PubSummary: Decodable, Hashable, Sendable, Identifiable {
     public let name: String
     /// The neighbourhood, for telling same-named pubs apart; nil when unknown.
     public let area: String?
-    public let amenity: LabelledSymbol
+    public let amenity: Amenity
     public let lat: Double
     public let lon: Double
     public let address: String?
@@ -29,4 +29,6 @@ public struct PubSummary: Decodable, Hashable, Sendable, Identifiable {
     /// Only the features answered "yes", already ordered.
     public internal(set) var features: [LabelledSymbol]
     public let listed: Bool
+    /// A line from the pub's reviews to show on its card; nil when none is chosen.
+    public let quote: Quote?
 }
