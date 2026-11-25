@@ -73,7 +73,8 @@ public struct RootView: View {
             selectedID: detail.selectedID,
             onSelectPin: select,
             onSelectPub: { pub in detail.select(pub, near: userCoordinate) },
-            panel: detail.selectedID == nil ? nil : PubDetailPanel(model: detail, onClose: detail.deselect)
+            panel: detail.selectedID == nil ? nil : PubDetailPanel(model: detail, onClose: detail.deselect),
+            meta: meta.meta
         )
     }
 

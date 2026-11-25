@@ -21,10 +21,13 @@ public struct PubsMapScreen<Panel: View>: View {
     let onSelectPub: (PubSummary) -> Void
     /// The selected pub's panel, shown in the sheet instead of the list.
     let panel: Panel?
+    /// The server's lists, for the filters; nil until loaded.
+    let meta: Meta?
 
     @State var detent: SheetDetent = .half
     /// The search and filters, shared by the list and the pins.
     @State var query = PubQuery()
+    @State var openPanel: FilterPanel?
     @State var cameraRequest: MapCameraRequest?
     /// Whether the person has moved the map themselves this launch.
     @State var userHasMovedMap = false
@@ -39,7 +42,8 @@ public struct PubsMapScreen<Panel: View>: View {
         selectedID: String?,
         onSelectPin: @escaping (Pin) -> Void,
         onSelectPub: @escaping (PubSummary) -> Void,
-        panel: Panel?
+        panel: Panel?,
+        meta: Meta?
     ) {
         self.pubs = pubs
         self.pins = pins
@@ -49,6 +53,7 @@ public struct PubsMapScreen<Panel: View>: View {
         self.onSelectPin = onSelectPin
         self.onSelectPub = onSelectPub
         self.panel = panel
+        self.meta = meta
     }
 
     public var body: some View {
@@ -89,7 +94,9 @@ public struct PubsMapScreen<Panel: View>: View {
                         selectedID: selectedID,
                         onGoToLondon: goToLondon,
                         onSelect: onSelectPub,
-                        onSearchEverywhere: query.everywhere ? nil : { query.everywhere = true }
+                        onSearchEverywhere: query.everywhere ? nil : { query.everywhere = true },
+                        onIncludeBars: query.amenity == "pub" ? { query.amenity = nil } : nil,
+                        onClearFilters: query.activeFilterCount > 0 ? { query = PubQuery() } : nil
                     )
                 }
             }
@@ -98,6 +105,10 @@ public struct PubsMapScreen<Panel: View>: View {
             VStack(spacing: Metrics.s) {
                 SearchBar { text in query.search = text }
                     .padding(.horizontal, Metrics.m)
+                FilterRow(query: $query, openPanel: $openPanel, meta: meta)
+                if let openPanel {
+                    FilterPanelCard(panel: openPanel, query: $query, meta: meta) { self.openPanel = nil }
+                }
                 StatusBanner(
                     pubs: pubs,
                     isLocationDenied: isLocationDenied,
@@ -142,6 +153,7 @@ public struct PubsMapScreen<Panel: View>: View {
         selectedID: nil,
         onSelectPin: { _ in },
         onSelectPub: { _ in },
-        panel: nil
+        panel: nil,
+        meta: nil
     )
 }

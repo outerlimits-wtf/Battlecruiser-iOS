@@ -12,6 +12,10 @@ struct ResultsList: View {
     let onSelect: (PubSummary) -> Void
     /// Nil when already searching everywhere.
     let onSearchEverywhere: (() -> Void)?
+    /// Nil when bars are already included.
+    let onIncludeBars: (() -> Void)?
+    /// Nil when no filters are set.
+    let onClearFilters: (() -> Void)?
 
     var body: some View {
         ScrollView {
@@ -57,6 +61,12 @@ struct ResultsList: View {
                 .padding(.top, Metrics.s)
         } else {
             StateView(.empty(emoji: "🍺", title: "Nothing doing", body: emptyMessage)) {
+                if let onIncludeBars {
+                    Button("🍸 Include bars", action: onIncludeBars).buttonStyle(ChipStyle())
+                }
+                if let onClearFilters {
+                    Button("Clear all filters", action: onClearFilters).buttonStyle(ChipStyle())
+                }
                 if let onSearchEverywhere {
                     Button("🌍 Search everywhere", action: onSearchEverywhere)
                         .buttonStyle(ChipStyle())
