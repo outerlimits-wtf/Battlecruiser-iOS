@@ -29,6 +29,8 @@ public struct PubDBClient: Sendable {
     let cache: ResponseCache?
     /// Shared by copies of this client, so every caller benefits from a tag.
     let etags = ETagStore()
+    /// The signed-in person's tokens; nil sends every request signed out.
+    let tokens: (any TokenProvider)?
 
     /// - Parameters:
     ///   - baseURL: The API root, ending `/api/v1`.
@@ -40,17 +42,19 @@ public struct PubDBClient: Sendable {
         baseURL: URL = PubDBClient.productionBaseURL,
         transport: any HTTPTransport = URLSession.shared,
         now: @escaping @Sendable () -> Date = { Date() },
-        cache: ResponseCache? = nil
+        cache: ResponseCache? = nil,
+        tokens: (any TokenProvider)? = nil
     ) {
         self.baseURL = baseURL
         self.transport = transport
         self.now = now
         self.cache = cache
+        self.tokens = tokens
     }
 
     /// The app's client: the configured server, saving responses to the app's cache.
-    public static func live(bundle: Bundle = .main) -> PubDBClient {
-        PubDBClient(baseURL: configuredBaseURL(in: bundle), cache: .standard())
+    public static func live(bundle: Bundle = .main, tokens: (any TokenProvider)? = nil) -> PubDBClient {
+        PubDBClient(baseURL: configuredBaseURL(in: bundle), cache: .standard(), tokens: tokens)
     }
 
     /// The server named under `PubDBBaseURL` in the bundle's Info.plist, else production.

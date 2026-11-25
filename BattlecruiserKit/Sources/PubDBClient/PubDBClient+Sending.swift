@@ -36,19 +36,12 @@ extension PubDBClient {
             request.setValue(value, forHTTPHeaderField: name)
         }
 
-        let data: Data
-        let response: URLResponse
-        do {
-            (data, response) = try await transport.send(request)
-        } catch let error as URLError where error.code == .cancelled {
-            throw CancellationError()
-        } catch let error as URLError {
-            throw PubDBError.transport(error)
-        }
-        try Task.checkCancellation()
-
-        guard let http = response as? HTTPURLResponse else {
-            throw PubDBError.http(status: 0)
+        // Every request carries the token when signed in (reads too: `canRemove`
+        // and `isFollowing` depend on it). On a 401, refresh once and retry once.
+        let token = await tokens?.accessToken()
+        var (data, http) = try await transmit(request, token: token)
+        if http.statusCode == 401, token != nil, let fresh = await tokens?.refreshedAccessToken() {
+            (data, http) = try await transmit(request, token: fresh)
         }
         let status = http.statusCode
         let contentType = http.value(forHTTPHeaderField: "Content-Type")
@@ -70,6 +63,28 @@ extension PubDBClient {
         }
         guard isJSON else {
             throw PubDBError.unexpectedContent(status: status, contentType: contentType)
+        }
+        return (data, http)
+    }
+
+    /// Sends one request, with the token if there is one.
+    private func transmit(_ request: URLRequest, token: String?) async throws -> (Data, HTTPURLResponse) {
+        var request = request
+        if let token {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        let data: Data
+        let response: URLResponse
+        do {
+            (data, response) = try await transport.send(request)
+        } catch let error as URLError where error.code == .cancelled {
+            throw CancellationError()
+        } catch let error as URLError {
+            throw PubDBError.transport(error)
+        }
+        try Task.checkCancellation()
+        guard let http = response as? HTTPURLResponse else {
+            throw PubDBError.http(status: 0)
         }
         return (data, http)
     }
