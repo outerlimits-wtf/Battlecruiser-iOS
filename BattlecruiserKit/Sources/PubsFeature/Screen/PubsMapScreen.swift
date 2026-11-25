@@ -68,24 +68,19 @@ public struct PubsMapScreen<Panel: View>: View {
                 MapAttribution().padding(.bottom, SheetDetent.peekHeight)
             }
             BottomSheet(detent: $detent, resetKey: selectedID) {
-                EmptyView()
+                if panel == nil {
+                    ResultsHeader(
+                        count: pubs.pubs.count,
+                        openCount: pubs.openCount,
+                        isLoading: pubs.isLoading,
+                        knowsLocation: userCoordinate != nil
+                    )
+                }
             } content: {
                 if let panel {
                     panel
                 } else {
-                    PubListView(
-                        pubs: pubs.pubs,
-                        openCount: pubs.openCount,
-                        notice: pubs.notice,
-                        onGoToLondon: goToLondon,
-                        onRetry: pubs.refresh,
-                        onSelect: onSelectPub,
-                        onRefresh: {
-                            pubs.refresh()
-                            await pubs.loadTask?.value
-                        }
-                    )
-                    .scrollContentBackground(.hidden)
+                    ResultsList(pubs: pubs, selectedID: selectedID, onGoToLondon: goToLondon, onSelect: onSelectPub)
                 }
             }
         }

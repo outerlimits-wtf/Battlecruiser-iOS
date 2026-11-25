@@ -7,6 +7,8 @@ public struct PubSummary: Decodable, Hashable, Sendable, Identifiable {
     /// The OpenStreetMap id, e.g. "node/123". Contains a slash.
     public let id: String
     public let name: String
+    /// The neighbourhood, for telling same-named pubs apart; nil when unknown.
+    public let area: String?
     public let amenity: LabelledSymbol
     public let lat: Double
     public let lon: Double
