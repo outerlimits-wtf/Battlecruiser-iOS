@@ -247,7 +247,7 @@ import queue, and the roadmap page. If you want admin on the phone later, it nee
 ## Server asks
 
 These are needed to keep logic off the device. Under D11 they are asks for the backend;
-an agent will work them on the pubdb side (P3). Milestones that need one wait for it
+an agent will work them on the pubdb side (P3), from the brief in [server-asks.md](server-asks.md). Milestones that need one wait for it
 rather than work around it. They are listed in the order the app needs them.
 
 | # | Ask | Why | Blocks |
