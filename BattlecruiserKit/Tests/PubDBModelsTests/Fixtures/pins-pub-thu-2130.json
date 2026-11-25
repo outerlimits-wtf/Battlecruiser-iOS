@@ -1,0 +1,1265 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "fhrs/1430046",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.13038,
+          51.4651
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1430046",
+        "name": "Tropix",
+        "area": "Clapham",
+        "amenity": "pub",
+        "pin": "closed",
+        "rank": 2,
+        "emoji": "🍺",
+        "label": "Closed now"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1560236",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.09093,
+          51.50609
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1560236",
+        "name": "London cider house",
+        "area": "The Borough",
+        "amenity": "pub",
+        "pin": "closed",
+        "rank": 2,
+        "emoji": "🍺",
+        "label": "Closed now"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1576316",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.11971,
+          51.53063
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1576316",
+        "name": "Jamboree",
+        "area": "King's Cross",
+        "amenity": "pub",
+        "pin": "closed",
+        "rank": 2,
+        "emoji": "🍺",
+        "label": "Closed now"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1612246",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.14326,
+          51.5421
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1612246",
+        "name": "3 Locks Brewery",
+        "area": "Camden Town",
+        "amenity": "pub",
+        "pin": "closed",
+        "rank": 2,
+        "emoji": "🍺",
+        "label": "Closed now"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1973622",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.07505,
+          51.55442
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1973622",
+        "name": "The Common Press",
+        "area": "Shacklewell",
+        "amenity": "pub",
+        "pin": "closed",
+        "rank": 2,
+        "emoji": "🍺",
+        "label": "Closed now"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/483985",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.12245,
+          51.47204
+        ]
+      },
+      "properties": {
+        "id": "fhrs/483985",
+        "name": "The Swan",
+        "area": "Stockwell Park",
+        "amenity": "pub",
+        "pin": "closed",
+        "rank": 2,
+        "emoji": "🍺",
+        "label": "Closed now"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/653667",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.07948,
+          51.52616
+        ]
+      },
+      "properties": {
+        "id": "fhrs/653667",
+        "name": "The LightHouse",
+        "area": "Shoreditch",
+        "amenity": "pub",
+        "pin": "closed",
+        "rank": 2,
+        "emoji": "🍺",
+        "label": "Closed now"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/10895507318",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.177,
+          51.51602
+        ]
+      },
+      "properties": {
+        "id": "node/10895507318",
+        "name": "The Mad Bishop & Bear",
+        "area": "Paddington",
+        "amenity": "pub",
+        "pin": "closed",
+        "rank": 2,
+        "emoji": "🍺",
+        "label": "Closed now"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/11020498904",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.00948,
+          51.5134
+        ]
+      },
+      "properties": {
+        "id": "node/11020498904",
+        "name": "Husk Brewery & Taproom",
+        "area": "Canning Town",
+        "amenity": "pub",
+        "pin": "closed",
+        "rank": 2,
+        "emoji": "🍻",
+        "label": "Closed now"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/11545207226",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.13639,
+          51.54152
+        ]
+      },
+      "properties": {
+        "id": "node/11545207226",
+        "name": "Werewolf Beer",
+        "area": "Camden Town",
+        "amenity": "pub",
+        "pin": "closed",
+        "rank": 2,
+        "emoji": "🍺",
+        "label": "Closed now"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/12536453836",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.20723,
+          50.83286
+        ]
+      },
+      "properties": {
+        "id": "node/12536453836",
+        "name": "The Foghorn",
+        "area": "Portslade by Sea",
+        "amenity": "pub",
+        "pin": "closed",
+        "rank": 2,
+        "emoji": "🍺",
+        "label": "Closed now"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/1275835684",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.1469,
+          51.47681
+        ]
+      },
+      "properties": {
+        "id": "node/1275835684",
+        "name": "Masons Arms",
+        "area": "Nine Elms",
+        "amenity": "pub",
+        "pin": "closed",
+        "rank": 2,
+        "emoji": "🍺",
+        "label": "Closed now"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/12797314961",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.06648,
+          51.46977
+        ]
+      },
+      "properties": {
+        "id": "node/12797314961",
+        "name": "Eko Brewery and Taproom",
+        "area": "Peckham",
+        "amenity": "pub",
+        "pin": "closed",
+        "rank": 2,
+        "emoji": "🍻",
+        "label": "Closed now"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/12819770592",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.00473,
+          51.48505
+        ]
+      },
+      "properties": {
+        "id": "node/12819770592",
+        "name": "The Crown",
+        "area": "East Greenwich",
+        "amenity": "pub",
+        "pin": "closed",
+        "rank": 2,
+        "emoji": "🍺",
+        "label": "Closed now"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/12842476349",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.28612,
+          51.48517
+        ]
+      },
+      "properties": {
+        "id": "node/12842476349",
+        "name": "The Greyhound",
+        "area": "Kew",
+        "amenity": "pub",
+        "pin": "closed",
+        "rank": 2,
+        "emoji": "🍺",
+        "label": "Closed now"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1067102",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.1192,
+          51.53135
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1067102",
+        "name": "2Northdown",
+        "area": "King's Cross",
+        "amenity": "pub",
+        "pin": "unknown",
+        "rank": 3,
+        "emoji": "🎸",
+        "label": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1085450",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.12277,
+          51.51543
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1085450",
+        "name": "The Top Secret Comedy Club",
+        "area": "Covent Garden",
+        "amenity": "pub",
+        "pin": "unknown",
+        "rank": 3,
+        "emoji": "🎤",
+        "label": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1099884",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.1598,
+          51.51575
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1099884",
+        "name": "Home House Studio",
+        "area": "Marylebone",
+        "amenity": "pub",
+        "pin": "unknown",
+        "rank": 3,
+        "emoji": "👥",
+        "label": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1105498",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.13669,
+          51.52793
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1105498",
+        "name": "Exmouth Arms Euston",
+        "area": "Somers Town",
+        "amenity": "pub",
+        "pin": "unknown",
+        "rank": 3,
+        "emoji": "🍺",
+        "label": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1113068",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.11197,
+          51.52957
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1113068",
+        "name": "Brewdog, Unit 3",
+        "area": "Angel",
+        "amenity": "pub",
+        "pin": "unknown",
+        "rank": 3,
+        "emoji": "🍻",
+        "label": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1156072",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.12252,
+          50.81726
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1156072",
+        "name": "Bison Beer Beach Bar",
+        "area": "Kemptown",
+        "amenity": "pub",
+        "pin": "unknown",
+        "rank": 3,
+        "emoji": "🍺",
+        "label": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1158706",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.09793,
+          51.49902
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1158706",
+        "name": "The ministry",
+        "area": "The Borough",
+        "amenity": "pub",
+        "pin": "unknown",
+        "rank": 3,
+        "emoji": "👥",
+        "label": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1174677",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.12957,
+          51.54893
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1174677",
+        "name": "The Unicorn",
+        "area": "Kentish Town",
+        "amenity": "pub",
+        "pin": "unknown",
+        "rank": 3,
+        "emoji": "🍺",
+        "label": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1210093",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.07537,
+          51.55097
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1210093",
+        "name": "Earth Venue",
+        "area": "Shacklewell",
+        "amenity": "pub",
+        "pin": "unknown",
+        "rank": 3,
+        "emoji": "🎸",
+        "label": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1228495",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.19143,
+          51.51528
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1228495",
+        "name": "The Hayden Pub & Rooms",
+        "area": "Bayswater",
+        "amenity": "pub",
+        "pin": "unknown",
+        "rank": 3,
+        "emoji": "🍺",
+        "label": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1251811",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.12576,
+          51.53423
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1251811",
+        "name": "GOODSWAY",
+        "area": "Somers Town",
+        "amenity": "pub",
+        "pin": "unknown",
+        "rank": 3,
+        "emoji": "🎸",
+        "label": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/148928",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.06337,
+          51.52709
+        ]
+      },
+      "properties": {
+        "id": "fhrs/148928",
+        "name": "Bethnal Green Working Mens Club",
+        "area": "Bethnal Green",
+        "amenity": "pub",
+        "pin": "unknown",
+        "rank": 3,
+        "emoji": "👥",
+        "label": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1515597",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.05444,
+          51.48944
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1515597",
+        "name": "Fourpure brewing co",
+        "area": "South Bermondsey",
+        "amenity": "pub",
+        "pin": "unknown",
+        "rank": 3,
+        "emoji": "🍻",
+        "label": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1526716",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.10819,
+          51.52433
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1526716",
+        "name": "The Marion Anderson PH",
+        "area": "Clerkenwell",
+        "amenity": "pub",
+        "pin": "unknown",
+        "rank": 3,
+        "emoji": "🍺",
+        "label": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1531148",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.14381,
+          51.5098
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1531148",
+        "name": "Maison Estelle",
+        "area": "Mayfair",
+        "amenity": "pub",
+        "pin": "unknown",
+        "rank": 3,
+        "emoji": "👥",
+        "label": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1213661",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.08408,
+          51.50287
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1213661",
+        "name": "The vinegar yard",
+        "area": "Bermondsey Village",
+        "amenity": "pub",
+        "pin": "closing",
+        "rank": 4,
+        "emoji": "🍺",
+        "label": "Open till 22:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1690258",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.08244,
+          51.51523
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1690258",
+        "name": "Pitch",
+        "area": "Bishopsgate",
+        "amenity": "pub",
+        "pin": "closing",
+        "rank": 4,
+        "emoji": "🍺",
+        "label": "Open till 22:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1752387",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.16623,
+          51.53546
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1752387",
+        "name": "The New Inn",
+        "area": "St. John's Wood",
+        "amenity": "pub",
+        "pin": "closing",
+        "rank": 4,
+        "emoji": "🍺",
+        "label": "Open till 22:30"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1863931",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.1505,
+          51.51575
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1863931",
+        "name": "ANGELIQUES WINE HOUSE",
+        "area": "Marylebone",
+        "amenity": "pub",
+        "pin": "closing",
+        "rank": 4,
+        "emoji": "🍺",
+        "label": "Open till 22:30"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1876958",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.12928,
+          51.51077
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1876958",
+        "name": "Market Place Leicester Square",
+        "area": "Covent Garden",
+        "amenity": "pub",
+        "pin": "closing",
+        "rank": 4,
+        "emoji": "🍺",
+        "label": "Open till 22:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/207427",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.17192,
+          50.8268
+        ]
+      },
+      "properties": {
+        "id": "fhrs/207427",
+        "name": "The Hove Club",
+        "area": "Hove",
+        "amenity": "pub",
+        "pin": "closing",
+        "rank": 4,
+        "emoji": "🍺",
+        "label": "Open till 22:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/294804",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.09053,
+          51.51431
+        ]
+      },
+      "properties": {
+        "id": "fhrs/294804",
+        "name": "Goodman",
+        "area": "Bank",
+        "amenity": "pub",
+        "pin": "closing",
+        "rank": 4,
+        "emoji": "🍺",
+        "label": "Open till 22:30"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/362474",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.0725,
+          51.53009
+        ]
+      },
+      "properties": {
+        "id": "fhrs/362474",
+        "name": "Dorset Estate Social Club",
+        "area": "Shoreditch",
+        "amenity": "pub",
+        "pin": "closing",
+        "rank": 4,
+        "emoji": "🍺",
+        "label": "Open till 22:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/364136",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.06055,
+          51.49201
+        ]
+      },
+      "properties": {
+        "id": "fhrs/364136",
+        "name": "Ancient foresters",
+        "area": "Bermondsey",
+        "amenity": "pub",
+        "pin": "closing",
+        "rank": 4,
+        "emoji": "🍺",
+        "label": "Open till 22:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/424344",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.12406,
+          51.51856
+        ]
+      },
+      "properties": {
+        "id": "fhrs/424344",
+        "name": "Truckles Wine Bar",
+        "area": "Bloomsbury",
+        "amenity": "pub",
+        "pin": "closing",
+        "rank": 4,
+        "emoji": "🍺",
+        "label": "Open till 22:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/10092511647",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.09341,
+          51.53611
+        ]
+      },
+      "properties": {
+        "id": "node/10092511647",
+        "name": "The Hanbury",
+        "area": "Islington",
+        "amenity": "pub",
+        "pin": "closing",
+        "rank": 4,
+        "emoji": "🍺",
+        "label": "Open till 22:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/10266443623",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.00717,
+          51.4798
+        ]
+      },
+      "properties": {
+        "id": "node/10266443623",
+        "name": "Greenwich Tavern",
+        "area": "Greenwich Town Centre",
+        "amenity": "pub",
+        "pin": "closing",
+        "rank": 4,
+        "emoji": "🍺",
+        "label": "Open till 22:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/11007684249",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.07164,
+          51.49727
+        ]
+      },
+      "properties": {
+        "id": "node/11007684249",
+        "name": "Enid Street Tavern",
+        "area": "Bermondsey",
+        "amenity": "pub",
+        "pin": "closing",
+        "rank": 4,
+        "emoji": "🍺",
+        "label": "Open till 22:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/11045432726",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.14333,
+          51.5422
+        ]
+      },
+      "properties": {
+        "id": "node/11045432726",
+        "name": "3 Locks Brewing Company",
+        "area": "Camden Town",
+        "amenity": "pub",
+        "pin": "closing",
+        "rank": 4,
+        "emoji": "🍺",
+        "label": "Open till 22:30"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/11061470043",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.03228,
+          51.58059
+        ]
+      },
+      "properties": {
+        "id": "node/11061470043",
+        "name": "Untraditional Pub",
+        "area": "Walthamstow",
+        "amenity": "pub",
+        "pin": "closing",
+        "rank": 4,
+        "emoji": "🍺",
+        "label": "Open till 22:30"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1000126",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.1354,
+          51.52203
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1000126",
+        "name": "TCR Lounge Bar",
+        "area": "Fitzrovia",
+        "amenity": "pub",
+        "pin": "open",
+        "rank": 5,
+        "emoji": "🍺",
+        "label": "Open till 00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1046620",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.09016,
+          51.512
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1046620",
+        "name": "Candlemaker",
+        "area": "Bank",
+        "amenity": "pub",
+        "pin": "open",
+        "rank": 5,
+        "emoji": "🍺",
+        "label": "Open till 23:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1098668",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.14181,
+          51.49362
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1098668",
+        "name": "Victoria Taps",
+        "area": "Victoria",
+        "amenity": "pub",
+        "pin": "open",
+        "rank": 5,
+        "emoji": "🍺",
+        "label": "Open till 23:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1150015",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.09105,
+          51.49151
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1150015",
+        "name": "Diogenes the dog",
+        "area": "Walworth",
+        "amenity": "pub",
+        "pin": "open",
+        "rank": 5,
+        "emoji": "🍺",
+        "label": "Open till 23:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1154420",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.12327,
+          51.51058
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1154420",
+        "name": "Lady Of The Grapes",
+        "area": "Covent Garden",
+        "amenity": "pub",
+        "pin": "open",
+        "rank": 5,
+        "emoji": "🍺",
+        "label": "Open till 23:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1156828",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.1086,
+          51.46377
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1156828",
+        "name": "Brixton Brew Bar (Pop Brixton)",
+        "area": "Brixton",
+        "amenity": "pub",
+        "pin": "open",
+        "rank": 5,
+        "emoji": "🍻",
+        "label": "Open till 00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1222574",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.17671,
+          50.83005
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1222574",
+        "name": "The Stirling Arms",
+        "area": "Hove",
+        "amenity": "pub",
+        "pin": "open",
+        "rank": 5,
+        "emoji": "🍺",
+        "label": "Open till 23:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1227565",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.09108,
+          51.51334
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1227565",
+        "name": "Puttshack, Ground Floor Reception",
+        "area": "Bank",
+        "amenity": "pub",
+        "pin": "open",
+        "rank": 5,
+        "emoji": "🍺",
+        "label": "Open till 00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1264740",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.15369,
+          51.51854
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1264740",
+        "name": "Clarette",
+        "area": "Marylebone",
+        "amenity": "pub",
+        "pin": "open",
+        "rank": 5,
+        "emoji": "🍺",
+        "label": "Open till 23:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1412342",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.10504,
+          51.56198
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1412342",
+        "name": "The Plimsoll",
+        "area": "Finsbury Park",
+        "amenity": "pub",
+        "pin": "open",
+        "rank": 5,
+        "emoji": "🍺",
+        "label": "Open till 23:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1418173",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.0788,
+          51.50976
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1418173",
+        "name": "Traitors Gate",
+        "area": "Tower Hill",
+        "amenity": "pub",
+        "pin": "open",
+        "rank": 5,
+        "emoji": "🍺",
+        "label": "Open till 23:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1418718",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.10242,
+          50.81299
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1418718",
+        "name": "The Master Mariner",
+        "area": "Brighton Marina Village",
+        "amenity": "pub",
+        "pin": "open",
+        "rank": 5,
+        "emoji": "🍺",
+        "label": "Open till 23:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/149134",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.06839,
+          51.517
+        ]
+      },
+      "properties": {
+        "id": "fhrs/149134",
+        "name": "Nags Head",
+        "area": "Whitechapel",
+        "amenity": "pub",
+        "pin": "open",
+        "rank": 5,
+        "emoji": "🍺",
+        "label": "Open till 02:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1496930",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.12917,
+          51.51027
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1496930",
+        "name": "Simmons Bar Leicester Square",
+        "area": "Covent Garden",
+        "amenity": "pub",
+        "pin": "open",
+        "rank": 5,
+        "emoji": "🍺",
+        "label": "Open till 03:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fhrs/1516064",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.13962,
+          51.51084
+        ]
+      },
+      "properties": {
+        "id": "fhrs/1516064",
+        "name": "The Starman",
+        "area": "Soho",
+        "amenity": "pub",
+        "pin": "open",
+        "rank": 5,
+        "emoji": "🍺",
+        "label": "Open till 02:00"
+      }
+    }
+  ]
+}

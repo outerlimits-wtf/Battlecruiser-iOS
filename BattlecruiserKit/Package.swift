@@ -19,6 +19,7 @@ let package = Package(
         .library(name: "UserLocation", targets: ["UserLocation"]),
         .library(name: "AppEnvironment", targets: ["AppEnvironment"]),
         .library(name: "DesignSystem", targets: ["DesignSystem"]),
+        .library(name: "PubsMap", targets: ["PubsMap"]),
         .library(name: "PubsFeature", targets: ["PubsFeature"]),
         .library(name: "PubDetailFeature", targets: ["PubDetailFeature"]),
         .library(name: "Root", targets: ["Root"]),
@@ -60,6 +61,15 @@ let package = Package(
             swiftSettings: [.defaultIsolation(MainActor.self)]
         ),
         .testTarget(name: "DesignSystemTests", dependencies: ["DesignSystem", "PubDBModels"]),
+
+        /// The map: every pin (/pins, ETag, once a minute), drawn as dots zoomed
+        /// out and full pins zoomed in.
+        .target(
+            name: "PubsMap",
+            dependencies: ["PubDBClient", "PubDBModels", "DesignSystem"],
+            swiftSettings: [.defaultIsolation(MainActor.self)]
+        ),
+        .testTarget(name: "PubsMapTests", dependencies: ["PubsMap", "PubDBClient", "PubDBModels"]),
 
         /// The pubs around the user: state that follows the map, then the map and list views.
         .target(

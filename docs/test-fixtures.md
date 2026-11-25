@@ -32,6 +32,7 @@ one consistent evening:
 | `pubs-similar-the-bedford.json` | `GET /pubs/node%2F251526423/similar?…` | 200 | `{ "pubs": [...] }` with 6 summaries |
 | `error-not-found.json` | `GET /pubs/node%2F1?…` | 404 | Error body without `field` |
 | `error-invalid-at.json` | `GET /pubs?at=not-a-time` | 400 | Error body with `field: "at"` |
+| `pins-pub-thu-2130.json` | `GET /pins?amenity=pub&at=2026-11-26T21:30:00+00:00` (captured 2026-11-26) | 200 | `application/geo+json` with a weak `ETag`. **Trimmed**: the full response is about 3,400 features (890 KB); this keeps the first 15 of each state (open, closing, unknown, closed), sorted by rank as the server sends them. Includes Brighton pubs, so coverage is wider than London. |
 | `meta.json` | `GET /meta` (captured 2026-11-26, no `at`) | 200 | Every list the UI is driven by: amenities, venue kinds, features, weekdays, contributable fields and their kinds, boards, photo kinds, report reasons, `clients.ios.minVersion`, limits |
 
 ## Things to know
