@@ -16,6 +16,7 @@ let package = Package(
         .library(name: "PubDBModels", targets: ["PubDBModels"]),
         .library(name: "PubDBClient", targets: ["PubDBClient"]),
         .library(name: "ResponseCache", targets: ["ResponseCache"]),
+        .library(name: "Auth", targets: ["Auth"]),
         .library(name: "UserLocation", targets: ["UserLocation"]),
         .library(name: "AppEnvironment", targets: ["AppEnvironment"]),
         .library(name: "DesignSystem", targets: ["DesignSystem"]),
@@ -36,6 +37,11 @@ let package = Package(
         /// Talks to the PubDB v1 API: builds requests, checks responses, maps errors.
         .target(name: "PubDBClient", dependencies: ["PubDBModels", "ResponseCache"]),
         .testTarget(name: "PubDBClientTests", dependencies: ["PubDBClient", "PubDBModels", "ResponseCache"]),
+
+        /// Signing in: WorkOS AuthKit with PKCE, tokens in the Keychain, refreshed
+        /// on a 401. Provides the client's TokenProvider. Not UI.
+        .target(name: "Auth", dependencies: ["PubDBClient"]),
+        .testTarget(name: "AuthTests", dependencies: ["Auth", "PubDBClient"]),
 
         /// Raw server responses on disk, with the time they were fetched. Foundation only.
         .target(name: "ResponseCache"),
