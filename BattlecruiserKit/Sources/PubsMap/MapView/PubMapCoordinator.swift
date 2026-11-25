@@ -139,12 +139,25 @@ public final class PubMapCoordinator: NSObject, MKMapViewDelegate {
         onSelect(annotation.pin)
     }
 
+    /// Set when a pan, pinch or rotate starts a move; cleared once it settles.
+    private var isUserMove = false
+
+    public func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+        // MapKit doesn't say who moved the map; a gesture in progress on its
+        // content view means the person did.
+        let gestures = mapView.subviews.first?.gestureRecognizers ?? []
+        if gestures.contains(where: { $0.state == .began || $0.state == .changed || $0.state == .ended }) {
+            isUserMove = true
+        }
+    }
+
     public func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         settleTask?.cancel()
         settleTask = Task { [weak self, weak mapView] in
             try? await Task.sleep(for: Self.settleDelay)
             guard !Task.isCancelled, let self, let mapView else { return }
-            let settled = MapViewport(mapView)
+            let settled = MapViewport(mapView, movedByUser: isUserMove)
+            isUserMove = false
             viewport = settled
             syncFullPins()
             onViewportChange(settled)

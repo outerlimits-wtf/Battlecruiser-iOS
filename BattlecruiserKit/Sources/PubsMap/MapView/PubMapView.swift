@@ -41,6 +41,8 @@ public struct PubMapView: UIViewRepresentable {
         base.configure(mapView)
         mapView.delegate = context.coordinator
         mapView.showsUserLocation = true
+        // The user's dot stays location blue (the web's #1a73e8), whatever the app's tint.
+        mapView.tintColor = UIColor(red: 0x1A / 255, green: 0x73 / 255, blue: 0xE8 / 255, alpha: 1)
         mapView.showsCompass = false
         mapView.showsScale = true
         mapView.region = Self.london

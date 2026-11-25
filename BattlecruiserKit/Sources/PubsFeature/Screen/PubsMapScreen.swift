@@ -4,13 +4,14 @@ import PubDBClient
 import PubDBModels
 import PubsMap
 
-/// The pubs around the user, on a map or as a list.
+/// The Map tab, laid out as the web is on a phone: the map, and over it a
+/// bottom sheet holding the list of pubs, or the selected pub's panel.
 ///
 /// The map draws every pin (`PinsModel`, from `/pins`); the list draws the
 /// pubs in the map's area (`PubsModel`, from `/pubs`). A tapped pin or row goes
-/// to the root, which opens the pub. It knows nothing of the detail sheet,
-/// location permission or app lifecycle; the root owns those.
-public struct PubsMapScreen: View {
+/// to the root, which opens the pub and hands its panel back as `panel`. This
+/// module knows nothing of the detail feature, permissions or lifecycle.
+public struct PubsMapScreen<Panel: View>: View {
     let pubs: PubsModel
     let pins: PinsModel
     let userCoordinate: Coordinate?
@@ -18,13 +19,13 @@ public struct PubsMapScreen: View {
     let selectedID: String?
     let onSelectPin: (Pin) -> Void
     let onSelectPub: (PubSummary) -> Void
+    /// The selected pub's panel, shown in the sheet instead of the list.
+    let panel: Panel?
 
-    /// The map first, always (decision D18).
-    @State var mode: PubsMode = .map
+    @State var detent: SheetDetent = .half
     @State var cameraRequest: MapCameraRequest?
-    /// How many times the map has settled. The first is where it opened; any
-    /// later one before a location fix means the user moved it themselves.
-    @State var settledCount = 0
+    /// Whether the person has moved the map themselves this launch.
+    @State var userHasMovedMap = false
     /// Whether the map has been brought to the user's first fix this launch.
     @State var hasCenteredOnUser = false
 
@@ -35,7 +36,8 @@ public struct PubsMapScreen: View {
         isLocationDenied: Bool,
         selectedID: String?,
         onSelectPin: @escaping (Pin) -> Void,
-        onSelectPub: @escaping (PubSummary) -> Void
+        onSelectPub: @escaping (PubSummary) -> Void,
+        panel: Panel?
     ) {
         self.pubs = pubs
         self.pins = pins
@@ -44,6 +46,7 @@ public struct PubsMapScreen: View {
         self.selectedID = selectedID
         self.onSelectPin = onSelectPin
         self.onSelectPub = onSelectPub
+        self.panel = panel
     }
 
     public var body: some View {
@@ -53,41 +56,46 @@ public struct PubsMapScreen: View {
                 selectedID: selectedID,
                 cameraRequest: $cameraRequest,
                 onViewportChange: { viewport in
-                    settledCount += 1
+                    if viewport.movedByUser { userHasMovedMap = true }
                     pubs.areaChanged(to: viewport.area)
                 },
                 onSelect: onSelectPin
             )
-            .ignoresSafeArea()
+            // Keep Apple's credit and the controls clear of the sheet's peek.
+            .safeAreaPadding(.bottom, SheetDetent.peekHeight)
+            .ignoresSafeArea(edges: .top)
             .overlay(alignment: .bottomTrailing) {
-                MapAttribution()
+                MapAttribution().padding(.bottom, SheetDetent.peekHeight)
             }
-            if mode == .list {
-                PubListView(
-                    pubs: pubs.pubs,
-                    openCount: pubs.openCount,
-                    notice: pubs.notice,
-                    onGoToLondon: goToLondon,
-                    onRetry: pubs.refresh,
-                    onSelect: onSelectPub,
-                    onRefresh: {
-                        pubs.refresh()
-                        await pubs.loadTask?.value
-                    }
-                )
-                .background(.background)
+            BottomSheet(detent: $detent, resetKey: selectedID) {
+                EmptyView()
+            } content: {
+                if let panel {
+                    panel
+                } else {
+                    PubListView(
+                        pubs: pubs.pubs,
+                        openCount: pubs.openCount,
+                        notice: pubs.notice,
+                        onGoToLondon: goToLondon,
+                        onRetry: pubs.refresh,
+                        onSelect: onSelectPub,
+                        onRefresh: {
+                            pubs.refresh()
+                            await pubs.loadTask?.value
+                        }
+                    )
+                    .scrollContentBackground(.hidden)
+                }
             }
         }
         .overlay(alignment: .top) {
             StatusBanner(
                 pubs: pubs,
                 isLocationDenied: isLocationDenied,
-                showsNotice: mode == .map,
+                showsNotice: detent == .peek,
                 onGoToLondon: goToLondon
             )
-        }
-        .safeAreaInset(edge: .top) {
-            ModePicker(mode: $mode)
         }
         .task {
             // Last session's pubs first, marked with their age, so the screen
@@ -96,7 +104,7 @@ public struct PubsMapScreen: View {
             // The map normally reports its area as soon as it appears. If it
             // hasn't after a second, show London rather than an empty list.
             try? await Task.sleep(for: .seconds(1))
-            pubs.loadIfIdle(in: Self.fallbackArea)
+            pubs.loadIfIdle(in: MapPlaces.fallbackArea)
         }
         .task {
             pins.refresh()
@@ -113,13 +121,14 @@ public struct PubsMapScreen: View {
 }
 
 #Preview("Live data") {
-    PubsMapScreen(
+    PubsMapScreen<EmptyView>(
         pubs: PubsModel(source: PubDBClient()),
         pins: PinsModel(source: PubDBClient()),
         userCoordinate: nil,
         isLocationDenied: false,
         selectedID: nil,
         onSelectPin: { _ in },
-        onSelectPub: { _ in }
+        onSelectPub: { _ in },
+        panel: nil
     )
 }

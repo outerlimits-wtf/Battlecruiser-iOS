@@ -6,13 +6,17 @@ public struct MapViewport: Equatable, Sendable {
     public let area: BoundingBox
     /// Metres one screen point covers. Small means zoomed in.
     public let metresPerPoint: Double
+    /// Whether the person moved the map to get here, rather than the app.
+    public let movedByUser: Bool
 
-    init(area: BoundingBox, metresPerPoint: Double) {
+    init(area: BoundingBox, metresPerPoint: Double, movedByUser: Bool = false) {
         self.area = area
         self.metresPerPoint = metresPerPoint
+        self.movedByUser = movedByUser
     }
 
-    init(_ mapView: MKMapView) {
+    init(_ mapView: MKMapView, movedByUser: Bool) {
+        self.movedByUser = movedByUser
         let region = mapView.region
         area = BoundingBox(
             center: Coordinate(latitude: region.center.latitude, longitude: region.center.longitude),

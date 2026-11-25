@@ -2,16 +2,18 @@ import SwiftUI
 import DesignSystem
 import PubDBModels
 
-/// One pub in full, shown in a sheet over the map.
+/// One pub in full, shown in the bottom sheet over the map.
 ///
-/// Opens at half height with the map still usable behind it, so tapping another
-/// pin switches pubs without closing anything. Draws from the summary straight
-/// away and fills in the rest when the detail arrives.
-public struct PubDetailSheet: View {
+/// The map stays usable behind it, so tapping another pin switches pubs
+/// without closing anything. Draws from the summary straight away and fills in
+/// the rest when the detail arrives.
+public struct PubDetailPanel: View {
     private let model: PubDetailModel
+    private let onClose: () -> Void
 
-    public init(model: PubDetailModel) {
+    public init(model: PubDetailModel, onClose: @escaping () -> Void) {
         self.model = model
+        self.onClose = onClose
     }
 
     public var body: some View {
@@ -49,9 +51,9 @@ public struct PubDetailSheet: View {
                 .padding()
             }
         }
-        .presentationDetents([.medium, .large])
-        .presentationBackgroundInteraction(.enabled(upThrough: .medium))
-        .presentationDragIndicator(.visible)
+        .overlay(alignment: .topTrailing) {
+            CloseButton(action: onClose)
+        }
     }
 
     @ViewBuilder

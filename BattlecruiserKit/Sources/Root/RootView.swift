@@ -1,5 +1,6 @@
 import SwiftUI
 import AppEnvironment
+import DesignSystem
 import PubDBClient
 import PubDBModels
 import PubDetailFeature
@@ -32,18 +33,7 @@ public struct RootView: View {
             if meta.requiresUpdate(from: build) {
                 UpdateRequiredView()
             } else {
-                PubsMapScreen(
-                    pubs: pubs,
-                    pins: pins,
-                    userCoordinate: userCoordinate,
-                    isLocationDenied: location.authorization == .denied,
-                    selectedID: detail.selectedID,
-                    onSelectPin: select,
-                    onSelectPub: { pub in detail.select(pub, near: userCoordinate) }
-                )
-                .sheet(isPresented: isShowingDetail) {
-                    PubDetailSheet(model: detail)
-                }
+                tabs
             }
         }
         .task {
@@ -53,6 +43,38 @@ public struct RootView: View {
         .onChange(of: scenePhase) { previous, phase in
             handleScenePhase(from: previous, to: phase)
         }
+    }
+
+    /// The web's side menu, as a tab bar (decision P6).
+    private var tabs: some View {
+        TabView {
+            Tab("Map", systemImage: "map") {
+                mapTab
+            }
+            Tab("Social", systemImage: "person.2") {
+                PlaceholderTab(emoji: "🏆", title: "Social", message: "Latest updates, the leaderboard and the boards land here.")
+            }
+            Tab("Lists", systemImage: "star") {
+                PlaceholderTab(emoji: "⭐", title: "Lists", message: "Your hit list and the pubs you've been to land here.")
+            }
+            Tab("Me", systemImage: "person.crop.circle") {
+                PlaceholderTab(emoji: "🍺", title: "Me", message: "Sign-in, your profile and settings land here.")
+            }
+        }
+        .tint(Palette.beer)
+    }
+
+    private var mapTab: some View {
+        PubsMapScreen(
+            pubs: pubs,
+            pins: pins,
+            userCoordinate: userCoordinate,
+            isLocationDenied: location.authorization == .denied,
+            selectedID: detail.selectedID,
+            onSelectPin: select,
+            onSelectPub: { pub in detail.select(pub, near: userCoordinate) },
+            panel: detail.selectedID == nil ? nil : PubDetailPanel(model: detail, onClose: detail.deselect)
+        )
     }
 
     /// Back from the background, everything on screen may be out of date: open
@@ -72,16 +94,6 @@ public struct RootView: View {
         default:
             break
         }
-    }
-
-    /// The sheet is open while a pub is selected; dismissing it deselects.
-    private var isShowingDetail: Binding<Bool> {
-        Binding(
-            get: { detail.selectedID != nil },
-            set: { isShowing in
-                if !isShowing { detail.deselect() }
-            }
-        )
     }
 
     /// A pin was tapped. Use its summary if the list already has it, so the
