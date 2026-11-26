@@ -23,6 +23,9 @@ public final class PubMapCoordinator: NSObject, MKMapViewDelegate {
     var pendingCamera: (request: MapCameraRequest, animated: Bool)?
     /// The full pins on the map, by pub id.
     var annotations: [String: PinAnnotation] = [:]
+    /// The pubs left out of the dots last time they were painted, so a settle
+    /// that changes nothing doesn't repaint every tile.
+    var paintedHidden: Set<String>?
 
     /// Set when a pan, pinch or rotate starts a move; cleared once it settles.
     var isUserMove = false
@@ -57,7 +60,11 @@ public final class PubMapCoordinator: NSObject, MKMapViewDelegate {
         }
         self.selectedID = selectedID
         self.colorScheme = colorScheme
-        syncFullPins(forceRedraw: schemeChanged, restyle: [previousSelection, selectedID].compactMap { $0 })
+        syncFullPins(
+            forceRedraw: schemeChanged,
+            repaintDots: pinsChanged || schemeChanged,
+            restyle: [previousSelection, selectedID].compactMap { $0 }
+        )
     }
 
     /// Move the camera now, or as soon as the map has been laid out: a region
@@ -82,7 +89,14 @@ public final class PubMapCoordinator: NSObject, MKMapViewDelegate {
     /// Make the full pins match what should be shown: add and remove only the
     /// difference, replace a pin whose details changed, then repaint the dots
     /// without the pubs that now have full pins.
-    func syncFullPins(forceRedraw: Bool = false, restyle: [String] = []) {
+    ///
+    /// Repainting the dots throws away every tile MapKit has drawn, at every
+    /// zoom, and until they are drawn again it stretches whatever coarser tile
+    /// it still has, so the dots swell into blobs. So it only happens when the
+    /// dots would look different: new pins, a new colour scheme, or a change
+    /// in which pubs have full pins.
+    /// - Parameter repaintDots: The pins or colours changed.
+    func syncFullPins(forceRedraw: Bool = false, repaintDots: Bool = false, restyle: [String] = []) {
         guard let mapView else { return }
         let wanted = FullPinSelection.ids(for: pins, in: viewport, selectedID: selectedID)
         let shown = Set(annotations.keys)
@@ -112,6 +126,8 @@ public final class PubMapCoordinator: NSObject, MKMapViewDelegate {
             annotations.values.forEach(restyleView)
         }
         let hidden = Set(annotations.keys)
+        guard repaintDots || hidden != paintedHidden else { return }
+        paintedHidden = hidden
         dotsRenderer.show(DotSnapshot(pins: pins, hidden: hidden, traits: mapView.traitCollection))
     }
 

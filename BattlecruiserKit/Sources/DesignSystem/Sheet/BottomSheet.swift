@@ -132,7 +132,10 @@ public struct BottomSheet<Header: View, Content: View>: View {
             .safeAreaPadding(.bottom, layout.bottomInset)
             .frame(maxHeight: .infinity, alignment: .top)
             .opacity(detent == .peek && drag == 0 ? 0 : 1)
-            .scrollDisabled(detent != .full)
+            // Also while a pull has hold of the sheet: the scroll view would
+            // otherwise bounce the content down inside the sheet as it moves.
+            // Switching it off mid-pull settles the content back at its top.
+            .scrollDisabled(detent != .full || pullOrigin != nil)
             .environment(scroll)
             .gesture(dragGesture(layout), including: detent == .full ? .subviews : .all)
             .simultaneousGesture(pullGesture(layout), including: detent == .full ? .all : .subviews)
@@ -168,8 +171,9 @@ public struct BottomSheet<Header: View, Content: View>: View {
     /// At full, alongside the content's scrolling: pulling down with the
     /// content at its top moves the whole sheet, whether the pull started
     /// there or scrolled back up to it. The sheet follows the finger exactly,
-    /// which carries the scroll view along with it, so the content never
-    /// stretches away from the top as if to refresh.
+    /// and the content's scrolling is switched off while it does (see
+    /// `sheetContent`), so the content never stretches away from the top as
+    /// if to refresh.
     private func pullGesture(_ layout: SheetLayout) -> some Gesture {
         DragGesture(minimumDistance: 6, coordinateSpace: .global)
             .updating($isPulling) { _, isPulling, _ in isPulling = true }

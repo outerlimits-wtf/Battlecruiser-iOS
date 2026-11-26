@@ -12,9 +12,9 @@ enum FilterLabels {
             return query.kinds.count == 1 ? first : "\(first) +\(query.kinds.count - 1)"
         }
         switch query.amenity {
-        case "pub": "Pubs"
-        case "bar": "Bars"
-        default: "Pubs & bars"
+        case "pub": return "Pubs"
+        case "bar": return "Bars"
+        default: return "Pubs & bars"
         }
     }
 
