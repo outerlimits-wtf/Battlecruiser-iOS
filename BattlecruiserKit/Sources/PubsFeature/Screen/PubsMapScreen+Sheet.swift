@@ -5,7 +5,13 @@ import PubDBClient
 /// The bottom sheet: the list with its header, or the selected pub's panel.
 extension PubsMapScreen {
     var sheet: some View {
-        BottomSheet(detent: $detent, resetKey: selectedID, overlaysGrabber: panel != nil) {
+        BottomSheet(
+            detent: $detent,
+            resetKey: selectedID,
+            // Until the controls are measured, the sheet's own default.
+            topInset: controlsHeight > 0 ? controlsHeight + Metrics.m : nil,
+            overlaysGrabber: panel != nil
+        ) {
             if panel == nil {
                 ResultsHeader(
                     count: pubs.pubs.count,

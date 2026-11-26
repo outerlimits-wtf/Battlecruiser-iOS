@@ -37,6 +37,9 @@ public struct PubsMapScreen<Panel: View>: View {
     @State var userHasMovedMap = false
     /// Whether the map has been brought to the user's first fix this launch.
     @State var hasCenteredOnUser = false
+    /// The height of the search bar and filter pills: the sheet stops below
+    /// them at full, so the grabber is never tucked under the filters.
+    @State var controlsHeight: CGFloat = 0
 
     public init(
         pubs: PubsModel,
@@ -78,7 +81,8 @@ public struct PubsMapScreen<Panel: View>: View {
             )
             // Keep Apple's credit and the controls clear of the sheet's peek.
             .safeAreaPadding(.bottom, SheetDetent.peekHeight)
-            .ignoresSafeArea(edges: .top)
+            // Edge to edge: the tab bar floats over it.
+            .ignoresSafeArea()
             .overlay(alignment: .bottomTrailing) {
                 MapAttribution().padding(.bottom, SheetDetent.peekHeight)
             }
@@ -86,14 +90,17 @@ public struct PubsMapScreen<Panel: View>: View {
         }
         .overlay(alignment: .top) {
             VStack(spacing: Metrics.s) {
-                SearchBar { text in
-                    guard text != query.search else { return }
-                    query.search = text
-                    // Clearing the box leaves whatever is open alone.
-                    if !text.trimmingCharacters(in: .whitespaces).isEmpty { onSearch() }
+                VStack(spacing: Metrics.s) {
+                    SearchBar { text in
+                        guard text != query.search else { return }
+                        query.search = text
+                        // Clearing the box leaves whatever is open alone.
+                        if !text.trimmingCharacters(in: .whitespaces).isEmpty { onSearch() }
+                    }
+                        .padding(.horizontal, Metrics.m)
+                    FilterRow(query: $query, openPanel: $openPanel, meta: meta)
                 }
-                    .padding(.horizontal, Metrics.m)
-                FilterRow(query: $query, openPanel: $openPanel, meta: meta)
+                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { controlsHeight = $0 }
                 if let openPanel {
                     FilterPanelCard(panel: openPanel, query: $query, meta: meta) { self.openPanel = nil }
                 }

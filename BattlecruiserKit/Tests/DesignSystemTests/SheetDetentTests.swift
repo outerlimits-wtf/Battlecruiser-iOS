@@ -13,6 +13,14 @@ struct SheetDetentTests {
         #expect(SheetDetent.peek.offset(in: height) == 622)
     }
 
+    @Test func peekShowsMoreWhenTheSheetRunsUnderTheTabBar() {
+        let peek = SheetDetent.peekHeight + 83
+        #expect(SheetDetent.peek.offset(in: height, peek: peek) == 539)
+        #expect(SheetDetent.half.offset(in: height, peek: peek) == 322)
+        #expect(SheetDetent.snap(offset: 539, velocity: 900, height: height, peek: peek) == .peek)
+        #expect(SheetDetent.snap(offset: 520, velocity: 0, height: height, peek: peek) == .peek)
+    }
+
     @Test func aGentleReleaseSettlesOnTheNearest() {
         #expect(SheetDetent.snap(offset: 40, velocity: 0, height: height) == .full)
         #expect(SheetDetent.snap(offset: 300, velocity: 0, height: height) == .half)

@@ -7,26 +7,28 @@ public enum SheetDetent: CaseIterable, Sendable {
     case half
     case peek
 
-    /// How much of the sheet still shows when it is pushed down.
+    /// How much of the sheet still shows above the tab bar when it is pushed down.
     public static let peekHeight: CGFloat = 78
     /// Where it rests by default, as a fraction of its own height.
     static let halfFraction: CGFloat = 0.46
     /// Past this, a flick beats where the thumb let go (the web's 0.4 px/ms).
     static let flickVelocity: CGFloat = 400
 
-    func offset(in height: CGFloat) -> CGFloat {
+    /// - Parameter peek: How much shows at peek: `peekHeight`, plus whatever
+    ///   the sheet runs underneath at the bottom (the floating tab bar).
+    func offset(in height: CGFloat, peek: CGFloat = peekHeight) -> CGFloat {
         switch self {
         case .full: 0
         case .half: (height * Self.halfFraction).rounded()
-        case .peek: max(0, height - Self.peekHeight)
+        case .peek: max(0, height - peek)
         }
     }
 
     /// Flick it and it carries on the way it was going, one position at a
     /// time; let go gently and it settles wherever is nearest.
     /// - Parameter velocity: Points per second, positive downwards.
-    static func snap(offset: CGFloat, velocity: CGFloat, height: CGFloat) -> SheetDetent {
-        let resting = allCases.map { (detent: $0, at: $0.offset(in: height)) }
+    static func snap(offset: CGFloat, velocity: CGFloat, height: CGFloat, peek: CGFloat = peekHeight) -> SheetDetent {
+        let resting = allCases.map { (detent: $0, at: $0.offset(in: height, peek: peek)) }
         if velocity > flickVelocity {
             return resting.first { $0.at > offset + 1 }?.detent ?? .peek
         }

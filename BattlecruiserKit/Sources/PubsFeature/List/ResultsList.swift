@@ -39,10 +39,9 @@ struct ResultsList: View {
             }
             .padding(.bottom, 120)
         }
-        .refreshable {
-            pubs.refresh()
-            await pubs.loadTask?.value
-        }
+        // A pull down at the top moves the sheet, so no pull to refresh: the
+        // list refreshes itself as it goes stale.
+        .sheetScrollable()
     }
 
     private var emptyMessage: String {

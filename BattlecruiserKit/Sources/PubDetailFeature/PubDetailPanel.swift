@@ -75,6 +75,7 @@ public struct PubDetailPanel: View {
             }
             .padding(.bottom, 120)
         }
+        .sheetScrollable()
         .onChange(of: focusReview) { _, id in
             guard let id else { return }
             Task {
