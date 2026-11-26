@@ -5,8 +5,9 @@
   the BattlecruiserKit modules, which are linked into it statically.
 
   Keep it in step with the code:
-  - Required-reason APIs: only the file-timestamp category, used by
-    ResponseCache (reads and sets modification dates of its own files in Caches/).
+  - Required-reason APIs: file timestamps, used by ResponseCache (reads and
+    sets modification dates of its own files in Caches/); and UserDefaults, for
+    the app's own settings (the Appearance choice, via @AppStorage).
   - Collected data:
     - the user's location, sent to the PubDB API as lat/lon to work out
       distances. Not stored against the account, not used for tracking.
@@ -82,6 +83,15 @@
 			<array>
 				<!-- Timestamps of files inside the app's own container (Caches/ResponseCache). -->
 				<string>C617.1</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<!-- The app's own settings, read and written only by the app. -->
+				<string>CA92.1</string>
 			</array>
 		</dict>
 	</array>

@@ -1,6 +1,7 @@
 import SwiftUI
 import AppEnvironment
 import DesignSystem
+import Me
 import PubDBClient
 import PubDBModels
 import PubDetailFeature
@@ -18,9 +19,11 @@ public struct RootView: View {
     @State private var pubs: PubsModel
     @State private var pins: PinsModel
     @State private var detail: PubDetailModel
+    @State private var tab: RootTab = DebugLaunch.tab ?? .map
     @Environment(\.scenePhase) private var scenePhase
 
     private let build = AppVersion.current()
+    @AppStorage(ThemePreference.storageKey) private var theme: ThemePreference = .system
 
     public init(dependencies: AppDependencies) {
         _meta = State(initialValue: MetaStore(source: dependencies.client))
@@ -49,22 +52,23 @@ public struct RootView: View {
         .onChange(of: scenePhase) { previous, phase in
             handleScenePhase(from: previous, to: phase)
         }
+        .preferredColorScheme(theme.colorScheme)
     }
 
     /// The web's side menu, as a tab bar (decision P6).
     private var tabs: some View {
-        TabView {
-            Tab("Map", systemImage: "map") {
+        TabView(selection: $tab) {
+            Tab("Map", systemImage: "map", value: RootTab.map) {
                 mapTab
             }
-            Tab("Social", systemImage: "person.2") {
+            Tab("Social", systemImage: "person.2", value: RootTab.social) {
                 PlaceholderTab(emoji: "🏆", title: "Social", message: "Latest updates, the leaderboard and the boards land here.")
             }
-            Tab("Lists", systemImage: "star") {
+            Tab("Lists", systemImage: "star", value: RootTab.lists) {
                 PlaceholderTab(emoji: "⭐", title: "Lists", message: "Your hit list and the pubs you've been to land here.")
             }
-            Tab("Me", systemImage: "person.crop.circle") {
-                MeTab(session: session)
+            Tab("Me", systemImage: "person.crop.circle", value: RootTab.me) {
+                MeScreen(session: session, onOpenProfile: { _ in })
             }
         }
         .tint(Palette.beer)

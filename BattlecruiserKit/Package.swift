@@ -24,6 +24,7 @@ let package = Package(
         .library(name: "PubsFeature", targets: ["PubsFeature"]),
         .library(name: "PubDetailFeature", targets: ["PubDetailFeature"]),
         .library(name: "Account", targets: ["Account"]),
+        .library(name: "Me", targets: ["Me"]),
         .library(name: "Root", targets: ["Root"]),
     ],
     targets: [
@@ -103,12 +104,19 @@ let package = Package(
             swiftSettings: [.defaultIsolation(MainActor.self)]
         ),
 
+        /// The Me tab: the account, appearance, and About.
+        .target(
+            name: "Me",
+            dependencies: ["Account", "AppEnvironment", "DesignSystem"],
+            swiftSettings: [.defaultIsolation(MainActor.self)]
+        ),
+
         /// The whole app: owns shared state and wires the features together, so
         /// features never import each other. The only module that imports features.
         .target(
             name: "Root",
             dependencies: [
-                "Account", "AppEnvironment", "Auth", "DesignSystem", "PubDBClient", "PubDBModels",
+                "Account", "AppEnvironment", "Auth", "DesignSystem", "Me", "PubDBClient", "PubDBModels",
                 "PubDetailFeature", "PubsFeature", "PubsMap", "UserLocation",
             ],
             swiftSettings: [.defaultIsolation(MainActor.self)]
