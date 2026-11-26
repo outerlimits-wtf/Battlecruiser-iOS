@@ -152,8 +152,11 @@ public struct BottomSheet<Header: View, Content: View>: View {
         .accessibilityLabel(detent.grabberLabel)
     }
 
+    /// Measured on the screen, not in the sheet: the sheet moves under the
+    /// finger, so in its own space the translation would shift with every
+    /// move and the sheet would flicker between two positions.
     private func dragGesture(_ layout: SheetLayout) -> some Gesture {
-        DragGesture(minimumDistance: 6)
+        DragGesture(minimumDistance: 6, coordinateSpace: .global)
             .updating($isDragging) { _, isDragging, _ in isDragging = true }
             .onChanged { value in drag = value.translation.height }
             .onEnded { value in settle(layout, velocity: value.velocity.height) }
@@ -164,7 +167,7 @@ public struct BottomSheet<Header: View, Content: View>: View {
     /// that bounce comes off the sheet's share and the content stays under
     /// the finger.
     private func pullGesture(_ layout: SheetLayout) -> some Gesture {
-        DragGesture(minimumDistance: 6)
+        DragGesture(minimumDistance: 6, coordinateSpace: .global)
             .updating($isPulling) { _, isPulling, _ in isPulling = true }
             .onChanged { value in
                 if pullEngaged == nil {
