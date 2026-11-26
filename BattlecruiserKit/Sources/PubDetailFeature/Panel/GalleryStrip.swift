@@ -4,6 +4,10 @@ import PubDBModels
 
 /// The web's photo strip at the top of the panel: a sideways carousel, each
 /// photo full height with its credit, or the placeholder when there are none.
+///
+/// A photo is as wide as its height makes it, so nothing is stretched or has
+/// its top and bottom cut off. A tall one still takes a third of the strip,
+/// on the backdrop; a panorama stops at the strip's width, losing its sides.
 struct GalleryStrip: View {
     let photos: [Photo]
     let name: String
@@ -24,8 +28,10 @@ struct GalleryStrip: View {
                             .frame(width: proxy.size.width * (onAdd == nil ? 1 : 0.7), height: Self.height)
                     } else {
                         ForEach(Array(photos.enumerated()), id: \.offset) { _, photo in
-                            PubPhoto(photo, name: name, emoji: emoji)
-                                .frame(width: photos.count == 1 && onAdd == nil ? proxy.size.width : proxy.size.width * 0.9, height: Self.height)
+                            PubPhoto(photo, name: name, emoji: emoji, size: .natural)
+                                .frame(height: Self.height)
+                                .frame(minWidth: proxy.size.width / 3, maxWidth: proxy.size.width)
+                                .clipped()
                                 .overlay(alignment: .bottomLeading) {
                                     PhotoCredit(photo, onPhoto: true).padding(Metrics.s)
                                 }

@@ -7,8 +7,11 @@ public struct PubPhoto: View {
     public enum Size {
         /// The 72pt square in a list row.
         case thumbnail
-        /// As large as it is laid out.
+        /// As large as it is laid out, filling it and cropped to fit.
         case full
+        /// The full image, never cropped or stretched: given a height and no
+        /// width, it is as wide as its shape makes it.
+        case natural
     }
 
     private let photo: Photo?
@@ -41,7 +44,11 @@ public struct PubPhoto: View {
         if let url {
             AsyncImage(url: url) { phase in
                 if let image = phase.image {
-                    image.resizable().scaledToFill()
+                    if size == .natural {
+                        image.resizable().scaledToFit()
+                    } else {
+                        image.resizable().scaledToFill()
+                    }
                 } else if phase.error != nil {
                     fallback()
                 } else {
