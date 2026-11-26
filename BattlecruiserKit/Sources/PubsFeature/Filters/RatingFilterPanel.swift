@@ -10,8 +10,11 @@ struct RatingFilterPanel: View {
         SectionHeader("Rated at least")
         ChipFlow {
             ForEach(FilterOptions.ratingSteps, id: \.self) { step in
-                Button("⭐ \(step)+") { query.minRating = step }
-                    .buttonStyle(ChipStyle(isSelected: query.minRating == step))
+                Button { query.minRating = step } label: {
+                    Text("\(step)+ ") + Text(Image(systemName: "star.fill")).foregroundStyle(Palette.beerBright)
+                }
+                .buttonStyle(ChipStyle(isSelected: query.minRating == step))
+                .accessibilityLabel("\(step) or more")
             }
             Button("Any") { query.minRating = nil }
                 .buttonStyle(ChipStyle(isSelected: query.minRating == nil))

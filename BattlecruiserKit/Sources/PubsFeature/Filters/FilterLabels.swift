@@ -12,13 +12,12 @@ enum FilterLabels {
         }
     }
 
-    /// "Open Mon", "Open past 23:00", "Open by 18:00", "Has hours", else "Hours".
+    /// "Open Mon", "Open past 23:00", "Has hours", else "Hours".
     static func hours(_ query: PubQuery, weekdays: [Weekday]) -> String {
         if let day = query.openOnDay {
             return "Open \(weekdays.first { $0.day == day }?.short ?? "that day")"
         }
         if let time = query.closesAfter { return "Open past \(time)" }
-        if let time = query.opensBefore { return "Open by \(time)" }
         if query.hasHours { return "Has hours" }
         return "Hours"
     }
@@ -46,7 +45,7 @@ enum FilterLabels {
     static func isActive(_ panel: FilterPanel, in query: PubQuery) -> Bool {
         switch panel {
         case .kind: query.amenity != PubQuery.defaultAmenity
-        case .hours: query.openOnDay != nil || query.opensBefore != nil || query.closesAfter != nil || query.hasHours
+        case .hours: query.openOnDay != nil || query.closesAfter != nil || query.hasHours
         case .features: !query.features.isEmpty
         case .rating: query.minRating != nil
         case .guinness: query.maxGuinnessPence != nil

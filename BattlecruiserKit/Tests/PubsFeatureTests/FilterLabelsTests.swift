@@ -18,8 +18,6 @@ struct FilterLabelsTests {
         #expect(FilterLabels.hours(query, weekdays: []) == "Hours")
         query.hasHours = true
         #expect(FilterLabels.hours(query, weekdays: []) == "Has hours")
-        query.opensBefore = "18:00"
-        #expect(FilterLabels.hours(query, weekdays: []) == "Open by 18:00")
         query.closesAfter = "23:00"
         #expect(FilterLabels.hours(query, weekdays: []) == "Open past 23:00")
     }

@@ -24,10 +24,7 @@ struct FilterRow: View {
                 panelPill(.features, FilterLabels.features(query, all: meta?.features ?? []))
                 panelPill(.rating, FilterLabels.rating(query))
                 panelPill(.guinness, FilterLabels.guinness(query))
-                toggle(isOn: $query.hasPhoto) { Text("Has photo") }
-                toggle(isOn: $query.listed) { Text("Listed") }
                 toggle(isOn: $query.includeClosed) { Text("Closed pubs") }
-                toggle(isOn: $query.latestClose) { Text("Latest close") }
                 if query.activeFilterCount > 0 {
                     Button("Reset") {
                         let search = query.search

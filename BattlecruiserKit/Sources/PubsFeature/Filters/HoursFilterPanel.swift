@@ -3,14 +3,14 @@ import DesignSystem
 import PubDBClient
 import PubDBModels
 
-/// "WHEN ARE YOU DRINKING": known hours only, a day, and two times.
+/// "WHEN ARE YOU DRINKING": known hours only, a day, and how late.
 struct HoursFilterPanel: View {
     @Binding var query: PubQuery
     let weekdays: [Weekday]
 
     var body: some View {
         SectionHeader("When are you drinking")
-        Toggle("🕐 Only pubs we know the hours of", isOn: $query.hasHours)
+        Toggle("Only pubs we know the hours of", isOn: $query.hasHours)
             .font(Typography.body)
             .tint(Palette.good)
         Text("Open on a day").font(Typography.secondary).foregroundStyle(Palette.inkMuted)
@@ -23,7 +23,6 @@ struct HoursFilterPanel: View {
                 .accessibilityLabel(weekday.long)
             }
         }
-        TimeFilterField(title: "Open by", value: $query.opensBefore, fallback: "18:00")
         TimeFilterField(title: "Still open at", value: $query.closesAfter, fallback: "23:00")
     }
 }
