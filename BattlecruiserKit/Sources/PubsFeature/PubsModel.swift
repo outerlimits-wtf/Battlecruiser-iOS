@@ -12,14 +12,14 @@ import PubDBModels
 @Observable
 public final class PubsModel {
     /// In display order: open, unknown, closed, each nearest first.
-    public private(set) var pubs: [PubSummary] = []
-    public private(set) var isLoading = false
+    public internal(set) var pubs: [PubSummary] = []
+    public internal(set) var isLoading = false
     /// The last fetch's failure, cleared by the next success. `pubs` is kept.
-    public private(set) var lastError: PubDBError? = nil
+    public internal(set) var lastError: PubDBError? = nil
     /// When `pubs` was fetched. Open states are true only for that moment.
-    public private(set) var fetchedAt: Date? = nil
+    public internal(set) var fetchedAt: Date? = nil
     /// True while `pubs` came from the disk cache rather than this session's fetch.
-    public private(set) var isShowingCached = false
+    public internal(set) var isShowingCached = false
 
     /// How many of `pubs` can serve you right now.
     public var openCount: Int {
@@ -37,17 +37,17 @@ public final class PubsModel {
         )
     }
 
-    @ObservationIgnored private let source: any PubSource
-    @ObservationIgnored private let debounce: Duration
-    @ObservationIgnored private let sleep: @Sendable (Duration) async throws -> Void
-    @ObservationIgnored private let now: () -> Date
+    @ObservationIgnored let source: any PubSource
+    @ObservationIgnored let debounce: Duration
+    @ObservationIgnored let sleep: @Sendable (Duration) async throws -> Void
+    @ObservationIgnored let now: () -> Date
     /// The area most recently asked for: being fetched, or fetched.
-    public private(set) var requestedArea: BoundingBox? = nil
+    public internal(set) var requestedArea: BoundingBox? = nil
     /// The search and filters the list is for.
-    public private(set) var query = PubQuery()
-    @ObservationIgnored private var userLocation: Coordinate?
+    public internal(set) var query = PubQuery()
+    @ObservationIgnored var userLocation: Coordinate?
     /// The pending or running load. Internal so tests can await it.
-    @ObservationIgnored private(set) var loadTask: Task<Void, Never>?
+    @ObservationIgnored var loadTask: Task<Void, Never>?
 
     public convenience init(source: any PubSource, debounce: Duration = .milliseconds(300)) {
         self.init(
@@ -130,53 +130,6 @@ public final class PubsModel {
         userLocation = location
         if isFirstFix {
             refresh()
-        }
-    }
-
-    // MARK: - Loading
-
-    /// Whether `area` needs a fetch. An area inside the one already asked for
-    /// is covered, unless it is less than half as wide: the server returns the
-    /// pubs nearest the centre, so zooming well in can reveal pubs the wider
-    /// fetch left out. After a failure, any change retries.
-    func shouldFetch(_ area: BoundingBox) -> Bool {
-        guard let requested = requestedArea, lastError == nil else {
-            return true
-        }
-        let zoomedWellIn = (area.east - area.west) < (requested.east - requested.west) / 2
-        return !requested.contains(area) || zoomedWellIn
-    }
-
-    private func load(_ area: BoundingBox?, debounced: Bool) {
-        loadTask?.cancel()
-        if let area { requestedArea = area }
-        let location = userLocation
-        let query = query
-        let fetchArea = query.usesArea ? area : nil
-        loadTask = Task { [debounce, sleep] in
-            do {
-                if debounced {
-                    try await sleep(debounce)
-                }
-                isLoading = true
-                let list = try await source.fetchPubs(matching: query, in: fetchArea, near: location)
-                // A newer request may have started while this one was in flight.
-                try Task.checkCancellation()
-                pubs = PubOrdering.forDisplay(list.pubs)
-                fetchedAt = now()
-                isShowingCached = false
-                lastError = nil
-                isLoading = false
-            } catch {
-                if let shown = PubDBError.wrapping(error) {
-                    lastError = shown
-                    isLoading = false
-                } else if !Task.isCancelled {
-                    // Superseded: the newer load owns `isLoading`. If nothing
-                    // superseded it, stop showing a spinner.
-                    isLoading = false
-                }
-            }
         }
     }
 }

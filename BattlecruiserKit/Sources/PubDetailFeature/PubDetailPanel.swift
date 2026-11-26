@@ -10,14 +10,14 @@ import PubDBModels
 /// without closing anything. Draws from the summary straight away and fills
 /// in the rest when the detail arrives.
 public struct PubDetailPanel: View {
-    private let model: PubDetailModel
-    private let context: PanelContext
+    let model: PubDetailModel
+    let context: PanelContext
     private let onClose: () -> Void
     private let onSelectPub: (PubSummary) -> Void
-    @State private var tab: PanelTab = .overview
-    @State private var toast: ToastMessage?
-    @State private var isAddingPhoto = false
-    @State private var reporting: ReportTarget?
+    @State var tab: PanelTab = .overview
+    @State var toast: ToastMessage?
+    @State var isAddingPhoto = false
+    @State var reporting: ReportTarget?
 
     public init(
         model: PubDetailModel,
@@ -118,38 +118,5 @@ public struct PubDetailPanel: View {
         guard let kind = summary.amenity.kind else { return nil }
         return context.meta?.venueKinds.first { $0.key == kind }?.note
     }
-
-    private func factWriter(_ pubID: String) -> FactWriter? {
-        guard context.session.isSignedIn else { return nil }
-        return FactWriter(context: context, pubID: pubID, onChanged: changed) { toast = ToastMessage($0, tone: .bad) }
-    }
-
-    /// The Guinness price field's bounds, from `/meta`.
-    private var priceBounds: ClosedRange<Int> {
-        let field = context.meta?.contributableFields.first { $0.key == "guinness_price" }
-        return (field?.min ?? 200)...(field?.max ?? 1500)
-    }
-
-    private func removeFact(_ contribution: Contribution, from pubID: String) {
-        Task {
-            do {
-                changed(try await context.writer.deleteFact(contribution.id, from: pubID))
-            } catch {
-                if let message = PubDBError.wrapping(error)?.userMessage { toast = ToastMessage(message, tone: .bad) }
-            }
-        }
-    }
-
-    /// After a write: say so, and show what the server now has. A change held
-    /// for an admin shows the server's message and changes nothing yet.
-    private func changed(_ result: WriteResult) {
-        if result.queued {
-            toast = ToastMessage(result.message ?? "Sent to an admin to check.")
-            return
-        }
-        toast = ToastMessage(result.message ?? "Saved. The next person through the door gets that.")
-        if let id = model.selectedID { context.marks.noteVisited(id) }
-        model.refresh()
-        Task { await context.session.load() }
-    }
 }
+

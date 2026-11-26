@@ -10,19 +10,22 @@ public final class PubMapCoordinator: NSObject, MKMapViewDelegate {
     var reduceMotion = false
 
     weak var mapView: MKMapView?
-    private var settleTask: Task<Void, Never>?
-    private let dotsOverlay = PinDotsOverlay()
-    private let dotsRenderer: PinDotsRenderer
+    var settleTask: Task<Void, Never>?
+    let dotsOverlay = PinDotsOverlay()
+    let dotsRenderer: PinDotsRenderer
 
     private(set) var pins: [Pin] = []
-    private var pinsByID: [String: Pin] = [:]
-    private var selectedID: String?
-    private var viewport: MapViewport?
-    private var colorScheme: ColorScheme?
+    var pinsByID: [String: Pin] = [:]
+    var selectedID: String?
+    var viewport: MapViewport?
+    var colorScheme: ColorScheme?
     /// A camera move asked for before the map had a size, applied once it has one.
-    private var pendingCamera: (request: MapCameraRequest, animated: Bool)?
+    var pendingCamera: (request: MapCameraRequest, animated: Bool)?
     /// The full pins on the map, by pub id.
-    private var annotations: [String: PinAnnotation] = [:]
+    var annotations: [String: PinAnnotation] = [:]
+
+    /// Set when a pan, pinch or rotate starts a move; cleared once it settles.
+    var isUserMove = false
 
     /// How long the map must be still before it counts as settled (the web's 300 ms).
     static let settleDelay: Duration = .milliseconds(300)
@@ -68,7 +71,7 @@ public final class PubMapCoordinator: NSObject, MKMapViewDelegate {
         request.apply(to: mapView, animated: animated)
     }
 
-    private func performPendingCamera() {
+    func performPendingCamera() {
         guard let pending = pendingCamera else { return }
         pendingCamera = nil
         perform(pending.request, animated: pending.animated)
@@ -79,7 +82,7 @@ public final class PubMapCoordinator: NSObject, MKMapViewDelegate {
     /// Make the full pins match what should be shown: add and remove only the
     /// difference, replace a pin whose details changed, then repaint the dots
     /// without the pubs that now have full pins.
-    private func syncFullPins(forceRedraw: Bool = false, restyle: [String] = []) {
+    func syncFullPins(forceRedraw: Bool = false, restyle: [String] = []) {
         guard let mapView else { return }
         let wanted = FullPinSelection.ids(for: pins, in: viewport, selectedID: selectedID)
         let shown = Set(annotations.keys)
@@ -112,74 +115,8 @@ public final class PubMapCoordinator: NSObject, MKMapViewDelegate {
         dotsRenderer.show(DotSnapshot(pins: pins, hidden: hidden, traits: mapView.traitCollection))
     }
 
-    private func restyleView(for annotation: PinAnnotation) {
+    func restyleView(for annotation: PinAnnotation) {
         guard let view = mapView?.view(for: annotation) as? PinAnnotationView else { return }
         view.configure(annotation.pin, isSelected: annotation.pin.id == selectedID, reduceMotion: reduceMotion)
-    }
-
-    // MARK: - Delegate
-
-    public func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay) -> MKOverlayRenderer {
-        overlay === dotsOverlay ? dotsRenderer : MKOverlayRenderer(overlay: overlay)
-    }
-
-    public func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
-        guard let annotation = annotation as? PinAnnotation else { return nil }
-        let view = mapView.dequeueReusableAnnotationView(
-            withIdentifier: PinAnnotationView.reuseIdentifier, for: annotation
-        ) as? PinAnnotationView
-        view?.configure(annotation.pin, isSelected: annotation.pin.id == selectedID, reduceMotion: reduceMotion)
-        return view
-    }
-
-    public func mapView(_ mapView: MKMapView, didSelect annotation: any MKAnnotation) {
-        guard let annotation = annotation as? PinAnnotation else { return }
-        // Selection is the app's, not MapKit's: no callout, just open the pub.
-        mapView.deselectAnnotation(annotation, animated: false)
-        onSelect(annotation.pin)
-    }
-
-    /// Set when a pan, pinch or rotate starts a move; cleared once it settles.
-    private var isUserMove = false
-
-    public func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
-        // MapKit doesn't say who moved the map; a gesture in progress on its
-        // content view means the person did.
-        let gestures = mapView.subviews.first?.gestureRecognizers ?? []
-        if gestures.contains(where: { $0.state == .began || $0.state == .changed || $0.state == .ended }) {
-            isUserMove = true
-        }
-    }
-
-    public func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        settleTask?.cancel()
-        settleTask = Task { [weak self, weak mapView] in
-            try? await Task.sleep(for: Self.settleDelay)
-            guard !Task.isCancelled, let self, let mapView else { return }
-            let settled = MapViewport(mapView, movedByUser: isUserMove)
-            isUserMove = false
-            viewport = settled
-            syncFullPins()
-            onViewportChange(settled)
-        }
-    }
-
-    // MARK: - Tapping a dot
-
-    @objc private func tapped(_ recognizer: UITapGestureRecognizer) {
-        guard let mapView, recognizer.state == .ended else { return }
-        let location = recognizer.location(in: mapView)
-        // A tap on a full pin or the user's dot belongs to that view.
-        var hit = mapView.hitTest(location, with: nil)
-        while let view = hit {
-            if view is MKAnnotationView { return }
-            hit = view.superview
-        }
-        let pin = DotHitTest.nearest(to: location, in: pins, excluding: Set(annotations.keys)) { pin in
-            mapView.convert(CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude), toPointTo: mapView)
-        }
-        if let pin {
-            onSelect(pin)
-        }
     }
 }
