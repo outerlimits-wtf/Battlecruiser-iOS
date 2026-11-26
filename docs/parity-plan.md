@@ -17,8 +17,8 @@ one `Social` module holds Latest, Leaderboard, Boards and Notifications, and the
 Fix-mode editors live in `PubDetailFeature/Writes` until the `Contribute` module
 has more than two of them.
 
-**Server asks (2026-11-27):** S1–S10 and S12–S16 are built on the server branch
-`feat/ios-server-asks` but **not deployed**. See "Where they stand" in
+**Server asks (2026-11-27):** S1–S10 and S12–S16 are **deployed** to production,
+along with six reworked levels. See "Where they stand" in
 [server-asks.md](server-asks.md). The work they unblock is in
 [Phase H](#phase-h-picking-up-the-server-asks). Still open: S11, S17, S18.
 
@@ -261,8 +261,8 @@ What else earns a tab is still open. Today Lists and Me fill the last two slots.
 
 ### Phase H: picking up the server asks
 
-Starts once `feat/ios-server-asks` is deployed. Until then production sends none of
-these fields, and the app must keep decoding without them, as today. The order puts
+Unblocked: the server work was deployed on 2026-11-27. Keep every new field optional
+in the models, so old cached responses still decode. The order puts
 App Store needs first, then deleting device-side workarounds, then the rest.
 
 | # | Work | Needs | Done when |
@@ -282,17 +282,19 @@ App Store needs first, then deleting device-side workarounds, then the rest.
 | H12 | Limits from meta (S13): the report note, avatar size, handle rules and page sizes; `Retry-After` on the photo 429. Plus the 🎲 random handle (S14) in the handle editor. | S13, S14 | No hard-coded limits. |
 | H13 | Sources (C5): draw `sources[]` with each `license`. | S15 | Credits as the server sends them. |
 
-### Phase L: levels (Walk-in, Punter, Regular, Lock-in, Owner)
+### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 
 The app already decodes and draws `level`: `LevelBadge` on leaderboard rows,
 `LevelProgress` on the signed-in card and profile, and "How levels work" (`LevelsPage`)
 in Me. The models match the shape built in S16, but nothing has been checked against
-a real response yet. The look of each level is yours to decide before L2.
+a real response yet. The live levels are listed in server-asks.md ("Levels as live").
+Owner was retired on 2026-11-27, so Lock-in is now the top. The look of each level is
+yours to decide before L2.
 
 | # | Work | Needs | Done when |
 |---|---|---|---|
 | L1 | Check against production: `next.key`, `emoji`, the leaderboard's short form and `xp`, `progress` at the top level (1, `next` null). Decoding tests from H0's fixtures. | deploy | Every screen with a level matches the web. |
-| L2 | The look per level: badge colour or artwork for each `key` (with a fallback for a key the app doesn't know, since keys may be added), and the level name and line on profiles. Colour alone never carries the level. | design | Each of the five levels is distinct in light and dark, and reads aloud. |
+| L2 | The look per level: badge colour or artwork for each `key` (with a fallback for a key the app doesn't know, since keys may be added or retired), and the level name and line on profiles. Colour alone never carries the level. | design | Each of the six levels is distinct in light and dark, and reads aloud. |
 | L3 | Leaderboard shows `xp` beside `total` (it still ranks on `total`). | S16 | |
 | L4 | A level-up moment: after a write, say what it earned and when someone reaches a new level (respecting Reduce Motion). **Needs a new server ask (S19):** write responses carry the writer's XP gained and their `level`, or the app refetches `/me`. | S19 | No XP maths on the device. |
 | L5 | Badges beside names on reviews, the feed and profiles in lists. **Needs a new server ask (S20):** the short `level` on review authors and feed entries. | S20 | |
@@ -301,8 +303,8 @@ a real response yet. The look of each level is yours to decide before L2.
 
 Outside the phases, so they don't get lost:
 
-- **Deploy the server branch.** It needs merging to `main`, then `bun run deploy`
-  (`deploy/RUNBOOK.md`). The web changes for S10, S12 and S16 need a look in a browser first.
+- **Check the web in a browser.** The web changes for S10, S12 and S16 are live but
+  haven't been looked at, and nothing signed-in has been tried against production.
 - **Server:** the `tsc` error in `src/sources/website.ts:139`; the web Profile should
   draw `joinedAtLabel`; spec stubs for S17 and S18 before they're built; Retractions
   is the only stub left.
@@ -320,7 +322,7 @@ import queue, and the roadmap page. If you want admin on the phone later, it nee
 These are needed to keep logic off the device. Under D11 they are asks for the backend;
 an agent will work them on the pubdb side (P3), from the brief in [server-asks.md](server-asks.md). Milestones that need one wait for it
 rather than work around it. They are listed in the order the app needs them.
-S1–S10 and S12–S16 are built (not deployed), with their final shapes in
+S1–S10 and S12–S16 are deployed, with their final shapes in
 server-asks.md; S19 and S20 are proposed in Phase L.
 
 | # | Ask | Why | Blocks |

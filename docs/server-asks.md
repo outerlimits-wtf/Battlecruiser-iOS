@@ -11,12 +11,13 @@ logic onto the server once, so neither client has it.
 
 ## Where they stand (2026-11-27)
 
-**Built, not deployed.** S1–S10 and S12–S16 are built on the server worktree
-`../pubdb-server-asks`, branch `feat/ios-server-asks`, up to date with `origin/main`
-but not merged, pushed or deployed. `bun test` passes (765), `bun run build`
-succeeds, and `tsc` has one error, in `src/sources/website.ts:139`, which the branch didn't touch.
-The spec on that branch (`spec/pubdb-api-v1.md`) documents every field below and is the
-source of truth. This section only records what was built and where it differs from the ask.
+**Deployed 2026-11-27.** S1–S10 and S12–S16 were built on `feat/ios-server-asks`,
+fast-forwarded into pubdb's `main` and deployed (cb038eb). Later that day `main` gained
+a test-isolation fix (efec76f) and the new levels (c344f56, below), also deployed.
+`bun test` passes (765) on the Mac and on the Pi; `tsc` has one old error, in
+`src/sources/website.ts:139`. The spec (`../pubdb/spec/pubdb-api-v1.md`) documents every
+field below and is the source of truth. This section only records what was built and
+where it differs from the ask.
 
 | ask | commit | built as | differs from the ask |
 | --- | --- | --- | --- |
@@ -34,14 +35,29 @@ source of truth. This section only records what was built and where it differs f
 | S13 | a754371 | `Retry-After` on the photo 429; `limits` gains `maxReportNote`, `maxAvatarBytes`, `username { min, max, pattern }`, `feed`/`boards`/`notifications` `{ defaultLimit, maxLimit }`, `guinnessFilter { minPence, maxPence }` | adds notifications limits |
 | S14 | db017ca | `GET /usernames/random` → `{ username, label }`, `no-store` | adds `label` |
 | S15 | a5875f0 | `sources[]` only `osm`, `fhrs`, `wikidata`, `commons`, each with `license` (null for Commons) | none |
-| S16 | 9e71aab | `level` on `/me` (`user.level`) and `/users/{u}`; leaderboard rows add `xp` and `level { key, name, emoji } \| null`; `/meta` `levels` and `xpRules` | `next` gains `key`; `progress` rounds down to two decimals; emoji 🚪 🍻 🍺 🔒 🔑; the leaderboard still ranks on `total` |
+| S16 | 9e71aab | `level` on `/me` (`user.level`) and `/users/{u}`; leaderboard rows add `xp` and `level { key, name, emoji } \| null`; `/meta` `levels` and `xpRules` | `next` gains `key`; `progress` rounds down to two decimals; the leaderboard still ranks on `total`. Levels changed in c344f56, see below |
+
+**Levels as live (c344f56):** six, with Owner retired, so Lock-in is the top.
+
+| key | name | emoji | from XP | line |
+| --- | --- | --- | --- | --- |
+| `walk_in` | Walk-in | 🚪 | 0 | Never seen you before mate |
+| `half_pinter` | Half Pint Hero | 🍺 | 50 | Just in for a swift one |
+| `pub_crawler` | Pub Crawler | 🗺️ | 100 | Just passing through mate |
+| `punter` | Punter | 🍻 | 500 | Knows where the toilets are |
+| `regular` | Regular | 🥂 | 1000 | Staff know your order |
+| `lock_in` | Lock-in | 🔒 | 1500 | Still here when the shutters come down |
+
+The spec now says level keys can be retired as well as added: draw a level from its
+own `name` and `emoji`, never from a table in the app.
 
 **Still open:** S11 (no Apple team id yet), S17 and S18 (not asked for in that run),
 and the new S19 and S20 (levels in more places, below).
 Retractions are the only stub left in the spec. S17 and S18 have no stub there yet.
 
-**Before it ships:** the web client was changed to use S10, S12 and S16 (levels, the
-`pub` a write returns, Block/Unblock on profiles) but nobody has looked at it in a browser.
+**Not checked yet:** the web client's use of S10, S12 and S16 (levels, the `pub` a
+write returns, Block/Unblock on profiles) is live but nobody has looked at it in a browser,
+and nothing that needs signing in has been tried against production.
 The web Profile still formats `joinedAt` itself rather than drawing `joinedAtLabel`.
 
 ## How to work these
@@ -204,8 +220,7 @@ People get a level from what they've added, each kind of thing worth different
 XP. The server owns the weights and the thresholds, so they can be retuned
 without a release and the web and the app always agree.
 
-**Levels** (names and one-liners from the product owner; the middle three
-one-liners are suggestions to change freely):
+**Levels** as first asked (superseded: see *Levels as live* above):
 
 | key | name | from XP | line |
 | --- | --- | --- | --- |
