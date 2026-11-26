@@ -39,6 +39,17 @@ struct PubOrderingTests {
         #expect(ids == ["measured", "unmeasured"])
     }
 
+    @Test func aSortTheUserAskedForKeepsTheServersOrder() {
+        let pubs = [
+            PubFixtures.pub(id: "closed-late", state: "closed", metres: 900),
+            PubFixtures.pub(id: "open-early", state: "open", metres: 10),
+        ]
+
+        let ids = PubOrdering.forDisplay(pubs, keepingServerOrder: true).map { $0.id }
+
+        #expect(ids == ["closed-late", "open-early"])
+    }
+
     @Test func tiesKeepTheServersOrder() {
         let pubs = [
             PubFixtures.pub(id: "first"),

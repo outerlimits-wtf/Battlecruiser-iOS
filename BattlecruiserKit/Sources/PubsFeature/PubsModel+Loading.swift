@@ -35,7 +35,7 @@ extension PubsModel {
                 let list = try await source.fetchPubs(matching: query, in: fetchArea, near: location)
                 // A newer request may have started while this one was in flight.
                 try Task.checkCancellation()
-                pubs = PubOrdering.forDisplay(list.pubs)
+                pubs = PubOrdering.forDisplay(list.pubs, keepingServerOrder: query.latestClose)
                 fetchedAt = now()
                 isShowingCached = false
                 lastError = nil

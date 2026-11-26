@@ -82,7 +82,7 @@ public final class PubsModel {
         guard fetchedAt == nil else {
             return
         }
-        pubs = PubOrdering.forDisplay(cached.value.pubs)
+        pubs = PubOrdering.forDisplay(cached.value.pubs, keepingServerOrder: query.latestClose)
         fetchedAt = cached.fetchedAt
         isShowingCached = true
     }

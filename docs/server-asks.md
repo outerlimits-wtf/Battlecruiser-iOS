@@ -213,14 +213,11 @@ so a client can explain them:
 The iOS app draws `level` when it's there and nothing when it isn't, so this can
 land on the server first.
 
-### S17. The worst-rated pubs, and the latest close [B8, new]
+### S17. The worst-rated pubs [B8, new]
 
 Badly rated pubs are worth a look, but `/pubs` and `/pins` only take `minRating`.
 - Accept `maxRating` (rated at most), so a client can ask for the 1s to 4s.
 - Accept `sortBy=rating_asc` (and `rating_desc`), lowest first.
-- `sortBy=latest_close` does nothing that the app can see. Make it work on the
-  server: order by tonight's (or any day's) latest closing time, latest first.
-  The app has taken its "Latest close" pill out until it does.
 
 The app's rating chips now run 1+ to 9+; it adds a "Rated at most" row once
 `maxRating` is accepted.

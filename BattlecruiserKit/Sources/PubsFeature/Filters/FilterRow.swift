@@ -25,6 +25,7 @@ struct FilterRow: View {
                 panelPill(.rating, FilterLabels.rating(query))
                 panelPill(.guinness, FilterLabels.guinness(query))
                 toggle(isOn: $query.includeClosed) { Text("Closed pubs") }
+                toggle(isOn: $query.latestClose) { Text("Latest close") }
                 if query.activeFilterCount > 0 {
                     Button("Reset") {
                         let search = query.search
