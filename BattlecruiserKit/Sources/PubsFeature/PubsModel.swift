@@ -29,7 +29,6 @@ public final class PubsModel {
     /// What, if anything, the screen should tell the user about these pubs.
     public var notice: PubsNotice? {
         PubsNotice.current(
-            area: query.usesArea ? requestedArea : nil,
             pubCount: pubs.count,
             hasFreshResult: fetchedAt != nil && !isShowingCached,
             isLoading: isLoading,

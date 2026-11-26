@@ -3,7 +3,7 @@ import UIKit
 import DesignSystem
 
 /// What sits at the top of the map: location turned off, how old the pubs
-/// are, and any notice (outside London, offline, failed, nothing here).
+/// are, and any notice (offline, failed, nothing here).
 struct StatusBanner: View {
     let pubs: PubsModel
     let isLocationDenied: Bool
