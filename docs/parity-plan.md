@@ -1,7 +1,17 @@
 # Battlecruiser: parity with the web client
 
 **Status: approved 2026-11-26**, with the decisions recorded in
-[Decisions](#decisions) (P1–P8).
+[Decisions](#decisions) (P1–P8), and as D27–D34 in
+[backend/05-decisions.md](backend/05-decisions.md).
+
+**Progress (2026-11-26):** Phases A–D and F are built; E is built except the
+parts waiting on server asks (the Fix panel's other editors, night forms, hours
+editor, history editing, S2–S6). Notifications (F7) wait on S15b; G1 (block)
+on S10, G2 (deep links) on S11. Two departures from the layout above: one
+`Social` module holds Latest, Leaderboard and Boards (the same kind of page),
+and the Fix-mode editors live in `PubDetailFeature/Writes` until the
+`Contribute` module has more than two of them. Sign-in is built but untried
+against WorkOS until `AppConfig.workOSClientID` is set.
 
 This plan follows on from [mvp-plan.md](mvp-plan.md), which is built. It covers bringing
 the iPhone app level with the PubDB web client (`../pubdb/src`) in features and look, on

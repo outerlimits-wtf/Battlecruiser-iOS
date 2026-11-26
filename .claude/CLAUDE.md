@@ -23,7 +23,7 @@ Why this exists: on 2026-10-16 Claude took "incremental commits with explanation
 
 ## Project overview
 
-Battlecruiser is a native iOS app written in Swift and SwiftUI. It is at an early stage: the app currently shows a placeholder `ContentView` ("Hello, world!").
+Battlecruiser is a native iOS app written in Swift and SwiftUI: the PubDB web client's features on the iPhone (docs/parity-plan.md). A map of pubs with a bottom sheet (list or pub panel), and tabs for Social, Lists and Me.
 
 - Bundle target: `Battlecruiser` (application), scheme `Battlecruiser`
 - Project: `Battlecruiser.xcodeproj`, opened through `Battlecruiser.xcworkspace`
@@ -36,31 +36,35 @@ Battlecruiser is a native iOS app written in Swift and SwiftUI. It is at an earl
 
 ```
 Battlecruiser.xcworkspace/   # Open this, not the .xcodeproj: it holds the app project and the local packages
-Battlecruiser.xcodeproj/     # The app target only: entry point, composition, assets, Info.plist settings. Links BattlecruiserKit's products (PubDBClient, PubsFeature)
+Battlecruiser.xcodeproj/     # The app target only: entry point, composition, assets, Info.plist settings. Links BattlecruiserKit's Root product
 Sources/
   App/
     BattlecruiserApp.swift   # @main App entry point, creates WindowGroup
-    ContentView.swift        # Composition root: PubsMapScreen(source: PubDBClient.live()), plus #Preview and #Playground
+    ContentView.swift        # Composition root: RootView(dependencies: .live(...)), plus #Preview and #Playground
+    AppConfig.swift          # Per-build settings that aren't secret (the WorkOS client id)
   Assets.xcassets/           # Asset catalog (AccentColor)
   PrivacyInfo.xcprivacy      # Privacy manifest for the whole binary (see Working conventions)
 Tests/                       # BattlecruiserTests: app-level tests only (Swift Testing)
-BattlecruiserKit/            # The one local package (decision D24), at the top level; modules added as they are built
+BattlecruiserKit/            # The one local package (decision D24); module graph in docs/parity-plan.md
   Package.swift
-  Sources/PubDBModels/       # API response types
-  Sources/PubDBClient/       # Talks to the v1 API: requests, response checks, PubDBError; saves/reads responses via ResponseCache; live() for the app
+  Sources/PubDBModels/       # API types by area: Pub/, Pins/, Meta/, Account/, Community/, Writes/, Shared/, Errors/
+  Sources/PubDBClient/       # Endpoint (Request/), one factory file per area (Endpoints/), PubQuery, ETags (Conditional/), TokenProvider (Auth/), PubDBClient+<Area>.swift
   Sources/ResponseCache/     # Raw responses on disk (Caches/), fetch time = file date, bounded (actor)
+  Sources/Auth/              # WorkOS AuthKit with PKCE, tokens in the Keychain, refresh (AuthSession)
   Sources/UserLocation/      # Location permission + current coordinate (main actor)
-  Sources/DesignSystem/      # Shared SwiftUI pieces: ShipPin, OpenPill, FreshnessLabel, PinEmphasis + its tint (main actor)
-  Sources/PubsFeature/       # PubsMapScreen (Map/List switch) + PubMap (MapKit, tappable pins), PubListView + PubRow, PubsModel, PubOrdering, Freshness (stale/refresh rules), PubsNotice (outside London / offline / failed / empty) (main actor)
-  Sources/PubDetailFeature/  # PubDetailModel (selected pub: instant summary, cached + fresh detail) + PubDetailSheet and its Sections/ (main actor)
-  Tests/PubDBModelsTests/    # Decoding tests + Fixtures/ (real production responses; docs/test-fixtures.md)
-  Tests/PubDBClientTests/    # Request-building and error tests against a fake transport
-  Tests/ResponseCacheTests/  # Store/load/evict tests in a temporary folder
-  Tests/UserLocationTests/   # Permission-flow tests against a fake location manager
-  Tests/DesignSystemTests/   # Pin emphasis rules
-  Tests/PubsFeatureTests/    # Ordering + PubsModel timing/error tests against a fake PubSource
-  Tests/PubDetailFeatureTests/ # PubDetailModel tests against a fake PubDetailSource
-docs/                        # Backend guide, decisions, MVP plan
+  Sources/AppEnvironment/    # App-wide state: MetaStore (/meta), SessionModel (/me), MarksModel, Loadable, RemoteValue, LRUCache
+  Sources/DesignSystem/      # The web's theme (Theme/), components (Components/), PubCard, BottomSheet (Sheet/), bundled artwork
+  Sources/PubsMap/           # MKMapView: dots overlay (Dots/), full pins (FullPins/), PinsModel (/pins with ETags)
+  Sources/PubsFeature/       # The Map tab: search, filters (Filters/), results list (List/), sheet, PubsModel
+  Sources/PubDetailFeature/  # The pub panel: Panel/, Overview/, Reviews/, About/, Writes/ (reviews, photos, reports, facts)
+  Sources/Account/           # Sign-in card, signed-in card, handle, avatar, delete account
+  Sources/Me/                # The Me tab: account, Appearance, About
+  Sources/Social/            # The Social tab: latest updates, leaderboard, boards
+  Sources/Profile/           # Someone's page, follow
+  Sources/Lists/             # The Lists tab: hit list and Been here
+  Sources/Root/              # RootView: owns shared state, tab bar, wires features together (the only module importing features)
+  Tests/<Module>Tests/       # One test target per module; PubDBModelsTests/Fixtures holds real production responses (docs/test-fixtures.md)
+docs/                        # Backend guide, decisions, MVP plan, parity plan, server asks
 ```
 
 ## Modularisation (decision D24)
@@ -72,7 +76,7 @@ The app is modular from the outset. **Code lives in local Swift packages inside 
 - A module's API for other modules is `public`. Everything else stays `internal`.
 - Each module gets its own test target in its package.
 - **Local packages are our own code, so they are not "adding dependencies".** Creating or changing modules inside `BattlecruiserKit/` is normal work, done one piece at a time under the Workflow rules. Adding a **third-party** package still needs the user's explicit approval (decision D8: first-party only).
-- The module layout is in `docs/mvp-plan.md` ("Modules").
+- The module layout is in `docs/parity-plan.md` ("Target architecture").
 
 ## Environment
 
@@ -84,7 +88,7 @@ The app is modular from the outset. **Code lives in local Swift packages inside 
 
 - Use SwiftUI for UI. Keep views small and composable; split a view into its own file once it stops being trivial.
 - Accessibility is part of done: custom controls get a VoiceOver label (and a hint if tapping does something), layouts stack at accessibility text sizes (`dynamicTypeSize.isAccessibilitySize`), animations respect Reduce Motion, and colour never carries meaning alone. Where server text reads badly aloud, rephrase it for VoiceOver only (see `Spoken` in PubDetailFeature); the screen still shows the server's label.
-- Keep `Sources/PrivacyInfo.xcprivacy` in step with the code, in the same change: it declares every required-reason API used anywhere in the binary (today only file timestamps, in ResponseCache) and every kind of data sent off the device (today only location, to the PubDB API). Adding `UserDefaults`, sign-in, analytics or anything similar means updating it.
+- Keep `Sources/PrivacyInfo.xcprivacy` in step with the code, in the same change: it declares every required-reason API used anywhere in the binary (today file timestamps, in ResponseCache, and UserDefaults, for settings) and every kind of data sent off the device (today location, and with sign-in a user ID, email address and photos). Adding `UserDefaults`, sign-in, analytics or anything similar means updating it.
 - Follow standard Swift API design guidelines: `UpperCamelCase` for types, `lowerCamelCase` for everything else, and clear argument labels.
 - Prefer Swift's modern concurrency (`async`/`await`, `@MainActor` for UI state) over callbacks.
 - Write code that should compile, but do not run a build to check it unless instructed (see Command rules).
