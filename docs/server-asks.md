@@ -9,6 +9,41 @@ a string, doing date maths or knowing OSM `opening_hours` syntax. The web client
 breaks that rule in the places below, and iOS would have to copy it. Each ask moves that
 logic onto the server once, so neither client has it.
 
+## Where they stand (2026-11-27)
+
+**Built, not deployed.** S1–S10 and S12–S16 are built on the server worktree
+`../pubdb-server-asks`, branch `feat/ios-server-asks`, up to date with `origin/main`
+but not merged, pushed or deployed. `bun test` passes (765), `bun run build`
+succeeds, and `tsc` has one error, in `src/sources/website.ts:139`, which the branch didn't touch.
+The spec on that branch (`spec/pubdb-api-v1.md`) documents every field below and is the
+source of truth. This section only records what was built and where it differs from the ask.
+
+| ask | commit | built as | differs from the ask |
+| --- | --- | --- | --- |
+| S1 | 638b6bd | `counts { returned, matched, open }`, `truncated`, `headerLabel`, `scopeLabel`; open → unknown → closed, nearest first; `sortBy=distance\|name` | adds `counts.matched` |
+| S2 | 266ef8c | `weekTable[].state`, `weekTable[].sessions [{ open, close \| null }]`; `opening_hours` input `{ days: [{ day, state, sessions }] }`; `opening_hours` and `garden_closes` validated (`400`, `field: "value"`) | a day left out counts as closed; `close: null` is "onwards" |
+| S3 | 5072e1e | `PubDetail.session { day, short, long }` (0 = Monday); night contributions take `{ "at": ISO }` | none |
+| S4 | aab1137 | `editable[field] = { value, display }`; `contributableFields[]` gains `section`, `order`, `placeholder`, `maxLength`; kinds `status` and `weekday` | an unknown `kind` falls back to a text editor (spec rule) |
+| S5 | 51f04df | `status` `{ state, year?, became? }`, `previous_name` `{ name, year?, owner? }`, **and** `parts [{ key, label, kind, optional }]` in meta; the piped form still accepted | both options, not one |
+| S6 | 9f30427 | `timeline[]` gains `contributionId`, `canRemove`, `hideValue` | adds `hideValue`: post it as a `previous_name_removed` contribution to hide a stop that came from OSM |
+| S7 | c2b50e3 | every label asked for; `priceHistory.window` also has `years [{ at, label }]`, `change { pence, label } \| null` | `priceHistory.window.to` is the midnight (London) ending `at`'s day, so ETags can match |
+| S8 | fb2d46e | `meta.filters { ratingSteps, guinnessSteps }`; `appliedFilters` and `ignored [{ param, value }]` on `/pubs` and `/pins` | a missing `amenity` applies no filter (pubs and bars); now a spec "Known divergence". **Always send `amenity`** unless `kinds` is set |
+| S9 | cb038eb | weak `ETag` and `304` on `/pubs/{id}` and `/meta`; the detail is `private, no-cache`, `Vary: Authorization, Cookie` | keep one tag per pub **per account** |
+| S10 | d46bac4 | `PUT`/`DELETE /users/{u}/block` → `{ username, blocked }`; `GET /me/blocks`; profiles gain `isBlocked` | contributions stay visible; reviews, photos, quotes, feed entries, follows and notifications are hidden. They are never told |
+| S12 | 3de6e96 | the `201` from contribution and review `POST`s adds `entry` (as in `contributions[]`/`reviews[]`) and `pub` (the full `PubDetail`); both take `at`, `lat`, `lon` | a `202` has neither key |
+| S13 | a754371 | `Retry-After` on the photo 429; `limits` gains `maxReportNote`, `maxAvatarBytes`, `username { min, max, pattern }`, `feed`/`boards`/`notifications` `{ defaultLimit, maxLimit }`, `guinnessFilter { minPence, maxPence }` | adds notifications limits |
+| S14 | db017ca | `GET /usernames/random` → `{ username, label }`, `no-store` | adds `label` |
+| S15 | a5875f0 | `sources[]` only `osm`, `fhrs`, `wikidata`, `commons`, each with `license` (null for Commons) | none |
+| S16 | 9e71aab | `level` on `/me` (`user.level`) and `/users/{u}`; leaderboard rows add `xp` and `level { key, name, emoji } \| null`; `/meta` `levels` and `xpRules` | `next` gains `key`; `progress` rounds down to two decimals; emoji 🚪 🍻 🍺 🔒 🔑; the leaderboard still ranks on `total` |
+
+**Still open:** S11 (no Apple team id yet), S17 and S18 (not asked for in that run),
+and the new S19 and S20 (levels in more places, below).
+Retractions are the only stub left in the spec. S17 and S18 have no stub there yet.
+
+**Before it ships:** the web client was changed to use S10, S12 and S16 (levels, the
+`pub` a write returns, Block/Unblock on profiles) but nobody has looked at it in a browser.
+The web Profile still formats `joinedAt` itself rather than drawing `joinedAtLabel`.
+
 ## How to work these
 
 - Change the spec first. Move a stub out of *Planned — not built* or add the new field
@@ -21,6 +56,8 @@ logic onto the server once, so neither client has it.
 - One ask per PR. The iOS milestone each one unblocks is in brackets.
 
 ## The asks, in the order iOS needs them
+
+As first written on 2026-11-26. For what was built, see *Where they stand* above.
 
 ### S1. List ordering and counts on the server [B6]
 
@@ -235,6 +272,18 @@ so "taproom" finds only places with it in the name.
 
 The app already sends `kinds` from its Type chips; until this lands the server
 ignores it and, with no `amenity`, shows pubs and bars alike.
+
+### S19. Writes say what they earned [L4, new]
+
+So the app can mark a level-up without working out XP itself:
+- The `201` from contribution, review and photo `POST`s adds `xp { gained, gainedLabel }`
+  ("+25 XP") and the writer's `level` (the same object as on `/me`).
+- Add `levelUp: true` when the write took them into a new level.
+
+### S20. Levels beside names [L5, new]
+
+Add the short `level { key, name, emoji }` (as on leaderboard rows) to review authors on
+`PubDetail.reviews[]`, profile reviews and feed entries. Null for names with no account.
 
 ## For the web client
 

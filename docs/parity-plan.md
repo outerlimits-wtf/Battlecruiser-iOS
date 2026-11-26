@@ -17,6 +17,11 @@ one `Social` module holds Latest, Leaderboard, Boards and Notifications, and the
 Fix-mode editors live in `PubDetailFeature/Writes` until the `Contribute` module
 has more than two of them.
 
+**Server asks (2026-11-27):** S1–S10 and S12–S16 are built on the server branch
+`feat/ios-server-asks` but **not deployed**. See "Where they stand" in
+[server-asks.md](server-asks.md). The work they unblock is in
+[Phase H](#phase-h-picking-up-the-server-asks). Still open: S11, S17, S18.
+
 This plan follows on from [mvp-plan.md](mvp-plan.md), which is built. It covers bringing
 the iPhone app level with the PubDB web client (`../pubdb/src`) in features and look, on
 the v1 API (`../pubdb/spec/pubdb-api-v1.md`, checked 2026-11-08).
@@ -254,6 +259,58 @@ What else earns a tab is still open. Today Lists and Me fill the last two slots.
 | G4 | Accessibility pass: VoiceOver labels, Dynamic Type stacking and Reduce Motion on every new screen, plus `Spoken` rewording where the server's text reads badly aloud. |
 | G5 | Update CLAUDE.md's layout section, `Package.swift` comments, and `docs/backend/05-decisions.md` with what was decided here. |
 
+### Phase H: picking up the server asks
+
+Starts once `feat/ios-server-asks` is deployed. Until then production sends none of
+these fields, and the app must keep decoding without them, as today. The order puts
+App Store needs first, then deleting device-side workarounds, then the rest.
+
+| # | Work | Needs | Done when |
+|---|---|---|---|
+| H0 | Fresh production fixtures for `/pubs`, `/pubs/{id}`, `/meta`, `/me`, `/users/{u}`, `/leaderboard`, `/usernames/random` and `/me/blocks` (docs/test-fixtures.md), and decoding tests for the new fields, all optional. | deploy | Old and new fixtures both decode. |
+| H1 | Block a user (G1): Block/Unblock on profiles, the `isBlocked` state, and a "Blocked" list in Me from `/me/blocks`. | S10 | Required before App Store submission. |
+| H2 | The list from the server (finishes B6): draw `headerLabel`, `scopeLabel`, `counts`, `truncated`; delete `PubOrdering` and `openCount`. | S1 | The last named workaround is gone. |
+| H3 | Labels everywhere (S7): `ratingLabel`, `addressLine`, `contributorLabel`, `checkedAtLabel`, `spanLabel`, `osmFacts`, `hours.sourceLabel`, `percentLabel`, `joinedAtLabel`, `createdAtLabel`, `summaryLines`. Delete each string the device composes today. Several PRs, one area each. | S7 | No date or number formatting left in views. |
+| H4 | Price graph (C3) from `priceHistory.band`, `window`, `ticks`, `summaryLabel`, `change`. | S7 | The app only plots. |
+| H5 | Filters from meta (B8): rating and Guinness steps from `meta.filters`, the Guinness range from `limits.guinnessFilter`, and a note when `ignored` is non-empty. Check that `amenity` is always sent unless `kinds` is set. | S8 | No hard-coded chip lists. |
+| H6 | Conditional GETs for `/pubs/{id}` and `/meta` (A3's store). The detail's tag is per account, so key it by account too and clear it on sign-out. | S9 | 304 on reopen; no account sees another's tags. |
+| H7 | Writes use what comes back (E1): show `entry`, swap in `pub`, skip the reload; send `at`, `lat`, `lon`. | S12 | One request per write. |
+| H8 | Fix-panel editors (E4) from `editable`, `section`, `order`, `placeholder`, `maxLength`; the `status` and `weekday` kinds; `parts` for structured values. An unknown kind gets a text editor. | S4, S5 | Every field the web can edit, iOS can edit. |
+| H9 | Night forms (E5) using `session`, and posting `{ at }`. | S3 | No 06:00 maths on the device. |
+| H10 | Hours editor (E6) from `weekTable[].state` and `sessions`, and posting `{ days }`. Show the `400` on `field: "value"`. | S2 | Same `hours.raw` as the web. |
+| H11 | History editing (E7): edit and remove through `contributionId`/`canRemove`, and hide OSM stops with `hideValue`. | S5, S6 | No string matching. |
+| H12 | Limits from meta (S13): the report note, avatar size, handle rules and page sizes; `Retry-After` on the photo 429. Plus the 🎲 random handle (S14) in the handle editor. | S13, S14 | No hard-coded limits. |
+| H13 | Sources (C5): draw `sources[]` with each `license`. | S15 | Credits as the server sends them. |
+
+### Phase L: levels (Walk-in, Punter, Regular, Lock-in, Owner)
+
+The app already decodes and draws `level`: `LevelBadge` on leaderboard rows,
+`LevelProgress` on the signed-in card and profile, and "How levels work" (`LevelsPage`)
+in Me. The models match the shape built in S16, but nothing has been checked against
+a real response yet. The look of each level is yours to decide before L2.
+
+| # | Work | Needs | Done when |
+|---|---|---|---|
+| L1 | Check against production: `next.key`, `emoji`, the leaderboard's short form and `xp`, `progress` at the top level (1, `next` null). Decoding tests from H0's fixtures. | deploy | Every screen with a level matches the web. |
+| L2 | The look per level: badge colour or artwork for each `key` (with a fallback for a key the app doesn't know, since keys may be added), and the level name and line on profiles. Colour alone never carries the level. | design | Each of the five levels is distinct in light and dark, and reads aloud. |
+| L3 | Leaderboard shows `xp` beside `total` (it still ranks on `total`). | S16 | |
+| L4 | A level-up moment: after a write, say what it earned and when someone reaches a new level (respecting Reduce Motion). **Needs a new server ask (S19):** write responses carry the writer's XP gained and their `level`, or the app refetches `/me`. | S19 | No XP maths on the device. |
+| L5 | Badges beside names on reviews, the feed and profiles in lists. **Needs a new server ask (S20):** the short `level` on review authors and feed entries. | S20 | |
+
+### Loose ends
+
+Outside the phases, so they don't get lost:
+
+- **Deploy the server branch.** It needs merging to `main`, then `bun run deploy`
+  (`deploy/RUNBOOK.md`). The web changes for S10, S12 and S16 need a look in a browser first.
+- **Server:** the `tsc` error in `src/sources/website.ts:139`; the web Profile should
+  draw `joinedAtLabel`; spec stubs for S17 and S18 before they're built; Retractions
+  is the only stub left.
+- **S11** waits on a paid Apple developer account (team id, D15).
+- **S17, S18** not yet asked for. Until S18 lands, Type chips (`kinds`) are ignored and
+  the server lists pubs and bars together.
+- The web bugs below (brands chips, no delete account) are still unreported.
+
 **Not in this plan:** the admin tools (`/admin/*` is outside the API, per the spec), the
 import queue, and the roadmap page. If you want admin on the phone later, it needs
 `/api/v1` admin endpoints first.
@@ -263,6 +320,8 @@ import queue, and the roadmap page. If you want admin on the phone later, it nee
 These are needed to keep logic off the device. Under D11 they are asks for the backend;
 an agent will work them on the pubdb side (P3), from the brief in [server-asks.md](server-asks.md). Milestones that need one wait for it
 rather than work around it. They are listed in the order the app needs them.
+S1–S10 and S12–S16 are built (not deployed), with their final shapes in
+server-asks.md; S19 and S20 are proposed in Phase L.
 
 | # | Ask | Why | Blocks |
 |---|---|---|---|
@@ -284,6 +343,8 @@ rather than work around it. They are listed in the order the app needs them.
 | S15b | A notifications endpoint (new followers, replies, pubs on your lists closing), and later APNs. | Social tab. | F7 |
 | S17 | `maxRating` and `sortBy=rating_asc` on `/pubs` and `/pins`. | No way to find the worst-rated pubs. | B8 |
 | S18 | `kinds=` (venue kind keys) on `/pubs` and `/pins`, and `q` matching kind labels. | No filtering or searching by type (taproom, oddity…). | B8 |
+| S19 | Write responses carry the writer's XP gained and their `level`. | A level-up moment without device maths. | L4 |
+| S20 | The short `level { key, name, emoji }` on review authors and feed entries. | Badges beside names. | L5 |
 
 The surveys also found two bugs on the web side to pass on:
 - `OwnerPicker` expects `/brands` to be a bare array, but it is `{ brands: [...] }`, so
