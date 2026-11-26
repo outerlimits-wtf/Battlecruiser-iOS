@@ -283,6 +283,7 @@ rather than work around it. They are listed in the order the app needs them.
 | S15 | `sources` on a pub lists only public-facing credits (PubDB, OSM, Commons…), never internal ones such as Hopscout. | The app shows what it is sent. | C5 |
 | S15b | A notifications endpoint (new followers, replies, pubs on your lists closing), and later APNs. | Social tab. | F7 |
 | S17 | `maxRating` and `sortBy=rating_asc` on `/pubs` and `/pins`. | No way to find the worst-rated pubs. | B8 |
+| S18 | `kinds=` (venue kind keys) on `/pubs` and `/pins`, and `q` matching kind labels. | No filtering or searching by type (taproom, oddity…). | B8 |
 
 The surveys also found two bugs on the web side to pass on:
 - `OwnerPicker` expects `/brands` to be a bare array, but it is `{ brands: [...] }`, so

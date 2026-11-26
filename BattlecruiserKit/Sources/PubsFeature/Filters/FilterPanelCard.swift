@@ -13,7 +13,7 @@ struct FilterPanelCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Metrics.m) {
             switch panel {
-            case .kind: KindFilterPanel(query: $query)
+            case .kind: KindFilterPanel(query: $query, kinds: meta?.venueKinds ?? [])
             case .hours: HoursFilterPanel(query: $query, weekdays: meta?.weekdays ?? [])
             case .features: FeaturesFilterPanel(query: $query, features: meta?.features ?? [])
             case .rating: RatingFilterPanel(query: $query)

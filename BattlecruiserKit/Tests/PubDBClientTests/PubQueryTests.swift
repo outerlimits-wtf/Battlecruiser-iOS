@@ -17,6 +17,17 @@ struct PubQueryTests {
         #expect(sent["amenity"] == "pub")
     }
 
+    @Test func kindsReplaceTheAmenityGroup() {
+        var query = PubQuery()
+        query.kinds = ["taproom", "oddity"]
+
+        let sent = items(.pubs(matching: query, in: area, near: nil, limit: 200))
+
+        #expect(sent["kinds"] == "oddity,taproom")
+        #expect(sent["amenity"] == nil)
+        #expect(query.activeFilterCount == 2)
+    }
+
     @Test func everyFilterIsSentUnderTheServersName() {
         var query = PubQuery()
         query.amenity = nil

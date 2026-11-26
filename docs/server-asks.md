@@ -222,6 +222,20 @@ Badly rated pubs are worth a look, but `/pubs` and `/pins` only take `minRating`
 The app's rating chips now run 1+ to 9+; it adds a "Rated at most" row once
 `maxRating` is accepted.
 
+### S18. Filter and search by venue kind [B8, new]
+
+`amenity` only takes the two groups, `pub` and `bar`, so there's no asking for
+taprooms or oddities, and search only looks at name, address, postcode and city,
+so "taproom" finds only places with it in the name.
+- Accept `kinds=taproom,oddity` on `/pubs` and `/pins`: any of the venue kind keys
+  in `/meta`'s `venueKinds`. Kinds cross the groups, so when `kinds` is set,
+  ignore `amenity` (the app leaves it out).
+- Have `q` match a venue kind's label too ("taproom", "taprooms", "oddity"), so a
+  search for a type finds that type.
+
+The app already sends `kinds` from its Type chips; until this lands the server
+ignores it and, with no `amenity`, shows pubs and bars alike.
+
 ## For the web client
 
 Changes the iOS app has made that the web should copy (not server work):

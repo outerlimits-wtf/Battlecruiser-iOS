@@ -4,7 +4,13 @@ import PubDBModels
 
 /// What each filter pill says, so it reads as the filter it has set, as on the web.
 enum FilterLabels {
-    static func kind(_ query: PubQuery) -> String {
+    /// The type picked ("Oddity", "Taproom +2"), else the group.
+    static func kind(_ query: PubQuery, all: [VenueKind] = []) -> String {
+        if !query.kinds.isEmpty {
+            // In /meta's order, so the name shown doesn't jump about.
+            let first = all.first { query.kinds.contains($0.key) }?.label ?? "Type"
+            return query.kinds.count == 1 ? first : "\(first) +\(query.kinds.count - 1)"
+        }
         switch query.amenity {
         case "pub": "Pubs"
         case "bar": "Bars"
@@ -44,7 +50,7 @@ enum FilterLabels {
     /// Whether a panel's pill shows as set.
     static func isActive(_ panel: FilterPanel, in query: PubQuery) -> Bool {
         switch panel {
-        case .kind: query.amenity != PubQuery.defaultAmenity
+        case .kind: query.amenity != PubQuery.defaultAmenity || !query.kinds.isEmpty
         case .hours: query.openOnDay != nil || query.closesAfter != nil || query.hasHours
         case .features: !query.features.isEmpty
         case .rating: query.minRating != nil

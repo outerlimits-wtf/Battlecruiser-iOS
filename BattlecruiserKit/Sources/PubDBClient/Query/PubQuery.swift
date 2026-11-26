@@ -8,8 +8,12 @@ public struct PubQuery: Hashable, Sendable {
     public var search = ""
     /// Look everywhere, not just the map's area.
     public var everywhere = false
-    /// "pub" or "bar"; nil for both.
+    /// "pub" or "bar"; nil for both. Not sent while `kinds` is set.
     public var amenity: String? = PubQuery.defaultAmenity
+    /// Venue kind keys from `/meta` (`taproom`, `oddity`…), any of which will
+    /// do. Kinds cross the pub and bar groups, so they replace `amenity`.
+    /// Needs server ask S18; until then the server ignores it.
+    public var kinds: Set<String> = []
     public var openNow = false
     /// 0 = Monday.
     public var openOnDay: Int?
@@ -45,7 +49,7 @@ public struct PubQuery: Hashable, Sendable {
 
     /// How many filters are set, for "Reset" and "Clear filters".
     public var activeFilterCount: Int {
-        var count = features.count
+        var count = features.count + kinds.count
         if !trimmedSearch.isEmpty { count += 1 }
         if amenity != Self.defaultAmenity { count += 1 }
         for flag in [openNow, hasHours, hasPhoto, listed, includeClosed, latestClose] where flag { count += 1 }
@@ -61,7 +65,8 @@ public struct PubQuery: Hashable, Sendable {
             if let value { items.append(URLQueryItem(name: name, value: value)) }
         }
         add("q", trimmedSearch.isEmpty ? nil : trimmedSearch)
-        add("amenity", amenity)
+        add("amenity", kinds.isEmpty ? amenity : nil)
+        add("kinds", kinds.isEmpty ? nil : kinds.sorted().joined(separator: ","))
         add("openNow", openNow ? "1" : nil)
         add("openOnDay", openOnDay.map(String.init))
         add("opensBefore", opensBefore)
