@@ -6,7 +6,7 @@ import Root
 /// handed to the app's root view.
 struct ContentView: View {
     var body: some View {
-        RootView(dependencies: .live())
+        RootView(dependencies: .live(workOSClientID: AppConfig.workOSClientID))
     }
 }
 

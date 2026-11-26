@@ -13,6 +13,7 @@ import UserLocation
 /// feature has to import another.
 public struct RootView: View {
     @State private var meta: MetaStore
+    @State private var session: SessionModel
     @State private var location = LocationModel()
     @State private var pubs: PubsModel
     @State private var pins: PinsModel
@@ -23,6 +24,7 @@ public struct RootView: View {
 
     public init(dependencies: AppDependencies) {
         _meta = State(initialValue: MetaStore(source: dependencies.client))
+        _session = State(initialValue: SessionModel(source: dependencies.client, auth: dependencies.auth))
         _pubs = State(initialValue: PubsModel(source: dependencies.client))
         _pins = State(initialValue: PinsModel(source: dependencies.client))
         _detail = State(initialValue: PubDetailModel(source: dependencies.client))
@@ -39,6 +41,7 @@ public struct RootView: View {
         .task {
             meta.load()
             location.start()
+            await session.load()
             if let id = DebugLaunch.pubToOpen {
                 detail.select(id: id, name: "…", near: nil)
             }
@@ -61,7 +64,7 @@ public struct RootView: View {
                 PlaceholderTab(emoji: "⭐", title: "Lists", message: "Your hit list and the pubs you've been to land here.")
             }
             Tab("Me", systemImage: "person.crop.circle") {
-                PlaceholderTab(emoji: "🍺", title: "Me", message: "Sign-in, your profile and settings land here.")
+                MeTab(session: session)
             }
         }
         .tint(Palette.beer)
@@ -93,6 +96,7 @@ public struct RootView: View {
         case .active:
             location.start()
             if previous == .background {
+                Task { await session.load() }
                 meta.refresh()
                 pins.refresh()
                 pubs.refresh()

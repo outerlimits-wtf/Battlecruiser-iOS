@@ -23,6 +23,7 @@ let package = Package(
         .library(name: "PubsMap", targets: ["PubsMap"]),
         .library(name: "PubsFeature", targets: ["PubsFeature"]),
         .library(name: "PubDetailFeature", targets: ["PubDetailFeature"]),
+        .library(name: "Account", targets: ["Account"]),
         .library(name: "Root", targets: ["Root"]),
     ],
     targets: [
@@ -94,12 +95,20 @@ let package = Package(
         ),
         .testTarget(name: "PubDetailFeatureTests", dependencies: ["PubDetailFeature", "PubDBClient", "PubDBModels"]),
 
+        /// The account: sign in, the signed-in card, handle, picture, sign out,
+        /// delete account.
+        .target(
+            name: "Account",
+            dependencies: ["AppEnvironment", "Auth", "DesignSystem", "PubDBClient", "PubDBModels"],
+            swiftSettings: [.defaultIsolation(MainActor.self)]
+        ),
+
         /// The whole app: owns shared state and wires the features together, so
         /// features never import each other. The only module that imports features.
         .target(
             name: "Root",
             dependencies: [
-                "AppEnvironment", "DesignSystem", "PubDBClient", "PubDBModels",
+                "Account", "AppEnvironment", "Auth", "DesignSystem", "PubDBClient", "PubDBModels",
                 "PubDetailFeature", "PubsFeature", "PubsMap", "UserLocation",
             ],
             swiftSettings: [.defaultIsolation(MainActor.self)]

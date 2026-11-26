@@ -7,9 +7,12 @@
   Keep it in step with the code:
   - Required-reason APIs: only the file-timestamp category, used by
     ResponseCache (reads and sets modification dates of its own files in Caches/).
-  - Collected data: the user's location, sent to the PubDB API as lat/lon to
-    work out distances. Not linked to an identity (there are no accounts), not
-    used for tracking.
+  - Collected data:
+    - the user's location, sent to the PubDB API as lat/lon to work out
+      distances. Not stored against the account, not used for tracking.
+    - with sign-in (WorkOS): a user ID and the email address used to sign in,
+      linked to the account, for app functionality only. The profile picture
+      (photos) is linked too.
   If the app starts using UserDefaults, sign-in, analytics or anything else that
   sends data off the device, update this file in the same change.
 -->
@@ -21,6 +24,42 @@
 	<array/>
 	<key>NSPrivacyCollectedDataTypes</key>
 	<array>
+		<dict>
+			<key>NSPrivacyCollectedDataType</key>
+			<string>NSPrivacyCollectedDataTypeUserID</string>
+			<key>NSPrivacyCollectedDataTypeLinked</key>
+			<true/>
+			<key>NSPrivacyCollectedDataTypeTracking</key>
+			<false/>
+			<key>NSPrivacyCollectedDataTypePurposes</key>
+			<array>
+				<string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSPrivacyCollectedDataType</key>
+			<string>NSPrivacyCollectedDataTypeEmailAddress</string>
+			<key>NSPrivacyCollectedDataTypeLinked</key>
+			<true/>
+			<key>NSPrivacyCollectedDataTypeTracking</key>
+			<false/>
+			<key>NSPrivacyCollectedDataTypePurposes</key>
+			<array>
+				<string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSPrivacyCollectedDataType</key>
+			<string>NSPrivacyCollectedDataTypePhotosorVideos</string>
+			<key>NSPrivacyCollectedDataTypeLinked</key>
+			<true/>
+			<key>NSPrivacyCollectedDataTypeTracking</key>
+			<false/>
+			<key>NSPrivacyCollectedDataTypePurposes</key>
+			<array>
+				<string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+			</array>
+		</dict>
 		<dict>
 			<key>NSPrivacyCollectedDataType</key>
 			<string>NSPrivacyCollectedDataTypePreciseLocation</string>
