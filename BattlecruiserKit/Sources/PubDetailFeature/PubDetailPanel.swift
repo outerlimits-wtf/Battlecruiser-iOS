@@ -1,5 +1,6 @@
 import SwiftUI
 import DesignSystem
+import PubDBClient
 import PubDBModels
 
 /// One pub in full, in the bottom sheet over the map, laid out as the web's
@@ -92,7 +93,14 @@ public struct PubDetailPanel: View {
         VStack(alignment: .leading, spacing: Metrics.xl) {
             switch tab {
             case .overview:
-                OverviewTab(summary: summary, detail: model.detail, nearby: model.similar, onSelectPub: onSelectPub)
+                OverviewTab(
+                    summary: summary,
+                    detail: model.detail,
+                    nearby: model.similar,
+                    onSelectPub: onSelectPub,
+                    writer: factWriter(summary.id),
+                    priceBounds: priceBounds
+                )
             case .reviews:
                 if let detail = model.detail {
                     ReviewsTab(pubID: detail.id, reviews: detail.reviews, context: context, onChanged: changed)
@@ -100,7 +108,7 @@ public struct PubDetailPanel: View {
                 }
             case .about:
                 if let detail = model.detail {
-                    AboutTab(detail: detail)
+                    AboutTab(detail: detail, onRemove: context.session.isSignedIn ? { removeFact($0, from: detail.id) } : nil)
                 }
             }
         }
@@ -109,6 +117,27 @@ public struct PubDetailPanel: View {
     private func kindNote(_ summary: PubSummary) -> String? {
         guard let kind = summary.amenity.kind else { return nil }
         return context.meta?.venueKinds.first { $0.key == kind }?.note
+    }
+
+    private func factWriter(_ pubID: String) -> FactWriter? {
+        guard context.session.isSignedIn else { return nil }
+        return FactWriter(context: context, pubID: pubID, onChanged: changed) { toast = ToastMessage($0, tone: .bad) }
+    }
+
+    /// The Guinness price field's bounds, from `/meta`.
+    private var priceBounds: ClosedRange<Int> {
+        let field = context.meta?.contributableFields.first { $0.key == "guinness_price" }
+        return (field?.min ?? 200)...(field?.max ?? 1500)
+    }
+
+    private func removeFact(_ contribution: Contribution, from pubID: String) {
+        Task {
+            do {
+                changed(try await context.writer.deleteFact(contribution.id, from: pubID))
+            } catch {
+                if let message = PubDBError.wrapping(error)?.userMessage { toast = ToastMessage(message, tone: .bad) }
+            }
+        }
     }
 
     /// After a write: say so, and show what the server now has. A change held
