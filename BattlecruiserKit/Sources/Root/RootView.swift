@@ -2,6 +2,7 @@ import SwiftUI
 import AppEnvironment
 import DesignSystem
 import Me
+import Social
 import PubDBClient
 import PubDBModels
 import PubDetailFeature
@@ -25,7 +26,10 @@ public struct RootView: View {
     private let build = AppVersion.current()
     @AppStorage(ThemePreference.storageKey) private var theme: ThemePreference = .system
 
+    private let client: PubDBClient
+
     public init(dependencies: AppDependencies) {
+        client = dependencies.client
         _meta = State(initialValue: MetaStore(source: dependencies.client))
         _session = State(initialValue: SessionModel(source: dependencies.client, auth: dependencies.auth))
         _pubs = State(initialValue: PubsModel(source: dependencies.client))
@@ -62,7 +66,13 @@ public struct RootView: View {
                 mapTab
             }
             Tab("Social", systemImage: "person.2", value: RootTab.social) {
-                PlaceholderTab(emoji: "🏆", title: "Social", message: "Latest updates, the leaderboard and the boards land here.")
+                SocialScreen(
+                    source: client,
+                    boards: meta.meta?.boards ?? [],
+                    isSignedIn: session.isSignedIn,
+                    location: userCoordinate,
+                    onOpenPub: open
+                )
             }
             Tab("Lists", systemImage: "star", value: RootTab.lists) {
                 PlaceholderTab(emoji: "⭐", title: "Lists", message: "Your hit list and the pubs you've been to land here.")
@@ -121,6 +131,12 @@ public struct RootView: View {
         } else {
             detail.select(id: pin.id, name: pin.name, near: userCoordinate)
         }
+    }
+
+    /// Open a pub from another tab: on the map, in the panel.
+    private func open(_ pub: PubLink) {
+        tab = .map
+        detail.select(id: pub.id, name: pub.name, near: userCoordinate)
     }
 
     /// The user's position in the client's terms (CoreLocation stays out of it).
