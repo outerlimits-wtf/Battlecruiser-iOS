@@ -60,6 +60,5 @@ struct GalleryStrip: View {
         }
         .frame(height: Self.height)
         .background(Palette.photoBackdrop)
-        .clipShape(UnevenRoundedRectangle(topLeadingRadius: Metrics.sheetRadius, topTrailingRadius: Metrics.sheetRadius))
     }
 }

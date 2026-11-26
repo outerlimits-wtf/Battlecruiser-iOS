@@ -164,6 +164,17 @@ There is nothing to build against yet. Sketch:
 - Kinds include a new follower, and a pub on your hit list or Been here closing.
 - Later: APNs device registration (`PUT /api/v1/me/devices`).
 
+## For the web client
+
+Changes the iOS app has made that the web should copy (not server work):
+
+- **The sheet opens fully before it scrolls.** At half or peek, the panel and
+  list don't scroll: a drag on the content moves the sheet, so it reaches full
+  before any scrolling starts. Scrolling a half-open listing is never possible.
+  iOS: `BottomSheet` (`DesignSystem/Sheet`), done 2026-11-26.
+- **The pub photo runs to the sheet's top edge**, with the grabber drawn over
+  it, instead of a white strip above it.
+
 ## Bugs found in the web client while surveying
 
 - `OwnerPicker` expects `GET /api/v1/brands` to return a bare array, but it returns

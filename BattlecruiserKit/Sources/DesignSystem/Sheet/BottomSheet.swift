@@ -4,9 +4,15 @@ import SwiftUI
 /// half or full. Drag the top (grabber and header) to move it; flick to go one
 /// step; tap the grabber to cycle. Changing `resetKey` (a new pub) lifts it
 /// from peek to half so the new content is seen.
+///
+/// The content only scrolls at full: below it, a drag anywhere on the content
+/// moves the sheet instead, so it always opens all the way before scrolling.
 public struct BottomSheet<Header: View, Content: View>: View {
     @Binding private var detent: SheetDetent
     private let resetKey: AnyHashable?
+    /// Draw the grabber over the content (a photo running to the top edge)
+    /// rather than in a strip above it. The header is not shown.
+    private let overlaysGrabber: Bool
     private let header: Header
     private let content: Content
 
@@ -19,11 +25,13 @@ public struct BottomSheet<Header: View, Content: View>: View {
     public init(
         detent: Binding<SheetDetent>,
         resetKey: AnyHashable? = nil,
+        overlaysGrabber: Bool = false,
         @ViewBuilder header: () -> Header,
         @ViewBuilder content: () -> Content
     ) {
         _detent = detent
         self.resetKey = resetKey
+        self.overlaysGrabber = overlaysGrabber
         self.header = header()
         self.content = content()
     }
@@ -34,18 +42,27 @@ public struct BottomSheet<Header: View, Content: View>: View {
             let rest = detent.offset(in: height)
             let offset = min(max(rest + drag, 0), SheetDetent.peek.offset(in: height))
 
-            VStack(spacing: 0) {
-                VStack(spacing: 0) {
-                    grabber
-                    header
+            Group {
+                if overlaysGrabber {
+                    ZStack(alignment: .top) {
+                        sheetContent(height: height, rest: rest)
+                        grabber(onPhoto: true)
+                            .gesture(dragGesture(height: height, rest: rest))
+                    }
+                } else {
+                    VStack(spacing: 0) {
+                        VStack(spacing: 0) {
+                            grabber(onPhoto: false)
+                            header
+                        }
+                        .contentShape(Rectangle())
+                        .gesture(dragGesture(height: height, rest: rest))
+                        sheetContent(height: height, rest: rest)
+                    }
                 }
-                .contentShape(Rectangle())
-                .gesture(dragGesture(height: height, rest: rest))
-                content
-                    .frame(maxHeight: .infinity, alignment: .top)
-                    .opacity(detent == .peek && drag == 0 ? 0 : 1)
             }
             .frame(height: height)
+            .clipShape(UnevenRoundedRectangle(topLeadingRadius: Metrics.sheetRadius, topTrailingRadius: Metrics.sheetRadius))
             .background(
                 UnevenRoundedRectangle(topLeadingRadius: Metrics.sheetRadius, topTrailingRadius: Metrics.sheetRadius)
                     .fill(Palette.surface)
@@ -58,12 +75,22 @@ public struct BottomSheet<Header: View, Content: View>: View {
         }
     }
 
-    private var grabber: some View {
+    /// Scrolls only at full; below it, dragging the content moves the sheet.
+    private func sheetContent(height: CGFloat, rest: CGFloat) -> some View {
+        content
+            .frame(maxHeight: .infinity, alignment: .top)
+            .opacity(detent == .peek && drag == 0 ? 0 : 1)
+            .scrollDisabled(detent != .full)
+            .gesture(dragGesture(height: height, rest: rest), including: detent == .full ? .subviews : .all)
+    }
+
+    private func grabber(onPhoto: Bool) -> some View {
         Button {
             move(to: detent.next)
         } label: {
             Capsule()
-                .fill(Palette.ink.opacity(0.25))
+                .fill(onPhoto ? Color.white.opacity(0.9) : Palette.ink.opacity(0.25))
+                .shadow(color: .black.opacity(onPhoto ? 0.35 : 0), radius: 2)
                 .frame(width: 44, height: 6)
                 .frame(width: 112, height: 28)
                 .contentShape(Rectangle())
