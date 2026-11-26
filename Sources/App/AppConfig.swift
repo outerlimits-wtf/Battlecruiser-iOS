@@ -6,5 +6,5 @@ enum AppConfig {
     /// redirect `wtf.outerlimits.battlecruiser:/auth/callback` is registered.
     /// A public client id, not a secret: no API key goes on the device.
     /// Empty: the app offers no sign-in.
-    static let workOSClientID = ""
+    static let workOSClientID = "client_01M0WXZNM3P84M33KVEVC2HCGE"
 }
