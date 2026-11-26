@@ -13,7 +13,8 @@
       distances. Not stored against the account, not used for tracking.
     - with sign-in (WorkOS): a user ID and the email address used to sign in,
       linked to the account, for app functionality only. The profile picture
-      (photos) is linked too.
+      (photos) is linked too, and so is the phone's push token (device ID),
+      registered so notifications reach it.
   If the app starts using UserDefaults, sign-in, analytics or anything else that
   sends data off the device, update this file in the same change.
 -->
@@ -40,6 +41,18 @@
 		<dict>
 			<key>NSPrivacyCollectedDataType</key>
 			<string>NSPrivacyCollectedDataTypeEmailAddress</string>
+			<key>NSPrivacyCollectedDataTypeLinked</key>
+			<true/>
+			<key>NSPrivacyCollectedDataTypeTracking</key>
+			<false/>
+			<key>NSPrivacyCollectedDataTypePurposes</key>
+			<array>
+				<string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSPrivacyCollectedDataType</key>
+			<string>NSPrivacyCollectedDataTypeDeviceID</string>
 			<key>NSPrivacyCollectedDataTypeLinked</key>
 			<true/>
 			<key>NSPrivacyCollectedDataTypeTracking</key>

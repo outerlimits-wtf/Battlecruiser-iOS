@@ -7,13 +7,19 @@ import DesignSystem
 public struct MeScreen: View {
     private let session: SessionModel
     private let profileDestination: (ProfileLink) -> AnyView
+    private let notifications: NotificationsModel?
     @State private var path = NavigationPath()
     @AppStorage(ThemePreference.storageKey) private var theme: ThemePreference = .system
 
     /// - Parameter profileDestination: Someone's profile, from the Profile
     ///   feature, which this module doesn't import.
-    public init(session: SessionModel, profileDestination: @escaping (ProfileLink) -> AnyView) {
+    public init(
+        session: SessionModel,
+        notifications: NotificationsModel? = nil,
+        profileDestination: @escaping (ProfileLink) -> AnyView
+    ) {
         self.session = session
+        self.notifications = notifications
         self.profileDestination = profileDestination
     }
 
@@ -22,6 +28,9 @@ public struct MeScreen: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: Metrics.xl) {
                     AccountBlock(session: session, onOpenProfile: { path.append(ProfileLink($0)) })
+                    if let notifications, session.isSignedIn {
+                        PushSettings(model: notifications)
+                    }
                     VStack(alignment: .leading, spacing: Metrics.s) {
                         SectionHeader("Appearance")
                         Picker("Appearance", selection: $theme) {

@@ -13,6 +13,8 @@ public struct SocialScreen: View {
     private let location: Coordinate?
     private let onOpenPub: (PubLink) -> Void
     private let profileDestination: (ProfileLink) -> AnyView
+    /// Signed in: the inbox.
+    private let notifications: NotificationsModel?
 
     public init(
         source: any CommunitySource,
@@ -20,7 +22,8 @@ public struct SocialScreen: View {
         isSignedIn: Bool,
         location: Coordinate?,
         onOpenPub: @escaping (PubLink) -> Void,
-        profileDestination: @escaping (ProfileLink) -> AnyView
+        profileDestination: @escaping (ProfileLink) -> AnyView,
+        notifications: NotificationsModel? = nil
     ) {
         self.source = source
         self.boards = boards
@@ -28,12 +31,24 @@ public struct SocialScreen: View {
         self.location = location
         self.onOpenPub = onOpenPub
         self.profileDestination = profileDestination
+        self.notifications = notifications
     }
 
     public var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: Metrics.m) {
+                    if let notifications {
+                        NavigationLink {
+                            NotificationsPage(model: notifications, onOpenPub: onOpenPub)
+                        } label: {
+                            MenuRow(
+                                emoji: "🔔",
+                                title: notifications.unread > 0 ? "Notifications (\(notifications.unread))" : "Notifications",
+                                blurb: "Likes, follows, and the people you follow"
+                            )
+                        }
+                    }
                     NavigationLink {
                         LatestPage(source: source, isSignedIn: isSignedIn, onOpenPub: onOpenPub)
                     } label: {

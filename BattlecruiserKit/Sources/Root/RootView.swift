@@ -19,6 +19,8 @@ public struct RootView: View {
     @State var meta: MetaStore
     @State var session: SessionModel
     @State var marks: MarksModel
+    @State var notifications: NotificationsModel
+    @State var push = PushInbox.shared
     @State var location = LocationModel()
     @State var pubs: PubsModel
     @State var pins: PinsModel
@@ -36,6 +38,7 @@ public struct RootView: View {
         _meta = State(initialValue: MetaStore(source: dependencies.client))
         _session = State(initialValue: SessionModel(source: dependencies.client, auth: dependencies.auth))
         _marks = State(initialValue: MarksModel(source: dependencies.client))
+        _notifications = State(initialValue: NotificationsModel(source: dependencies.client))
         _pubs = State(initialValue: PubsModel(source: dependencies.client))
         _pins = State(initialValue: PinsModel(source: dependencies.client))
         _detail = State(initialValue: PubDetailModel(source: dependencies.client))
@@ -62,8 +65,17 @@ public struct RootView: View {
         }
         .preferredColorScheme(theme.colorScheme)
         .task(id: session.user?.id) {
-            // Signed in or out: the Save and Been here buttons follow the account.
-            if session.isSignedIn { await marks.load() } else { marks.clear() }
+            await accountChanged()
+        }
+        .onChange(of: push.deviceToken) { _, token in
+            guard let token, session.isSignedIn else { return }
+            Task { await notifications.register(deviceToken: token, environment: PushPermission.environment) }
+        }
+        .onChange(of: notifications.unread) { _, count in PushPermission.setBadge(count) }
+        .onChange(of: push.tapped) { _, route in
+            guard let route else { return }
+            push.tapped = nil
+            openPush(route)
         }
     }
 }

@@ -21,7 +21,10 @@ extension RootView {
         case .active:
             location.start()
             if previous == .background {
-                Task { await session.load() }
+                Task {
+                    await session.load()
+                    if session.isSignedIn { await notifications.load() }
+                }
                 meta.refresh()
                 pins.refresh()
                 pubs.refresh()
@@ -63,5 +66,28 @@ extension RootView {
     /// The user's position in the client's terms (CoreLocation stays out of it).
     var userCoordinate: Coordinate? {
         location.coordinate.map { Coordinate(latitude: $0.latitude, longitude: $0.longitude) }
+    }
+
+    /// Signed in or out: the lists, the inbox and this phone's pushes follow the account.
+    func accountChanged() async {
+        session.beforeSignOut = { [notifications] in await notifications.unregisterDevice() }
+        if session.isSignedIn {
+            await marks.load()
+            await notifications.load()
+            await PushPermission.requestAndRegister()
+        } else {
+            marks.clear()
+            notifications.clear()
+            PushPermission.setBadge(0)
+        }
+    }
+
+    /// A tapped push goes where its inbox row would.
+    func openPush(_ route: PushRoute) {
+        if route.type == "followed" {
+            tab = .social
+        } else if let pubID = route.pubID {
+            open(PubLink(id: pubID, name: "…"))
+        }
     }
 }

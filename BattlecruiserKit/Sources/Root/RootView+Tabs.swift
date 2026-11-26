@@ -27,9 +27,11 @@ extension RootView {
                     isSignedIn: session.isSignedIn,
                     location: userCoordinate,
                     onOpenPub: open,
-                    profileDestination: profile
+                    profileDestination: profile,
+                    notifications: session.isSignedIn ? notifications : nil
                 )
             }
+            .badge(notifications.unread)
             Tab("Lists", systemImage: "star", value: RootTab.lists) {
                 ListsScreen(
                     source: client,
@@ -40,7 +42,7 @@ extension RootView {
                 .id(session.user?.id)
             }
             Tab("Me", systemImage: "person.crop.circle", value: RootTab.me) {
-                MeScreen(session: session, profileDestination: profile)
+                MeScreen(session: session, notifications: notifications, profileDestination: profile)
             }
         }
         .tint(Palette.beer)

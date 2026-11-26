@@ -21,6 +21,8 @@ public final class SessionModel {
 
     @ObservationIgnored private let source: any SessionSource
     @ObservationIgnored private let auth: any Authenticator
+    /// Runs before the tokens go on sign-out (unregistering the phone for pushes).
+    @ObservationIgnored public var beforeSignOut: () async -> Void = {}
 
     public init(source: any SessionSource, auth: any Authenticator) {
         self.source = source
@@ -53,6 +55,7 @@ public final class SessionModel {
     }
 
     public func signOut() async {
+        await beforeSignOut()
         await auth.signOut()
         me = me.map { Me(authRequired: $0.authRequired, user: nil, session: nil) }
         await load()
