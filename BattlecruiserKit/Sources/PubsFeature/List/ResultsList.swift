@@ -34,7 +34,12 @@ struct ResultsList: View {
                         }
                         .buttonStyle(.plain)
                     }
-                    ResultsFooter(count: pubs.pubs.count)
+                    ResultsFooter(
+                        count: pubs.pubs.count,
+                        onIncludeBars: onIncludeBars,
+                        onClearFilters: onClearFilters,
+                        onSearchEverywhere: onSearchEverywhere
+                    )
                 }
             }
             .padding(.bottom, 120)
