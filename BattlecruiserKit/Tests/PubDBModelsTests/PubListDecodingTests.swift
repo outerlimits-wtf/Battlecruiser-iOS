@@ -14,12 +14,13 @@ struct PubListDecodingTests {
         #expect(list.count == list.pubs.count)
     }
 
-    @Test func thursdayEveningListCarriesOpenAndUnknownPubs() throws {
+    @Test func thursdayEveningListCarriesOpenPubs() throws {
+        // Balham's pubs all have hours now; the unknown case is covered by the
+        // sparse detail fixture (British Legion).
         let list = try Fixture.decode(PubList.self, from: "pubs-list-thu-2230")
         let states = Set(list.pubs.map(\.open.state))
 
         #expect(states.contains(.open))
-        #expect(states.contains(.unknown))
     }
 
     @Test func openPubsHaveACountdownAndUnknownOnesHaveNoClosingTime() throws {

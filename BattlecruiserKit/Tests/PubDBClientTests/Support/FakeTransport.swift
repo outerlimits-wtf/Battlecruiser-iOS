@@ -5,7 +5,7 @@ import Foundation
 /// it was sent. Each test makes its own, so tests can run in parallel safely.
 final class FakeTransport: HTTPTransport, @unchecked Sendable {
     enum Reply {
-        case response(status: Int, contentType: String?, body: String)
+        case response(status: Int, contentType: String?, body: String, headers: [String: String] = [:])
         case failure(any Error)
     }
 
@@ -31,8 +31,9 @@ final class FakeTransport: HTTPTransport, @unchecked Sendable {
         switch reply {
         case .failure(let error):
             throw error
-        case .response(let status, let contentType, let body):
-            let headers = contentType.map { ["Content-Type": $0] } ?? [:]
+        case .response(let status, let contentType, let body, let extraHeaders):
+            var headers = extraHeaders
+            if let contentType { headers["Content-Type"] = contentType }
             let response = HTTPURLResponse(url: request.url!, statusCode: status, httpVersion: "HTTP/1.1", headerFields: headers)!
             return (Data(body.utf8), response)
         }

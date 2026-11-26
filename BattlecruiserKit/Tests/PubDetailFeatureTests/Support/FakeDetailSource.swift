@@ -37,6 +37,10 @@ final class FakeDetailSource: PubDetailSource, @unchecked Sendable {
         lock.withLock { self.respond = respond }
     }
 
+    func fetchSimilar(to id: String, near location: Coordinate?) async throws -> PubList {
+        try JSONDecoder().decode(PubList.self, from: Data(#"{ "pubs": [] }"#.utf8))
+    }
+
     func fetchPub(id: String, near location: Coordinate?) async throws -> PubDetail {
         let respond = lock.withLock {
             recorded.append(Request(id: id, location: location))

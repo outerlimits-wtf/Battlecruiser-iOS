@@ -1,29 +1,6 @@
 import CoreLocation
 import Observation
 
-/// Whether the app may use the user's location, reduced to what the UI cares about.
-public nonisolated enum LocationAuthorization: Equatable, Sendable {
-    /// Not asked yet.
-    case notDetermined
-    /// Refused, or restricted by parental controls or device management.
-    case denied
-    /// Allowed while the app is in use (or always).
-    case authorized
-
-    public init(_ status: CLAuthorizationStatus) {
-        switch status {
-        case .notDetermined:
-            self = .notDetermined
-        case .authorizedWhenInUse, .authorizedAlways:
-            self = .authorized
-        case .denied, .restricted:
-            self = .denied
-        @unknown default:
-            self = .denied
-        }
-    }
-}
-
 /// Asks for location permission and tracks where the user is (decision D21).
 ///
 /// The blue dot on the map is drawn by MapKit itself once permission is
@@ -123,16 +100,3 @@ extension LocationModel: CLLocationManagerDelegate {
         // through the authorization callback instead.
     }
 }
-
-/// The parts of `CLLocationManager` the model uses, so tests can substitute a fake.
-protocol LocationManaging: AnyObject {
-    var authorizationStatus: CLAuthorizationStatus { get }
-    /// The most recent position iOS knows, possibly from before this launch.
-    var location: CLLocation? { get }
-    var delegate: (any CLLocationManagerDelegate)? { get set }
-    func requestWhenInUseAuthorization()
-    func startUpdatingLocation()
-    func stopUpdatingLocation()
-}
-
-extension CLLocationManager: LocationManaging {}

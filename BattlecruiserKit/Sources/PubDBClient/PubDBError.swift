@@ -8,6 +8,9 @@ public enum PubDBError: Error, Equatable, Sendable {
     case transport(URLError)
     /// The server answered with its structured error body.
     case server(status: Int, APIErrorDetail)
+    /// `429 rate_limited`: too many requests. Wait `retryAfter` seconds when
+    /// the server says how long (it usually does).
+    case rateLimited(retryAfter: TimeInterval?, APIErrorDetail?)
     /// A non-2xx status without a readable error body.
     case http(status: Int)
     /// A response that is not JSON. Unknown paths come back as the web app's
@@ -36,6 +39,8 @@ public enum PubDBError: Error, Equatable, Sendable {
         switch self {
         case .server(_, let detail):
             detail.message
+        case .rateLimited(_, let detail):
+            detail?.message ?? "That's a lot of requests. Give it a minute."
         case .transport where isOffline:
             "You're offline. Showing what was loaded last."
         case .transport, .http, .unexpectedContent, .decoding:

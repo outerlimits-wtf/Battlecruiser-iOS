@@ -1,13 +1,12 @@
 import SwiftUI
 import Playgrounds
-import PubDBClient
-import PubsFeature
+import Root
 
-/// The composition root: chooses the real server, with the app's response
-/// cache, and hands it to the map.
+/// The composition root: the real server, with the app's response cache,
+/// handed to the app's root view.
 struct ContentView: View {
     var body: some View {
-        PubsMapScreen(source: PubDBClient.live())
+        RootView(dependencies: .live(workOSClientID: AppConfig.workOSClientID))
     }
 }
 

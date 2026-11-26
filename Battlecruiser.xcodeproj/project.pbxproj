@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		000000000000000300000001 /* PubDBClient in Frameworks */ = {isa = PBXBuildFile; productRef = 000000000000000310000001 /* PubDBClient */; };
-		000000000000000300000002 /* PubsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 000000000000000310000002 /* PubsFeature */; };
+		000000000000000300000002 /* Root in Frameworks */ = {isa = PBXBuildFile; productRef = 000000000000000310000002 /* Root */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,7 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			files = (
 				000000000000000300000001 /* PubDBClient in Frameworks */,
-				000000000000000300000002 /* PubsFeature in Frameworks */,
+				000000000000000300000002 /* Root in Frameworks */,
 			);
 		};
 		000000000000000230000000 /* Frameworks */ = {
@@ -92,7 +92,7 @@
 			name = Battlecruiser;
 			packageProductDependencies = (
 				000000000000000310000001 /* PubDBClient */,
-				000000000000000310000002 /* PubsFeature */,
+				000000000000000310000002 /* Root */,
 			);
 			productName = Battlecruiser;
 			productReference = 000000000000000000000120 /* Battlecruiser.app */;
@@ -331,7 +331,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CT75TQXWJP;
+				DEVELOPMENT_TEAM = FMN472KPDF;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
@@ -352,7 +352,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = wtf.outerlimits.Battlecruiser;
+				PRODUCT_BUNDLE_IDENTIFIER = wtf.outerlimits.BattlecruiserZach;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
@@ -374,7 +374,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CT75TQXWJP;
+				DEVELOPMENT_TEAM = FMN472KPDF;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
@@ -395,7 +395,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = wtf.outerlimits.Battlecruiser;
+				PRODUCT_BUNDLE_IDENTIFIER = wtf.outerlimits.BattlecruiserZach;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
@@ -491,9 +491,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = PubDBClient;
 		};
-		000000000000000310000002 /* PubsFeature */ = {
+		000000000000000310000002 /* Root */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = PubsFeature;
+			productName = Root;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

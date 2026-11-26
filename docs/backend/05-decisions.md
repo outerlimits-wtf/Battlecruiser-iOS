@@ -62,6 +62,14 @@
 | # | Decision | Notes |
 |---|---|---|
 | D26 | **The detail sheet shows drinkers' reviews, read-only.** Score out of 10, byline, date and text, newest first; the first three, then "Show all". Hidden when a pub has none. | Narrows D5: reading reviews is in the MVP, writing them is not. Reviews are public in `GET /pubs/{id}`, so this needs no sign-in. Writing ("commenting") is `POST /pubs/{id}/reviews` and needs a signed-in session, so it waits for the first phase of D19 (Q5). Reviews decode lossily: a bad one is skipped, not the whole pub. |
+| D27 | **Parity with the web client is the next goal**, per [parity-plan.md](../parity-plan.md) (approved 2026-11-26), with the server doing everything it can; logic the web computes moves to the server as asks ([server-asks.md](../server-asks.md)) rather than being copied. | Decisions P1–P8 below. |
+| D28 | **Pins are the web's teardrop**, coloured by state, with the pint logo as the glyph (P1). Supersedes D17 for pins; the app icon stays 🚢. Zoomed out, every pub is a dot in one overlay (spec, "Building a map"). | The web is to change to the same logo. |
+| D29 | **Apple Maps is the base map** (P2), behind a swappable `MapBase`; CARTO would be its vector version. | |
+| D30 | **Server asks are worked on the pubdb side** (P3); iOS milestones that need one wait for it. | |
+| D31 | **Each pub's `sources` are shown** in the About tab (P4), superseding that part of D25; only public credits, chosen by the server (S15). | |
+| D32 | **The web's bottom sheet (peek, half, full) replaces the Map/List control** (P5), superseding R2. **A bottom tab bar replaces the web's side menu** (P6): Map, Social, Lists, Me. | |
+| D33 | **Sign-in is WorkOS bearer tokens with PKCE** (P7), skipping D19's cookie phase. Answers Q5. | The client id goes in the app's `AppConfig`. |
+| D34 | **No admin tools in the app** for now (P8). | `/admin/*` is outside the public API. |
 
 ## Apple developer accounts, briefly
 
@@ -96,4 +104,4 @@ come up.
 | Q2 | Is it fine for TestFlight builds, and so testers, to use production? Development use is decided (D14). | Backend author | No. It matters only at the first TestFlight build. |
 | Q3 | A database snapshot for local development | Backend author, when back | No |
 | Q4 | The bundle identifier and domain for Battlecruiser (D20) | You | No. Needed before TestFlight. |
-| Q5 | When do contributions come in, and with them the first phase of D19? | You | No |
+| Q5 | ~~When do contributions come in?~~ Answered by D27 and D33. | You | No |

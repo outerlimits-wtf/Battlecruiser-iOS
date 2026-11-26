@@ -1,8 +1,8 @@
 import SwiftUI
 
-/// The button that goes with a notice, if one helps: back to London when the
-/// map is outside the covered area, or try again after a failure. Offline and
-/// "nothing here" need no button: the app retries as the map moves.
+/// The button that goes with a notice, if one helps: off to London, where most
+/// of the pubs are, when there are none here, or try again after a failure.
+/// Offline needs no button: the app retries as the map moves.
 struct NoticeActions: View {
     let notice: PubsNotice
     let onGoToLondon: () -> Void
@@ -10,15 +10,15 @@ struct NoticeActions: View {
 
     var body: some View {
         switch notice {
-        case .outsideCoverage:
+        case .nothingHere:
             Button("Go to London", action: onGoToLondon)
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.bordered)
                 .controlSize(.small)
         case .failed:
             Button("Try again", action: onRetry)
                 .buttonStyle(.bordered)
                 .controlSize(.small)
-        case .offline, .nothingHere:
+        case .offline:
             EmptyView()
         }
     }
