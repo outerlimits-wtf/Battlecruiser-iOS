@@ -11,7 +11,10 @@ struct LeaderboardRow: View {
             RankBadge(contributor.rank)
             Avatar(url: contributor.avatarURL, name: contributor.name, size: .sm)
             VStack(alignment: .leading, spacing: 2) {
-                Text(contributor.name).font(Typography.rowTitle).foregroundStyle(Palette.ink)
+                HStack(spacing: Metrics.s) {
+                    Text(contributor.name).font(Typography.rowTitle).foregroundStyle(Palette.ink)
+                    if let level = contributor.level { LevelBadge(level) }
+                }
                 Text("\(contributor.pubs) \(contributor.pubs == 1 ? "pub" : "pubs") · \(contributor.agoLabel)")
                     .font(Typography.secondary)
                     .foregroundStyle(Palette.inkMuted)

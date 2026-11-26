@@ -27,6 +27,9 @@ public struct ProfileScreen: View {
             if let profile = remote.value {
                 VStack(alignment: .leading, spacing: Metrics.xl) {
                     ProfileHeader(profile: profile, source: source, canFollow: canFollow && !profile.isSelf)
+                    if let level = profile.level {
+                        LevelProgress(level)
+                    }
                     StatTiles(stats: profile.stats)
                     if let coverage = profile.coverage, profile.stats.visited > 0 {
                         CoverageCard(coverage)

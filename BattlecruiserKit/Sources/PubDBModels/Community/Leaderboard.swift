@@ -13,6 +13,8 @@ public struct Leaderboard: Decodable, Hashable, Sendable {
         public let total: Int
         public let pubs: Int
         public let agoLabel: String
+        /// Their level (S16); nil until the server sends it.
+        public let level: Level?
 
         public var id: String { name }
         public var avatarURL: URL? { avatarUrl.flatMap(URL.init(string:)) }

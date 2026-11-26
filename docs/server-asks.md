@@ -157,12 +157,61 @@ This replaces porting `lib/username.ts randomUsername` and its word lists.
 - Keep the licence-bearing ones (ODbL, CC BY-SA, OGL), because showing them is a
   condition of use.
 
-### S15b. Notifications [F7]
+### S15b. Notifications [F7] — done
 
-There is nothing to build against yet. Sketch:
-- `GET /api/v1/notifications` returns `{ items: [{ id, kind, title, body, pub?, user?, createdAtLabel, read }], unread }`.
-- Kinds include a new follower, and a pub on your hit list or Been here closing.
-- Later: APNs device registration (`PUT /api/v1/me/devices`).
+Built on origin/main (4509cc4): inbox, read, settings, APNs devices. The app uses it.
+
+### S16. Levels and XP [new]
+
+People get a level from what they've added, each kind of thing worth different
+XP. The server owns the weights and the thresholds, so they can be retuned
+without a release and the web and the app always agree.
+
+**Levels** (names and one-liners from the product owner; the middle three
+one-liners are suggestions to change freely):
+
+| key | name | from XP | line |
+| --- | --- | --- | --- |
+| `walk_in` | Walk-in | 0 | Staff don't even know your order |
+| `punter` | Punter | 100 | Knows where the toilets are |
+| `regular` | Regular | 500 | They start pouring when you walk in |
+| `lock_in` | Lock-in | 1500 | Still here when the shutters come down |
+| `owner` | Owner | 5000 | Part of the furniture |
+
+**XP per thing** (a starting point to tune):
+
+| what | XP |
+| --- | --- |
+| a review with words | 25 (a score alone: 10) |
+| a photo, once approved | 30 |
+| opening hours | 20 |
+| last orders / kicked out | 15 |
+| a Guinness price | 15 |
+| any other fact | 10 |
+| a like on your review | 5 |
+
+Facts taken back, or removed by an admin, take their XP with them. Importers
+earn nothing.
+
+**Shape.** A `level` object wherever a person is shown, and the tables in `/meta`
+so a client can explain them:
+
+```json
+"level": { "key": "regular", "name": "Regular", "line": "They start pouring when you walk in",
+           "emoji": "🍺", "xp": 640, "xpLabel": "640 XP",
+           "next": { "name": "Lock-in", "atXp": 1500, "remainingLabel": "860 XP to Lock-in" },
+           "progress": 0.14 }
+```
+
+- `GET /me` → `user.level`; `GET /users/{username}` → `level` beside `stats`.
+- `GET /leaderboard` → each contributor gains `xp` and `level { key, name, emoji }`,
+  and could be ranked on `xp` rather than `total`.
+- `GET /meta` → `levels: [{ key, name, line, emoji, minXp }]` and
+  `xpRules: [{ key, label, xp }]`.
+- `next` is null at the top level; `progress` is 0–1 through the current level.
+
+The iOS app draws `level` when it's there and nothing when it isn't, so this can
+land on the server first.
 
 ## For the web client
 

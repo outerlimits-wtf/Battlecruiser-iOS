@@ -29,6 +29,8 @@ public struct Profile: Decodable, Hashable, Sendable {
 
     public let user: User
     public let stats: Stats
+    /// Their level (S16); nil until the server sends it.
+    public let level: Level?
     public let isFollowing: Bool
     public let isSelf: Bool
     public let coverage: Coverage?
@@ -36,13 +38,14 @@ public struct Profile: Decodable, Hashable, Sendable {
     public let visited: [PubSummary]
 
     private enum CodingKeys: String, CodingKey {
-        case user, stats, isFollowing, isSelf, coverage, reviews, visited
+        case user, stats, level, isFollowing, isSelf, coverage, reviews, visited
     }
 
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         user = try container.decode(User.self, forKey: .user)
         stats = try container.decode(Stats.self, forKey: .stats)
+        level = try? container.decodeIfPresent(Level.self, forKey: .level)
         isFollowing = try container.decodeIfPresent(Bool.self, forKey: .isFollowing) ?? false
         isSelf = try container.decodeIfPresent(Bool.self, forKey: .isSelf) ?? false
         coverage = try? container.decodeIfPresent(Coverage.self, forKey: .coverage)

@@ -18,4 +18,7 @@ public struct Meta: Decodable, Hashable, Sendable {
     public let reportReasons: [ReportReason]
     public let clients: ClientRules
     public let limits: Limits
+    /// The levels and what earns XP (S16); nil until the server sends them.
+    public let levels: [LevelInfo]?
+    public let xpRules: [XPRule]?
 }

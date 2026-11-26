@@ -41,6 +41,8 @@ public struct MeUser: Decodable, Hashable, Sendable {
     public let avatarUrl: String?
     public let visited: Int?
     public let reviews: Int?
+    /// Their level (S16); nil until the server sends it.
+    public let level: Level?
 
     public var avatarURL: URL? { avatarUrl.flatMap(URL.init(string:)) }
 }

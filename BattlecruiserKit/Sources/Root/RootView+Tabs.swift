@@ -42,7 +42,7 @@ extension RootView {
                 .id(session.user?.id)
             }
             Tab("Me", systemImage: "person.crop.circle", value: RootTab.me) {
-                MeScreen(session: session, notifications: notifications, profileDestination: profile)
+                MeScreen(session: session, notifications: notifications, meta: meta.meta, profileDestination: profile)
             }
         }
         .tint(Palette.beer)

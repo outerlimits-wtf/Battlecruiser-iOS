@@ -2,12 +2,14 @@ import SwiftUI
 import Account
 import AppEnvironment
 import DesignSystem
+import PubDBModels
 
 /// The Me tab: the account, how the app looks, and what this is.
 public struct MeScreen: View {
     private let session: SessionModel
     private let profileDestination: (ProfileLink) -> AnyView
     private let notifications: NotificationsModel?
+    private let meta: Meta?
     @State private var path = NavigationPath()
     @AppStorage(ThemePreference.storageKey) private var theme: ThemePreference = .system
 
@@ -16,10 +18,12 @@ public struct MeScreen: View {
     public init(
         session: SessionModel,
         notifications: NotificationsModel? = nil,
+        meta: Meta? = nil,
         profileDestination: @escaping (ProfileLink) -> AnyView
     ) {
         self.session = session
         self.notifications = notifications
+        self.meta = meta
         self.profileDestination = profileDestination
     }
 
@@ -37,6 +41,14 @@ public struct MeScreen: View {
                             ForEach(ThemePreference.allCases) { Text($0.label).tag($0) }
                         }
                         .pickerStyle(.segmented)
+                    }
+                    if let levels = meta?.levels, !levels.isEmpty {
+                        NavigationLink {
+                            LevelsPage(levels: levels, rules: meta?.xpRules ?? [])
+                        } label: {
+                            MenuRow(emoji: "🏅", title: "Levels", blurb: "From walk-in to part of the furniture")
+                        }
+                        .buttonStyle(.plain)
                     }
                     NavigationLink {
                         AboutPage()

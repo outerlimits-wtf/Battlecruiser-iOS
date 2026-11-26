@@ -28,6 +28,9 @@ struct SignedInCard: View {
             .buttonStyle(.plain)
             .accessibilityHint("Shows your profile")
 
+            if let level = user.level {
+                LevelProgress(level)
+            }
             Text(user.usernameChosen ? "It goes on everything you add." : "We picked that one for you. Change it to something worse.")
                 .font(Typography.secondary)
                 .foregroundStyle(Palette.inkMuted)
