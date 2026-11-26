@@ -26,6 +26,8 @@ public struct RootView: View {
     @State var pins: PinsModel
     @State var detail: PubDetailModel
     @State var tab: RootTab = DebugLaunch.tab ?? .map
+    /// A profile opened from the pub panel, which has no stack to push onto.
+    @State var presentedProfile: ProfileLink?
     @Environment(\.scenePhase) private var scenePhase
 
     let build = AppVersion.current()

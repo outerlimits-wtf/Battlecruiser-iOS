@@ -1,21 +1,55 @@
 import SwiftUI
+import AppEnvironment
 import DesignSystem
 import PubDBModels
 
-/// One update: who and when, the pub, then the fact or the review.
+/// One update: who and when, the pub, then the fact or the review. Tap the
+/// person for their profile, anywhere else for the pub.
 struct FeedRow: View {
     let entry: FeedEntry
+    let onOpenPub: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: Metrics.s) {
-                Avatar(url: entry.avatarURL, name: entry.attribution.label, size: .xs)
-                Text(entry.attribution.label)
-                    .font(Typography.secondary.weight(.semibold))
-                    .foregroundStyle(entry.attribution.kind == "user" ? Palette.beer : Palette.inkFaint)
+                author
                 Spacer()
                 Text(entry.agoLabel).font(Typography.secondary).foregroundStyle(Palette.inkFaint)
             }
+            Button(action: onOpenPub) { update }
+                .buttonStyle(.plain)
+                .accessibilityHint("Shows the pub")
+        }
+        .padding(.horizontal, Metrics.l)
+        .padding(.vertical, Metrics.m)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .overlay(alignment: .bottom) { Rectangle().fill(Palette.surfaceSunken).frame(height: 1) }
+        .contentShape(Rectangle())
+        .onTapGesture(perform: onOpenPub)
+        .accessibilityElement(children: .contain)
+    }
+
+    /// A person links to their profile (on the Social tab's stack); a data
+    /// source is just a name.
+    @ViewBuilder
+    private var author: some View {
+        let label = HStack(spacing: Metrics.s) {
+            Avatar(url: entry.avatarURL, name: entry.attribution.label, size: .xs)
+            Text(entry.attribution.label)
+                .font(Typography.secondary.weight(.semibold))
+                .foregroundStyle(entry.attribution.kind == "user" ? Palette.beer : Palette.inkFaint)
+        }
+        if let link = ProfileLink(entry.attribution) {
+            NavigationLink(value: link) { label.contentShape(Rectangle()) }
+                .buttonStyle(.plain)
+                .accessibilityHint("Shows their profile")
+        } else {
+            label
+        }
+    }
+
+    private var update: some View {
+        VStack(alignment: .leading, spacing: 4) {
             Text(entry.pub.name).font(Typography.rowTitle).foregroundStyle(Palette.ink)
             if entry.isReview {
                 HStack(alignment: .firstTextBaseline, spacing: Metrics.s) {
@@ -33,12 +67,8 @@ struct FeedRow: View {
                 }
             }
         }
-        .padding(.horizontal, Metrics.l)
-        .padding(.vertical, Metrics.m)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .overlay(alignment: .bottom) { Rectangle().fill(Palette.surfaceSunken).frame(height: 1) }
         .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
-        .accessibilityHint("Shows the pub")
     }
 }

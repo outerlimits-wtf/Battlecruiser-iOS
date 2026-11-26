@@ -42,10 +42,9 @@ struct LatestPage: View {
                 } else {
                     LazyVStack(spacing: 0) {
                         ForEach(feed.updates) { entry in
-                            Button { onOpenPub(PubLink(id: entry.pub.id, name: entry.pub.name)) } label: {
-                                FeedRow(entry: entry)
+                            FeedRow(entry: entry) {
+                                onOpenPub(PubLink(id: entry.pub.id, name: entry.pub.name))
                             }
-                            .buttonStyle(.plain)
                         }
                     }
                 }

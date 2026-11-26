@@ -9,12 +9,21 @@ public struct PanelContext {
     public let marks: MarksModel
     public let meta: Meta?
     public let writer: any PubWriteSource
+    /// Show someone's profile (a reviewer's); nil where that can't be done.
+    public let onOpenProfile: ((ProfileLink) -> Void)?
 
-    public init(session: SessionModel, marks: MarksModel, meta: Meta?, writer: any PubWriteSource) {
+    public init(
+        session: SessionModel,
+        marks: MarksModel,
+        meta: Meta?,
+        writer: any PubWriteSource,
+        onOpenProfile: ((ProfileLink) -> Void)? = nil
+    ) {
         self.session = session
         self.marks = marks
         self.meta = meta
         self.writer = writer
+        self.onOpenProfile = onOpenProfile
     }
 
     /// Signed out on a server that has sign-in: writes become "sign in" prompts.

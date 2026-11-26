@@ -59,7 +59,13 @@ extension RootView {
             onSelectPub: { pub in detail.select(pub, near: userCoordinate) },
             panel: detail.selectedID == nil ? nil : PubDetailPanel(
                 model: detail,
-                context: PanelContext(session: session, marks: marks, meta: meta.meta, writer: client),
+                context: PanelContext(
+                    session: session,
+                    marks: marks,
+                    meta: meta.meta,
+                    writer: client,
+                    onOpenProfile: { presentedProfile = $0 }
+                ),
                 onClose: detail.deselect,
                 onSelectPub: { pub in detail.select(pub, near: userCoordinate) }
             ),
@@ -67,5 +73,16 @@ extension RootView {
             visitedIDs: marks.visited,
             onSearch: detail.deselect
         )
+        .sheet(item: $presentedProfile) { link in
+            NavigationStack {
+                profile(link)
+                    .toolbar {
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Done") { presentedProfile = nil }
+                        }
+                    }
+                    .navigationDestination(for: ProfileLink.self, destination: profile)
+            }
+        }
     }
 }

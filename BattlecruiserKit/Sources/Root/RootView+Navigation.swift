@@ -59,6 +59,8 @@ extension RootView {
 
     /// Open a pub from another tab: on the map, in the panel.
     func open(_ pub: PubLink) {
+        // From a profile shown over the map: put it away to show the pub.
+        presentedProfile = nil
         tab = .map
         detail.select(id: pub.id, name: pub.name, near: userCoordinate)
     }
