@@ -6,19 +6,22 @@ import DesignSystem
 /// The Me tab: the account, how the app looks, and what this is.
 public struct MeScreen: View {
     private let session: SessionModel
-    private let onOpenProfile: (String) -> Void
+    private let profileDestination: (ProfileLink) -> AnyView
+    @State private var path = NavigationPath()
     @AppStorage(ThemePreference.storageKey) private var theme: ThemePreference = .system
 
-    public init(session: SessionModel, onOpenProfile: @escaping (String) -> Void) {
+    /// - Parameter profileDestination: Someone's profile, from the Profile
+    ///   feature, which this module doesn't import.
+    public init(session: SessionModel, profileDestination: @escaping (ProfileLink) -> AnyView) {
         self.session = session
-        self.onOpenProfile = onOpenProfile
+        self.profileDestination = profileDestination
     }
 
     public var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             ScrollView {
                 VStack(alignment: .leading, spacing: Metrics.xl) {
-                    AccountBlock(session: session, onOpenProfile: onOpenProfile)
+                    AccountBlock(session: session, onOpenProfile: { path.append(ProfileLink($0)) })
                     VStack(alignment: .leading, spacing: Metrics.s) {
                         SectionHeader("Appearance")
                         Picker("Appearance", selection: $theme) {
@@ -40,6 +43,7 @@ public struct MeScreen: View {
             }
             .background(Palette.canvas)
             .navigationTitle("Me")
+            .navigationDestination(for: ProfileLink.self, destination: profileDestination)
         }
     }
 }

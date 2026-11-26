@@ -1,4 +1,5 @@
 import SwiftUI
+import AppEnvironment
 import DesignSystem
 import PubDBClient
 import PubDBModels
@@ -11,19 +12,22 @@ public struct SocialScreen: View {
     private let isSignedIn: Bool
     private let location: Coordinate?
     private let onOpenPub: (PubLink) -> Void
+    private let profileDestination: (ProfileLink) -> AnyView
 
     public init(
         source: any CommunitySource,
         boards: [BoardInfo],
         isSignedIn: Bool,
         location: Coordinate?,
-        onOpenPub: @escaping (PubLink) -> Void
+        onOpenPub: @escaping (PubLink) -> Void,
+        profileDestination: @escaping (ProfileLink) -> AnyView
     ) {
         self.source = source
         self.boards = boards
         self.isSignedIn = isSignedIn
         self.location = location
         self.onOpenPub = onOpenPub
+        self.profileDestination = profileDestination
     }
 
     public var body: some View {
@@ -56,6 +60,7 @@ public struct SocialScreen: View {
             }
             .background(Palette.canvas)
             .navigationTitle("Social")
+            .navigationDestination(for: ProfileLink.self, destination: profileDestination)
         }
     }
 }

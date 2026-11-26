@@ -3,6 +3,8 @@ import AppEnvironment
 import DesignSystem
 import Me
 import Social
+import Lists
+import Profile
 import PubDBClient
 import PubDBModels
 import PubDetailFeature
@@ -71,14 +73,21 @@ public struct RootView: View {
                     boards: meta.meta?.boards ?? [],
                     isSignedIn: session.isSignedIn,
                     location: userCoordinate,
-                    onOpenPub: open
+                    onOpenPub: open,
+                    profileDestination: profile
                 )
             }
             Tab("Lists", systemImage: "star", value: RootTab.lists) {
-                PlaceholderTab(emoji: "⭐", title: "Lists", message: "Your hit list and the pubs you've been to land here.")
+                ListsScreen(
+                    source: client,
+                    isSignedIn: session.isSignedIn,
+                    location: userCoordinate,
+                    onOpenPub: { id, name in open(PubLink(id: id, name: name)) }
+                )
+                .id(session.user?.id)
             }
             Tab("Me", systemImage: "person.crop.circle", value: RootTab.me) {
-                MeScreen(session: session, onOpenProfile: { _ in })
+                MeScreen(session: session, profileDestination: profile)
             }
         }
         .tint(Palette.beer)
@@ -131,6 +140,16 @@ public struct RootView: View {
         } else {
             detail.select(id: pin.id, name: pin.name, near: userCoordinate)
         }
+    }
+
+    /// Someone's profile, for whichever tab's stack asked.
+    private func profile(_ link: ProfileLink) -> AnyView {
+        AnyView(ProfileScreen(
+            username: link.username,
+            source: client,
+            canFollow: session.isSignedIn,
+            onOpenPub: { id, name in open(PubLink(id: id, name: name)) }
+        ))
     }
 
     /// Open a pub from another tab: on the map, in the panel.

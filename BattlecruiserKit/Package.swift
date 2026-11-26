@@ -26,6 +26,8 @@ let package = Package(
         .library(name: "Account", targets: ["Account"]),
         .library(name: "Me", targets: ["Me"]),
         .library(name: "Social", targets: ["Social"]),
+        .library(name: "Profile", targets: ["Profile"]),
+        .library(name: "Lists", targets: ["Lists"]),
         .library(name: "Root", targets: ["Root"]),
     ],
     targets: [
@@ -119,12 +121,26 @@ let package = Package(
             swiftSettings: [.defaultIsolation(MainActor.self)]
         ),
 
+        /// Someone's page: stats, coverage, reviews, pubs, follow.
+        .target(
+            name: "Profile",
+            dependencies: ["AppEnvironment", "DesignSystem", "PubDBClient", "PubDBModels"],
+            swiftSettings: [.defaultIsolation(MainActor.self)]
+        ),
+
+        /// The Lists tab: the hit list and Been here.
+        .target(
+            name: "Lists",
+            dependencies: ["AppEnvironment", "DesignSystem", "PubDBClient", "PubDBModels"],
+            swiftSettings: [.defaultIsolation(MainActor.self)]
+        ),
+
         /// The whole app: owns shared state and wires the features together, so
         /// features never import each other. The only module that imports features.
         .target(
             name: "Root",
             dependencies: [
-                "Account", "AppEnvironment", "Auth", "DesignSystem", "Me", "PubDBClient", "PubDBModels", "Social",
+                "Account", "AppEnvironment", "Auth", "DesignSystem", "Lists", "Me", "Profile", "PubDBClient", "PubDBModels", "Social",
                 "PubDetailFeature", "PubsFeature", "PubsMap", "UserLocation",
             ],
             swiftSettings: [.defaultIsolation(MainActor.self)]
