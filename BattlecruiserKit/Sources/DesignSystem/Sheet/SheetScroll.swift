@@ -9,10 +9,6 @@ import SwiftUI
 final class SheetScrollState {
     /// Scrolled all the way up, or pulled past the top.
     var isAtTop = true
-    /// How far the content is pulled past the top (the scroll view's bounce).
-    /// The sheet takes this off its own drag, so the content follows the
-    /// finger rather than moving twice as fast.
-    var overscroll: CGFloat = 0
 }
 
 public extension View {
@@ -30,14 +26,11 @@ private struct SheetScrollTracking: ViewModifier {
         content.onScrollGeometryChange(for: CGFloat.self) { geometry in
             geometry.contentOffset.y + geometry.contentInsets.top
         } action: { _, distance in
-            guard let state else { return }
-            state.isAtTop = distance <= 1
-            state.overscroll = max(0, -distance)
+            state?.isAtTop = distance <= 1
         }
         // A new scroll view (the list swapped for a pub) starts at its top.
         .onAppear {
             state?.isAtTop = true
-            state?.overscroll = 0
         }
     }
 }

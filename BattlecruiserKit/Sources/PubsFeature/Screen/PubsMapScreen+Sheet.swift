@@ -8,8 +8,10 @@ extension PubsMapScreen {
         BottomSheet(
             detent: $detent,
             resetKey: selectedID,
-            // Until the controls are measured, the sheet's own default.
-            topInset: controlsHeight > 0 ? controlsHeight + Metrics.m : nil,
+            // Until the controls are measured, the sheet's own default. A clear
+            // gap under the filters, so a thumb going for the grabber at full
+            // doesn't land on a pill instead.
+            topInset: controlsHeight > 0 ? controlsHeight + Metrics.xl : nil,
             overlaysGrabber: panel != nil
         ) {
             if panel == nil {

@@ -30,9 +30,10 @@ public struct BottomSheet<Header: View, Content: View>: View {
     @State private var drag: CGFloat = 0
     @GestureState private var isDragging = false
     @GestureState private var isPulling = false
-    /// Whether the pull at full under way moves the sheet: decided when it
-    /// starts, by whether the content was at its top and the pull was down.
-    @State private var pullEngaged: Bool?
+    /// Where the finger was (its translation) when the pull at full under way
+    /// took hold of the sheet: once the content is at its top and the finger
+    /// is moving down. Nil while the content is still scrolling.
+    @State private var pullOrigin: CGFloat?
     @State private var scroll = SheetScrollState()
     /// How much the tab bar (and home indicator) covers at the bottom.
     @State private var bottomInset: CGFloat = 0
@@ -116,7 +117,7 @@ public struct BottomSheet<Header: View, Content: View>: View {
             // A drag the system took away (no onEnded): settle where it is.
             .onChange(of: isDragging || isPulling) { _, isActive in
                 guard !isActive else { return }
-                pullEngaged = nil
+                pullOrigin = nil
                 if drag != 0 { settle(layout, velocity: 0) }
             }
         }
@@ -145,7 +146,9 @@ public struct BottomSheet<Header: View, Content: View>: View {
                 .fill(onPhoto ? Color.white.opacity(0.9) : Palette.ink.opacity(0.25))
                 .shadow(color: .black.opacity(onPhoto ? 0.35 : 0), radius: 2)
                 .frame(width: 44, height: 6)
-                .frame(width: 112, height: 28)
+                // Tall and wide, so it is easy to catch at full, just under
+                // the filters.
+                .frame(width: 160, height: 36)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -162,23 +165,25 @@ public struct BottomSheet<Header: View, Content: View>: View {
             .onEnded { value in settle(layout, velocity: value.velocity.height) }
     }
 
-    /// At full, alongside the content's scrolling: a pull down that starts at
-    /// the top moves the sheet. The scroll view bounces as it is pulled, so
-    /// that bounce comes off the sheet's share and the content stays under
-    /// the finger.
+    /// At full, alongside the content's scrolling: pulling down with the
+    /// content at its top moves the whole sheet, whether the pull started
+    /// there or scrolled back up to it. The sheet follows the finger exactly,
+    /// which carries the scroll view along with it, so the content never
+    /// stretches away from the top as if to refresh.
     private func pullGesture(_ layout: SheetLayout) -> some Gesture {
         DragGesture(minimumDistance: 6, coordinateSpace: .global)
             .updating($isPulling) { _, isPulling, _ in isPulling = true }
             .onChanged { value in
-                if pullEngaged == nil {
-                    pullEngaged = scroll.isAtTop && value.translation.height > 0
+                let y = value.translation.height
+                if pullOrigin == nil, scroll.isAtTop, value.velocity.height > 0 {
+                    pullOrigin = y
                 }
-                guard pullEngaged == true else { return }
-                drag = max(0, value.translation.height - scroll.overscroll)
+                guard let pullOrigin else { return }
+                drag = max(0, y - pullOrigin)
             }
             .onEnded { value in
-                defer { pullEngaged = nil }
-                guard pullEngaged == true else { return }
+                defer { pullOrigin = nil }
+                guard pullOrigin != nil else { return }
                 settle(layout, velocity: value.velocity.height)
             }
     }
