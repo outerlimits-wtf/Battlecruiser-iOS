@@ -12,22 +12,9 @@ struct OverviewTab: View {
     /// Signed in: answering features and reporting prices.
     let writer: FactWriter?
     let priceBounds: ClosedRange<Int>
-    let maxRating: Int
-    /// Open the Reviews tab, at one review or at the top.
-    let onOpenReviews: (Int?) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: Metrics.xl) {
-            if let quote = summary.quote {
-                QuoteCard(
-                    quote: quote,
-                    review: detail?.reviews.first { $0.id == quote.reviewId },
-                    reviewCount: summary.reviewCount,
-                    maxRating: maxRating,
-                    onOpenReview: { onOpenReviews($0) },
-                    onOpenReviews: { onOpenReviews(nil) }
-                )
-            }
             if let detail {
                 TonightFacts(tonight: detail.weekTable.first(where: \.isTonight), gardenCloses: detail.gardenCloses)
                 WhatsThere(features: detail.features, quizNightDay: detail.quizNightDay, karaokeNightDay: detail.karaokeNightDay)

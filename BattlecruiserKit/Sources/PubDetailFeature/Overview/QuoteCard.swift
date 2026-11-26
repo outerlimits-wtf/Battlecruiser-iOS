@@ -2,8 +2,9 @@ import SwiftUI
 import DesignSystem
 import PubDBModels
 
-/// The line the list quotes, at the top of Overview, as the web's: tap it for
-/// that review, or the link for them all. Nothing when nobody has written.
+/// The line the list quotes, above the panel's tabs: tap it for that review,
+/// or the link for them all. Nothing when nobody has written. A touch smaller
+/// than the web's, so it doesn't push the tabs far down.
 struct QuoteCard: View {
     let quote: Quote
     /// The quoted review, when it is among those the detail holds.
@@ -14,13 +15,13 @@ struct QuoteCard: View {
     let onOpenReviews: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: Metrics.s) {
+        VStack(alignment: .leading, spacing: 6) {
             Button { onOpenReview(quote.reviewId) } label: {
-                VStack(alignment: .leading, spacing: Metrics.s) {
+                VStack(alignment: .leading, spacing: 6) {
                     Text("“\(quote.text)”")
-                        .font(.body.italic())
+                        .font(Typography.body.italic())
                         .foregroundStyle(Palette.ink)
-                        .lineLimit(4)
+                        .lineLimit(3)
                         .multilineTextAlignment(.leading)
                     HStack(spacing: Metrics.s) {
                         if let review {
@@ -40,10 +41,11 @@ struct QuoteCard: View {
             .buttonStyle(.plain)
             .accessibilityHint("Shows the review")
             Button(reviewCount > 1 ? "Read all \(reviewCount) reviews ›" : "Read the review ›", action: onOpenReviews)
-                .font(Typography.body.weight(.semibold))
+                .font(Typography.secondary.weight(.semibold))
                 .foregroundStyle(Palette.beer)
         }
-        .padding(Metrics.m)
+        .padding(.horizontal, Metrics.m)
+        .padding(.vertical, Metrics.s + 2)
         .background(Palette.canvas, in: RoundedRectangle(cornerRadius: Metrics.cardRadius))
     }
 }

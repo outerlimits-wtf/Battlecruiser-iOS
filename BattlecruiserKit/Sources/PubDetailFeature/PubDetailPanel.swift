@@ -53,6 +53,17 @@ public struct PubDetailPanel: View {
                         }
                         PanelHeader(summary: summary, city: model.detail?.city, kindNote: kindNote(summary))
                         ActionsRow(summary: summary, context: context)
+                        // Above the tabs, so it shows whichever tab is open.
+                        if let quote = summary.quote {
+                            QuoteCard(
+                                quote: quote,
+                                review: model.detail?.reviews.first { $0.id == quote.reviewId },
+                                reviewCount: summary.reviewCount,
+                                maxRating: context.meta?.limits.maxRating ?? 10,
+                                onOpenReview: { openReviews(at: $0) },
+                                onOpenReviews: { openReviews(at: nil) }
+                            )
+                        }
                     }
                     .padding(Metrics.l)
                     Section {
@@ -114,12 +125,7 @@ public struct PubDetailPanel: View {
                     nearby: model.similar,
                     onSelectPub: onSelectPub,
                     writer: factWriter(summary.id),
-                    priceBounds: priceBounds,
-                    maxRating: context.meta?.limits.maxRating ?? 10,
-                    onOpenReviews: { id in
-                        focusReview = id
-                        tab = .reviews
-                    }
+                    priceBounds: priceBounds
                 )
             case .reviews:
                 if let detail = model.detail {
@@ -132,6 +138,12 @@ public struct PubDetailPanel: View {
                 }
             }
         }
+    }
+
+    /// The Reviews tab, brought into view at one review or at the top.
+    private func openReviews(at id: Int?) {
+        focusReview = id
+        tab = .reviews
     }
 
     private func kindNote(_ summary: PubSummary) -> String? {
