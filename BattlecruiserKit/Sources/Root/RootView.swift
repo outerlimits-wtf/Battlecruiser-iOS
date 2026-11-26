@@ -18,6 +18,7 @@ import UserLocation
 public struct RootView: View {
     @State private var meta: MetaStore
     @State private var session: SessionModel
+    @State private var marks: MarksModel
     @State private var location = LocationModel()
     @State private var pubs: PubsModel
     @State private var pins: PinsModel
@@ -34,6 +35,7 @@ public struct RootView: View {
         client = dependencies.client
         _meta = State(initialValue: MetaStore(source: dependencies.client))
         _session = State(initialValue: SessionModel(source: dependencies.client, auth: dependencies.auth))
+        _marks = State(initialValue: MarksModel(source: dependencies.client))
         _pubs = State(initialValue: PubsModel(source: dependencies.client))
         _pins = State(initialValue: PinsModel(source: dependencies.client))
         _detail = State(initialValue: PubDetailModel(source: dependencies.client))
@@ -59,6 +61,10 @@ public struct RootView: View {
             handleScenePhase(from: previous, to: phase)
         }
         .preferredColorScheme(theme.colorScheme)
+        .task(id: session.user?.id) {
+            // Signed in or out: the Save and Been here buttons follow the account.
+            if session.isSignedIn { await marks.load() } else { marks.clear() }
+        }
     }
 
     /// The web's side menu, as a tab bar (decision P6).
@@ -104,7 +110,7 @@ public struct RootView: View {
             onSelectPub: { pub in detail.select(pub, near: userCoordinate) },
             panel: detail.selectedID == nil ? nil : PubDetailPanel(
                 model: detail,
-                meta: meta.meta,
+                context: PanelContext(session: session, marks: marks, meta: meta.meta, writer: client),
                 onClose: detail.deselect,
                 onSelectPub: { pub in detail.select(pub, near: userCoordinate) }
             ),

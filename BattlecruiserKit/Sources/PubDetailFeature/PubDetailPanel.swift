@@ -10,19 +10,20 @@ import PubDBModels
 /// in the rest when the detail arrives.
 public struct PubDetailPanel: View {
     private let model: PubDetailModel
-    private let meta: Meta?
+    private let context: PanelContext
     private let onClose: () -> Void
     private let onSelectPub: (PubSummary) -> Void
     @State private var tab: PanelTab = .overview
+    @State private var toast: ToastMessage?
 
     public init(
         model: PubDetailModel,
-        meta: Meta?,
+        context: PanelContext,
         onClose: @escaping () -> Void,
         onSelectPub: @escaping (PubSummary) -> Void
     ) {
         self.model = model
-        self.meta = meta
+        self.context = context
         self.onClose = onClose
         self.onSelectPub = onSelectPub
     }
@@ -41,7 +42,7 @@ public struct PubDetailPanel: View {
                             FreshnessLabel(fetchedAt: savedAt)
                         }
                         PanelHeader(summary: summary, city: model.detail?.city, kindNote: kindNote(summary))
-                        ActionsRow(summary: summary)
+                        ActionsRow(summary: summary, context: context)
                     }
                     .padding(Metrics.l)
                     Section {
@@ -67,6 +68,7 @@ public struct PubDetailPanel: View {
         .overlay(alignment: .topTrailing) {
             CloseButton(action: onClose).padding(.top, Metrics.s)
         }
+        .toast($toast)
         .onChange(of: model.selectedID) { tab = .overview }
     }
 
@@ -78,7 +80,8 @@ public struct PubDetailPanel: View {
                 OverviewTab(summary: summary, detail: model.detail, nearby: model.similar, onSelectPub: onSelectPub)
             case .reviews:
                 if let detail = model.detail {
-                    ReviewsTab(reviews: detail.reviews).id(detail.id)
+                    ReviewsTab(pubID: detail.id, reviews: detail.reviews, context: context, onChanged: changed)
+                        .id(detail.id)
                 }
             case .about:
                 if let detail = model.detail {
@@ -90,6 +93,19 @@ public struct PubDetailPanel: View {
 
     private func kindNote(_ summary: PubSummary) -> String? {
         guard let kind = summary.amenity.kind else { return nil }
-        return meta?.venueKinds.first { $0.key == kind }?.note
+        return context.meta?.venueKinds.first { $0.key == kind }?.note
+    }
+
+    /// After a write: say so, and show what the server now has. A change held
+    /// for an admin shows the server's message and changes nothing yet.
+    private func changed(_ result: WriteResult) {
+        if result.queued {
+            toast = ToastMessage(result.message ?? "Sent to an admin to check.")
+            return
+        }
+        toast = ToastMessage(result.message ?? "Saved. The next person through the door gets that.")
+        if let id = model.selectedID { context.marks.noteVisited(id) }
+        model.refresh()
+        Task { await context.session.load() }
     }
 }
