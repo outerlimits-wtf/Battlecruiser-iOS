@@ -42,3 +42,13 @@ extension Endpoint {
                  body: .json(ReportBody(type: type, id: id, reason: reason, note: note)), sendsClock: false)
     }
 }
+
+extension Endpoint {
+    static func uploadPhoto(to pubID: String, image: MultipartForm.File, kind: String, caption: String?) -> Endpoint {
+        var form = MultipartForm()
+        form.add("photo", file: image)
+        form.add("kind", value: kind)
+        if let caption, !caption.isEmpty { form.add("caption", value: caption) }
+        return Endpoint(method: .post, path: ["pubs", pubID, "photos"], body: .multipart(form), sendsClock: false)
+    }
+}

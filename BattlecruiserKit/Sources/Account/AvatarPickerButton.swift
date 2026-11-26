@@ -2,6 +2,7 @@ import PhotosUI
 import SwiftUI
 import AppEnvironment
 import DesignSystem
+import PubDBClient
 
 /// "Add photo" / "Change photo" for the profile picture, and "Remove" when
 /// there is one (which the web lacks). The picture is shrunk to a JPEG first.
@@ -19,8 +20,8 @@ struct AvatarPickerButton: View {
             guard let picked else { return }
             Task {
                 if let data = try? await picked.loadTransferable(type: Data.self),
-                   let file = ImageUpload.jpeg(from: data, maxSide: 512, name: "avatar.jpg") {
-                    await session.setAvatar(file)
+                   let jpeg = ImageUpload.jpeg(from: data, maxSide: 512) {
+                    await session.setAvatar(MultipartForm.File(filename: "avatar.jpg", mimeType: "image/jpeg", data: jpeg))
                 }
                 item = nil
             }

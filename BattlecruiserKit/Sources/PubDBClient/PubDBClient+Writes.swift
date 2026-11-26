@@ -26,4 +26,10 @@ extension PubDBClient {
     public func report(type: String, id: String, reason: String, note: String? = nil) async throws -> WriteResult {
         try await send(.report(type: type, id: id, reason: reason, note: note))
     }
+
+    /// A photo: JPEG at most `/meta`'s `clientMaxSide`, a `/meta` photo kind,
+    /// and an optional caption. Shared under `/meta`'s `photoLicense`.
+    public func uploadPhoto(to pubID: String, image: MultipartForm.File, kind: String, caption: String?) async throws -> PhotoUploadResult {
+        try await send(.uploadPhoto(to: pubID, image: image, kind: kind, caption: caption))
+    }
 }

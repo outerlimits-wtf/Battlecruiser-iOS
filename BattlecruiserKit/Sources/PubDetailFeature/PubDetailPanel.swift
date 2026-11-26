@@ -15,6 +15,8 @@ public struct PubDetailPanel: View {
     private let onSelectPub: (PubSummary) -> Void
     @State private var tab: PanelTab = .overview
     @State private var toast: ToastMessage?
+    @State private var isAddingPhoto = false
+    @State private var reporting: ReportTarget?
 
     public init(
         model: PubDetailModel,
@@ -35,7 +37,11 @@ public struct PubDetailPanel: View {
                     GalleryStrip(
                         photos: model.detail?.photos ?? summary.photo.map { [$0] } ?? [],
                         name: summary.name,
-                        emoji: summary.amenity.symbol.emoji
+                        emoji: summary.amenity.symbol.emoji,
+                        onAdd: context.session.isSignedIn ? { isAddingPhoto = true } : nil,
+                        onReport: context.session.isSignedIn ? { photo in
+                            reporting = photo.id.map { ReportTarget(type: "photo", id: $0) }
+                        } : nil
                     )
                     VStack(alignment: .leading, spacing: Metrics.l) {
                         if let savedAt = model.showingCachedFrom {
@@ -69,6 +75,15 @@ public struct PubDetailPanel: View {
             CloseButton(action: onClose).padding(.top, Metrics.s)
         }
         .toast($toast)
+        .sheet(isPresented: $isAddingPhoto) {
+            if let id = model.selectedID {
+                PhotoUploadSheet(pubID: id, context: context) { message in
+                    toast = ToastMessage(message)
+                    model.refresh()
+                }
+            }
+        }
+        .sheet(item: $reporting) { ReportSheet(target: $0, context: context) }
         .onChange(of: model.selectedID) { tab = .overview }
     }
 
