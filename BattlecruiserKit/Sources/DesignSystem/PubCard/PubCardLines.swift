@@ -6,16 +6,11 @@ import PubDBModels
 enum PubCardLines {
     static let separator = " · "
 
-    /// Rating, kind, area, brand. The Guinness price follows with its icon.
+    /// Kind and area. The rating (with its coloured star) goes before it and
+    /// the Guinness price after; the brand sits by the name.
     static func summary(_ pub: PubSummary) -> String {
-        var parts: [String] = []
-        if let rating = pub.rating {
-            // S7 asks the server for a ready-made `ratingLabel`.
-            parts.append("\(rating.formatted(.number.precision(.fractionLength(1)))) ★ (\(pub.reviewCount))")
-        }
-        parts.append(pub.amenity.label)
+        var parts = [pub.amenity.label]
         if let area = pub.area { parts.append(area) }
-        if let brand = pub.brand { parts.append(brand) }
         return parts.joined(separator: separator)
     }
 

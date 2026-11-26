@@ -22,9 +22,7 @@ public struct PubCard: View {
                 .clipShape(RoundedRectangle(cornerRadius: Metrics.thumbRadius))
             VStack(alignment: .leading, spacing: 3) {
                 HStack(spacing: 4) {
-                    Text(pub.name)
-                        .font(Typography.rowTitle)
-                        .foregroundStyle(Palette.ink)
+                    nameLine
                         .lineLimit(1)
                     if isVisited {
                         Image(systemName: "checkmark")
@@ -65,8 +63,18 @@ public struct PubCard: View {
         .accessibilityElement(children: .combine)
     }
 
+    /// The name, then the operator (when known) a touch smaller and lighter.
+    private var nameLine: Text {
+        let name = Text(pub.name).font(Typography.rowTitle).foregroundStyle(Palette.ink)
+        guard let brand = pub.brand else { return name }
+        return name + Text("  " + brand).font(Typography.body).foregroundStyle(Palette.inkMuted)
+    }
+
     private var summaryLine: Text {
-        let line = Text(PubCardLines.summary(pub))
+        var line = Text(PubCardLines.summary(pub))
+        if let rating = pub.rating {
+            line = RatingText.text(rating, reviewCount: pub.reviewCount) + Text(PubCardLines.separator) + line
+        }
         guard let guinness = pub.guinness else { return line }
         return line + Text(PubCardLines.separator) + GuinnessText.text(guinness.formatted)
     }

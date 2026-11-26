@@ -2,7 +2,7 @@ import SwiftUI
 import DesignSystem
 import PubDBModels
 
-/// Brand, name, what it is, whether it's open, and where.
+/// Name and brand, what it is, whether it's open, and where.
 struct PanelHeader: View {
     let summary: PubSummary
     let city: String?
@@ -11,12 +11,7 @@ struct PanelHeader: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            if let brand = summary.brand {
-                Text(brand).font(Typography.secondary).foregroundStyle(Palette.inkMuted)
-            }
-            Text(summary.name)
-                .font(Typography.title)
-                .foregroundStyle(Palette.ink)
+            nameLine
                 .accessibilityAddTraits(.isHeader)
             HStack(spacing: 0) {
                 summaryLine
@@ -40,8 +35,19 @@ struct PanelHeader: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
+    /// The name, then the operator (when known) a touch smaller and lighter,
+    /// running on after it and wrapping with it.
+    private var nameLine: Text {
+        let name = Text(summary.name).font(Typography.title).foregroundStyle(Palette.ink)
+        guard let brand = summary.brand else { return name }
+        return name + Text("  " + brand).font(Typography.subtitle).foregroundStyle(Palette.inkMuted)
+    }
+
     private var summaryLine: Text {
-        let line = Text(PanelLines.summary(summary))
+        var line = Text(PanelLines.summary(summary))
+        if let rating = summary.rating {
+            line = RatingText.text(rating, reviewCount: summary.reviewCount) + Text(" · ") + line
+        }
         guard let guinness = summary.guinness else { return line }
         return line + Text(" · ") + GuinnessText.text(guinness.formatted)
     }
@@ -49,14 +55,10 @@ struct PanelHeader: View {
 
 /// The header's joined lines, as the web builds them.
 enum PanelLines {
-    /// "8.4 ★ (11) · Gastropub · Balham"; the Guinness price follows with its icon.
+    /// "Gastropub · Balham". The rating (with its coloured star) goes before
+    /// it and the Guinness price, with its icon, after.
     static func summary(_ pub: PubSummary) -> String {
-        var parts: [String] = []
-        if let rating = pub.rating {
-            // S7 asks the server for a ready-made `ratingLabel`.
-            parts.append("\(rating.formatted(.number.precision(.fractionLength(1)))) ★ (\(pub.reviewCount))")
-        }
-        parts.append(pub.amenity.label)
+        var parts = [pub.amenity.label]
         if let area = pub.area { parts.append(area) }
         return parts.joined(separator: " · ")
     }

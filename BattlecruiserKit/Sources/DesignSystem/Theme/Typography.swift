@@ -4,6 +4,8 @@ import SwiftUI
 public enum Typography {
     /// A pub's name at the top of its panel (web 24 bold).
     public static let title = Font.title2.bold()
+    /// The operator after a pub's name in its panel: a touch under the title.
+    public static let subtitle = Font.title3
     /// A row's name (web 16 semibold).
     public static let rowTitle = Font.body.weight(.semibold)
     /// Body text (web 14).
