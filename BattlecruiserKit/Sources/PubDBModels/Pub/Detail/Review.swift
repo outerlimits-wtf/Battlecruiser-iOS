@@ -16,6 +16,9 @@ public struct Review: Decodable, Hashable, Sendable, Identifiable {
     public let avatarUrl: String?
     /// Whether the signed-in person may delete it.
     public let canRemove: Bool?
+    /// How many accounts like it, and whether the signed-in person does.
+    public let likes: Int?
+    public let likedByMe: Bool?
 
     public var avatarURL: URL? { avatarUrl.flatMap(URL.init(string:)) }
 

@@ -32,4 +32,9 @@ extension PubDBClient {
     public func uploadPhoto(to pubID: String, image: MultipartForm.File, kind: String, caption: String?) async throws -> PhotoUploadResult {
         try await send(.uploadPhoto(to: pubID, image: image, kind: kind, caption: caption))
     }
+
+    /// Like a review, or stop liking it. Not your own (`400`).
+    public func setLike(_ reviewID: Int, on pubID: String, _ on: Bool) async throws -> LikeChange {
+        try await send(.like(reviewID, on: pubID, on))
+    }
 }

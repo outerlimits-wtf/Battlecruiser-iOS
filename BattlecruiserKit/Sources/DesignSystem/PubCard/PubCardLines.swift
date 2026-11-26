@@ -6,7 +6,7 @@ import PubDBModels
 enum PubCardLines {
     static let separator = " · "
 
-    /// Rating, kind, area, brand, Guinness.
+    /// Rating, kind, area, brand. The Guinness price follows with its icon.
     static func summary(_ pub: PubSummary) -> String {
         var parts: [String] = []
         if let rating = pub.rating {
@@ -16,7 +16,6 @@ enum PubCardLines {
         parts.append(pub.amenity.label)
         if let area = pub.area { parts.append(area) }
         if let brand = pub.brand { parts.append(brand) }
-        if let guinness = pub.guinness { parts.append("Guinness \(guinness.formatted)") }
         return parts.joined(separator: separator)
     }
 

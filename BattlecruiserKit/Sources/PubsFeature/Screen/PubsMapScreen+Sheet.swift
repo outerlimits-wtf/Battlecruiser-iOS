@@ -23,6 +23,7 @@ extension PubsMapScreen {
                 ResultsList(
                     pubs: pubs,
                     selectedID: selectedID,
+                    visitedIDs: visitedIDs,
                     onGoToLondon: goToLondon,
                     onSelect: onSelectPub,
                     onSearchEverywhere: query.everywhere ? nil : { query.everywhere = true },

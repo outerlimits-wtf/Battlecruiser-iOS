@@ -61,7 +61,9 @@ extension RootView {
                 onClose: detail.deselect,
                 onSelectPub: { pub in detail.select(pub, near: userCoordinate) }
             ),
-            meta: meta.meta
+            meta: meta.meta,
+            visitedIDs: marks.visited,
+            onSearch: detail.deselect
         )
     }
 }

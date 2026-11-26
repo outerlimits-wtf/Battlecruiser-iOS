@@ -19,7 +19,7 @@ struct PanelHeader: View {
                 .foregroundStyle(Palette.ink)
                 .accessibilityAddTraits(.isHeader)
             HStack(spacing: 0) {
-                Text(PanelLines.summary(summary))
+                summaryLine
                     .font(Typography.body)
                     .foregroundStyle(Palette.inkMuted)
                 if let kindNote {
@@ -39,11 +39,17 @@ struct PanelHeader: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
+
+    private var summaryLine: Text {
+        let line = Text(PanelLines.summary(summary))
+        guard let guinness = summary.guinness else { return line }
+        return line + Text(" · ") + GuinnessText.text(guinness.formatted)
+    }
 }
 
 /// The header's joined lines, as the web builds them.
 enum PanelLines {
-    /// "8.4 ★ (11) · Gastropub · Balham · Guinness £6.20".
+    /// "8.4 ★ (11) · Gastropub · Balham"; the Guinness price follows with its icon.
     static func summary(_ pub: PubSummary) -> String {
         var parts: [String] = []
         if let rating = pub.rating {
@@ -52,7 +58,6 @@ enum PanelLines {
         }
         parts.append(pub.amenity.label)
         if let area = pub.area { parts.append(area) }
-        if let guinness = pub.guinness { parts.append("Guinness \(guinness.formatted)") }
         return parts.joined(separator: " · ")
     }
 

@@ -6,10 +6,10 @@ import PubDBModels
 /// The card's lines are the server's labels, joined as the web joins them.
 @MainActor
 struct PubCardLinesTests {
-    @Test func theSummaryLineJoinsRatingKindAreaBrandAndGuinness() throws {
+    @Test func theSummaryLineJoinsRatingKindAreaAndBrand() throws {
         let pub = try Self.pub(rating: "8.4", area: #""Balham""#, brand: #""Young's""#, guinness: true)
 
-        #expect(PubCardLines.summary(pub) == "8.4 ★ (11) · Pub · Balham · Young's · Guinness £6.20")
+        #expect(PubCardLines.summary(pub) == "8.4 ★ (11) · Pub · Balham · Young's")
     }
 
     @Test func missingPartsAreLeftOutNotBlank() throws {

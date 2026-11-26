@@ -23,6 +23,10 @@ public struct PubsMapScreen<Panel: View>: View {
     let panel: Panel?
     /// The server's lists, for the filters; nil until loaded.
     let meta: Meta?
+    /// Pubs on the person's Been here list, ticked in the results.
+    let visitedIDs: Set<String>
+    /// Typing a search: close the open pub, so the results show (as the web).
+    let onSearch: () -> Void
 
     @State var detent: SheetDetent = .half
     /// The search and filters, shared by the list and the pins.
@@ -43,7 +47,9 @@ public struct PubsMapScreen<Panel: View>: View {
         onSelectPin: @escaping (Pin) -> Void,
         onSelectPub: @escaping (PubSummary) -> Void,
         panel: Panel?,
-        meta: Meta?
+        meta: Meta?,
+        visitedIDs: Set<String> = [],
+        onSearch: @escaping () -> Void = {}
     ) {
         self.pubs = pubs
         self.pins = pins
@@ -54,6 +60,8 @@ public struct PubsMapScreen<Panel: View>: View {
         self.onSelectPub = onSelectPub
         self.panel = panel
         self.meta = meta
+        self.visitedIDs = visitedIDs
+        self.onSearch = onSearch
     }
 
     public var body: some View {
@@ -78,7 +86,12 @@ public struct PubsMapScreen<Panel: View>: View {
         }
         .overlay(alignment: .top) {
             VStack(spacing: Metrics.s) {
-                SearchBar { text in query.search = text }
+                SearchBar { text in
+                    guard text != query.search else { return }
+                    query.search = text
+                    // Clearing the box leaves whatever is open alone.
+                    if !text.trimmingCharacters(in: .whitespaces).isEmpty { onSearch() }
+                }
                     .padding(.horizontal, Metrics.m)
                 FilterRow(query: $query, openPanel: $openPanel, meta: meta)
                 if let openPanel {

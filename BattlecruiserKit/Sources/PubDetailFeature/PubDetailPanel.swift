@@ -18,6 +18,8 @@ public struct PubDetailPanel: View {
     @State var toast: ToastMessage?
     @State var isAddingPhoto = false
     @State var reporting: ReportTarget?
+    /// The review the quote asked for, brought into view on the Reviews tab.
+    @State var focusReview: Int?
 
     public init(
         model: PubDetailModel,
@@ -32,6 +34,7 @@ public struct PubDetailPanel: View {
     }
 
     public var body: some View {
+        ScrollViewReader { scroller in
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 0, pinnedViews: [.sectionHeaders]) {
                 if let summary = model.summary {
@@ -72,6 +75,14 @@ public struct PubDetailPanel: View {
             }
             .padding(.bottom, 120)
         }
+        .onChange(of: focusReview) { _, id in
+            guard let id else { return }
+            Task {
+                try? await Task.sleep(for: .milliseconds(150))
+                withAnimation { scroller.scrollTo(ReviewsTab.anchor(id), anchor: .top) }
+            }
+        }
+        }
         .overlay(alignment: .topTrailing) {
             CloseButton(action: onClose).padding(.top, Metrics.s)
         }
@@ -85,7 +96,10 @@ public struct PubDetailPanel: View {
             }
         }
         .sheet(item: $reporting) { ReportSheet(target: $0, context: context) }
-        .onChange(of: model.selectedID) { tab = .overview }
+        .onChange(of: model.selectedID) {
+            tab = .overview
+            focusReview = nil
+        }
     }
 
     @ViewBuilder
@@ -99,11 +113,16 @@ public struct PubDetailPanel: View {
                     nearby: model.similar,
                     onSelectPub: onSelectPub,
                     writer: factWriter(summary.id),
-                    priceBounds: priceBounds
+                    priceBounds: priceBounds,
+                    maxRating: context.meta?.limits.maxRating ?? 10,
+                    onOpenReviews: { id in
+                        focusReview = id
+                        tab = .reviews
+                    }
                 )
             case .reviews:
                 if let detail = model.detail {
-                    ReviewsTab(pubID: detail.id, reviews: detail.reviews, context: context, onChanged: changed)
+                    ReviewsTab(pubID: detail.id, reviews: detail.reviews, context: context, focusID: focusReview, onChanged: changed)
                         .id(detail.id)
                 }
             case .about:

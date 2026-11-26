@@ -52,3 +52,9 @@ extension Endpoint {
         return Endpoint(method: .post, path: ["pubs", pubID, "photos"], body: .multipart(form), sendsClock: false)
     }
 }
+
+extension Endpoint {
+    static func like(_ reviewID: Int, on pubID: String, _ on: Bool) -> Endpoint {
+        Endpoint(method: on ? .put : .delete, path: ["pubs", pubID, "reviews", String(reviewID), "like"], sendsClock: false)
+    }
+}

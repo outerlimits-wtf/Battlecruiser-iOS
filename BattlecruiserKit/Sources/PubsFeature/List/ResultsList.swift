@@ -8,6 +8,7 @@ import PubDBModels
 struct ResultsList: View {
     let pubs: PubsModel
     let selectedID: String?
+    let visitedIDs: Set<String>
     let onGoToLondon: () -> Void
     let onSelect: (PubSummary) -> Void
     /// Nil when already searching everywhere.
@@ -29,7 +30,7 @@ struct ResultsList: View {
                 } else {
                     ForEach(pubs.pubs) { pub in
                         Button { onSelect(pub) } label: {
-                            PubCard(pub, isSelected: pub.id == selectedID)
+                            PubCard(pub, isSelected: pub.id == selectedID, isVisited: visitedIDs.contains(pub.id))
                         }
                         .buttonStyle(.plain)
                     }

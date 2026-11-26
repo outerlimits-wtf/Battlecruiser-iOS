@@ -5,8 +5,18 @@ import PubDBModels
 /// One review: who, the score in beer, when, and what they said.
 struct ReviewRow: View {
     let review: Review
+    let pubID: String
+    let context: PanelContext
 
     var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            words
+            LikeButton(review: review, pubID: pubID, context: context)
+        }
+    }
+
+    /// Who, the score, when and what they said: one element for VoiceOver.
+    private var words: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: Metrics.s) {
                 Avatar(url: review.avatarURL, name: review.attribution.label, size: .xs)

@@ -6,10 +6,13 @@ import PubDBModels
 public struct PubCard: View {
     private let pub: PubSummary
     private let isSelected: Bool
+    private let isVisited: Bool
 
-    public init(_ pub: PubSummary, isSelected: Bool = false) {
+    /// - Parameter isVisited: On the person's Been here list: a tick by the name.
+    public init(_ pub: PubSummary, isSelected: Bool = false, isVisited: Bool = false) {
         self.pub = pub
         self.isSelected = isSelected
+        self.isVisited = isVisited
     }
 
     public var body: some View {
@@ -18,15 +21,29 @@ public struct PubCard: View {
                 .frame(width: 72, height: 72)
                 .clipShape(RoundedRectangle(cornerRadius: Metrics.thumbRadius))
             VStack(alignment: .leading, spacing: 3) {
-                Text(pub.name)
-                    .font(Typography.rowTitle)
-                    .foregroundStyle(Palette.ink)
-                    .lineLimit(1)
-                Text(PubCardLines.summary(pub))
+                HStack(spacing: 4) {
+                    Text(pub.name)
+                        .font(Typography.rowTitle)
+                        .foregroundStyle(Palette.ink)
+                        .lineLimit(1)
+                    if isVisited {
+                        Image(systemName: "checkmark")
+                            .font(Typography.secondary.weight(.bold))
+                            .foregroundStyle(Palette.good.opacity(0.7))
+                            .accessibilityLabel("Been here")
+                    }
+                }
+                summaryLine
                     .font(Typography.body)
                     .foregroundStyle(Palette.inkMuted)
                     .lineLimit(2)
                 openLine
+                if let quote = pub.quote {
+                    Text("“\(quote.text)”")
+                        .font(Typography.secondary.italic())
+                        .foregroundStyle(Palette.inkMuted)
+                        .lineLimit(1)
+                }
                 if let features = PubCardLines.features(pub) {
                     Text(features)
                         .font(Typography.secondary)
@@ -46,6 +63,12 @@ public struct PubCard: View {
         .saturation(PubCardLines.isShut(pub) ? 0 : 1)
         .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
+    }
+
+    private var summaryLine: Text {
+        let line = Text(PubCardLines.summary(pub))
+        guard let guinness = pub.guinness else { return line }
+        return line + Text(PubCardLines.separator) + GuinnessText.text(guinness.formatted)
     }
 
     @ViewBuilder
