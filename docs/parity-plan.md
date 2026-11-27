@@ -301,7 +301,7 @@ log line says a step was started but not committed, check `git status` first.
   panel's status editor uses a copy of the web's seven states (`StatusStates` in
   `PubDetailFeature/Writes/Fix/Editors`). Once it lands: model `meta.statuses`, draw the
   chips from it, keep the copy only as the fallback for an older server, and add
-  fixtures. Step 15 below.
+  fixtures. Step 16 below.
 
 **Working order** (pub editing first, as asked):
 
@@ -314,20 +314,31 @@ log line says a step was started but not committed, check `git status` first.
    `placeholder`, `maxLength`, `status`, `weekday`, `parts`). Likely two or three steps:
    (a) models and the panel's layout by `section`/`order`; (b) the simple kinds;
    (c) `status`, `weekday` and `parts`.
+**UX test build** (reordered 2026-11-27: the user wants a build out to UX testers once
+the things people do are done; technical steps wait until after it):
+
 5. [ ] **H10** · hours editor. See "Time pickers" below.
 6. [ ] **H9** · night forms (last orders, kicked out, garden). **Not the web's form**,
    which the user finds a poor experience: build them as the hours editor's
    sibling, the same day rows and the same picker, but with a closing time only (no
    open time). The night comes from `session`; post `{ at }`.
 7. [ ] **H11** · history editing.
-8. [ ] **H2** · the list from the server.
-9. [ ] **H3** · labels from the server, one area per step.
-10. [ ] **H4** · price graph.
-11. [ ] **H5** · filters from meta.
-12. [ ] **H6** · conditional GETs.
-13. [ ] **H12** · limits from meta, and the 🎲 handle.
-14. [ ] **H13** · sources (low priority).
-15. [ ] **S21** · status states from `/meta`, once deployed (see above).
+8. [ ] **H12a** · the 🎲 random handle (S14) in the handle editor. The limits half of
+   H12 waits (step 14).
+9. [ ] **UX build** · stop here and tell the user it's ready to send. Archiving and
+   uploading need their signing, so that part is theirs.
+
+**After the UX build** (technical; the user sees little or no change):
+
+10. [ ] **H2** · the list from the server.
+11. [ ] **H3** · labels from the server, one area per step.
+12. [ ] **H4** · price graph.
+13. [ ] **H5** · filters from meta.
+14. [ ] **H12b** · limits from meta (report note, avatar size, handle rules, page
+    sizes; `Retry-After` on the photo 429).
+15. [ ] **H6** · conditional GETs.
+16. [ ] **S21** · status states from `/meta`, once deployed (see above).
+17. [ ] **H13** · sources (low priority).
 
 **Time pickers (H9, H10):** closing times are picked in **5-minute steps**. Every
 time picker in the hours editor and the night forms uses the same shared control, so
@@ -409,6 +420,17 @@ the step lives in one place.
   closed, add "2019" and "flats", and see the panel's status update; StructuredValueTests
   pass. **Next: H10**, the hours editor (read "Time pickers" above and the web's
   `panel/HoursEditor.tsx` first).
+- 2026-11-27 · build · Agents now build and test (CLAUDE.md). Xcode's at
+  `/Applications/Xcode.app` but `xcode-select` points at the command-line tools, so
+  commands run with `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer` (the
+  system setting is left alone). Commands: from the repo, `xcodebuild -workspace
+  Battlecruiser.xcworkspace -scheme Battlecruiser -destination 'platform=iOS
+  Simulator,name=iPhone 18 Pro' build`; from `BattlecruiserKit/`, `xcodebuild -scheme
+  BattlecruiserKit-Package -destination <same> test` (the per-module schemes have no
+  test action). H8a–H8d checked: **the app builds and all 253 package tests pass**,
+  including FixLayoutTests and StructuredValueTests. Still unchecked by hand: Fix mode
+  on a signed-in pub against production. Order reordered for the UX test build (above).
+  **Next: H10.**
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 
