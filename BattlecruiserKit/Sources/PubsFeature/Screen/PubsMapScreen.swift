@@ -40,6 +40,7 @@ public struct PubsMapScreen<Panel: View>: View {
     /// The height of the search bar and filter pills: the sheet stops below
     /// them at full, so the grabber is never tucked under the filters.
     @State var controlsHeight: CGFloat = 0
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
 
     public init(
         pubs: PubsModel,
@@ -95,7 +96,13 @@ public struct PubsMapScreen<Panel: View>: View {
                         guard text != query.search else { return }
                         query.search = text
                         // Clearing the box leaves whatever is open alone.
-                        if !text.trimmingCharacters(in: .whitespaces).isEmpty { onSearch() }
+                        guard !text.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+                        onSearch()
+                        // The results are what was asked for: open the sheet
+                        // all the way, as the keyboard hides the lower half.
+                        if detent != .full {
+                            withAnimation(reduceMotion ? nil : .easeOut(duration: 0.3)) { detent = .full }
+                        }
                     }
                         .padding(.horizontal, Metrics.m)
                     FilterRow(query: $query, openPanel: $openPanel, meta: meta)

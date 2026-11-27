@@ -298,7 +298,7 @@ log line says a step was started but not committed, check `git status` first.
 
 **Working order** (pub editing first, as asked):
 
-1. [ ] **X1 · Sheet bug.** Searching with the sheet at peek raises the sheet to full,
+1. [x] **X1 · Sheet bug.** Searching with the sheet at peek raises the sheet to full,
    but its content stays hidden as if still at peek. The results must show at the new
    detent. (`DesignSystem/Sheet`, `PubsFeature/Search`.)
 2. [ ] **H0** · fixtures and decoding tests for the new fields (all optional).
@@ -329,6 +329,11 @@ the step lives in one place.
 
 - 2026-11-27 · plan · This section added; Leaderboard row layout fixed beforehand
   (`Social/LeaderboardRow.swift`).
+- 2026-11-27 · X1 · Cause: the keyboard's height went into the sheet's bottom inset, so
+  at peek the sheet grew to the keyboard while its content stayed hidden (detent still
+  `.peek`). `BottomSheet` now ignores the keyboard and scrolling dismisses it; typing a
+  search raises the sheet to `.full`. Not built. Check: search from peek, half and an
+  open pub; results show above the keyboard; scrolling hides the keyboard.
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 
