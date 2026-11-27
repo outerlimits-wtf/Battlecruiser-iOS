@@ -62,3 +62,21 @@ struct WeekHoursTests {
         #expect(TimeStepPicker.step == 5)
     }
 }
+
+/// Night fields go as "Thu 23:15" or `{ "at": … }` (S3); no 06:00 maths here.
+@MainActor
+struct NightReportTests {
+    @Test func aPickedNightIsTheWeekdayThenTheTime() {
+        #expect(NightReport.value(night: "Thu", time: "00:30") == "Thu 00:30")
+    }
+
+    @Test func justNowSendsTheInstant() {
+        let value = NightReport.justNow(Date(timeIntervalSince1970: 1_788_000_000))
+        #expect(value == #"{"at":"2026-08-29T10:40:00Z"}"#)
+    }
+
+    @Test func gardenTimesAreHoursAndMinutes() {
+        #expect(SingleTimeEditor.isTime("21:30"))
+        #expect(!SingleTimeEditor.isTime("With the pub"))
+    }
+}

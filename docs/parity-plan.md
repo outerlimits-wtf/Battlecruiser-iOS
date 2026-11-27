@@ -318,7 +318,7 @@ log line says a step was started but not committed, check `git status` first.
 the things people do are done; technical steps wait until after it):
 
 5. [x] **H10** · hours editor. See "Time pickers" below.
-6. [ ] **H9** · night forms (last orders, kicked out, garden). **Not the web's form**,
+6. [x] **H9** · night forms (last orders, kicked out, garden). **Not the web's form**,
    which the user finds a poor experience: build them as the hours editor's
    sibling, the same day rows and the same picker, but with a closing time only (no
    open time). The night comes from `session`; post `{ at }`.
@@ -447,6 +447,17 @@ the step lives in one place.
   signed-in account. Check: edit a pub's hours, a split shift, a late close, Same every
   day, and that the panel's week updates after Save. **Next: H9**, night forms, as the
   hours editor's sibling with `TimeStepPicker`.
+- 2026-11-27 · H9 · Night forms. `night` rows (last orders, kicked out) open
+  `NightFormSheet`: "It just happened" for tonight (`session`), sending `{ "at": <now> }`,
+  then a row per night starting from tonight, each a closing time on `TimeStepPicker`
+  and Report, sending `"Thu 23:15"` (meta's short weekday for the night the session
+  started; the spec's string form for a picked night). No 06:00 maths on the device.
+  `garden_closes` (single time) gets `SingleTimeEditor` on the same picker; a non-time
+  value such as "With the pub" is shown above it. The web's form was not copied.
+  **Built; all package tests pass** (new NightReportTests). Not checked by hand (needs
+  sign-in). Check: report last orders "just now" and for another night, kicked out
+  past midnight, and a garden time. **Next: H11**, history editing (`timeline[]`'s
+  `contributionId`/`canRemove`/`hideValue`; read the web's `panel/History.tsx` first).
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 

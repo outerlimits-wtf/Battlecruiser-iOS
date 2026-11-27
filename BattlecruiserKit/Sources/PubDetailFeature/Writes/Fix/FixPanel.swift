@@ -6,8 +6,8 @@ import PubDBModels
 /// order, each with what the pub has now. Shown in place of the tabs while
 /// fixing.
 ///
-/// Each row gets an editor by `kind`. `night` (H9) only shows the current
-/// value for now.
+/// Each row gets an editor by `kind`. `previous_name` is edited on the
+/// timeline (H11), so it only shows here if a server puts it outside History.
 struct FixPanel: View {
     let layout: FixLayout
     let detail: PubDetail
@@ -78,9 +78,11 @@ struct FixRow: View {
         case .hours where field.key == Self.weekHoursKey:
             WeekHoursEditor(field: field, current: current, weekTable: detail.weekTable, send: send)
         case .hours:
-            // A single time (`garden_closes`), which the server validates.
-            TextValueEditor(field: field, current: current, send: send)
-        case .night, .previousName:
+            // A single time (`garden_closes`).
+            SingleTimeEditor(field: field, current: current, send: send)
+        case .night:
+            NightEditor(field: field, weekdays: meta?.weekdays ?? [], session: detail.session, send: send)
+        case .previousName:
             CurrentValue(label: field.label, current: current)
         }
     }
