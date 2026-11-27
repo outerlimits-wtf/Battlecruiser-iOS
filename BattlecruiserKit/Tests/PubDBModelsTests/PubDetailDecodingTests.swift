@@ -59,7 +59,7 @@ struct PubDetailDecodingTests {
     }
 
     @Test func sparsePubDecodesWithHoursUnknown() throws {
-        let detail = try Fixture.decode(PubDetail.self, from: "pub-detail-sparse-the-furzedown")
+        let detail = try Fixture.decode(PubDetail.self, from: "pub-detail-sparse-british-legion")
 
         #expect(detail.summary.open.state == .unknown)
         #expect(detail.summary.photo == nil)

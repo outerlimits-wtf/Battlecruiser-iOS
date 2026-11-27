@@ -4,26 +4,36 @@ Guidance for Claude Code when working in this repository.
 
 ## Command rules (read first)
 
-- Never run `xcodebuild`, `swift`, `xcrun`, or any `git` command unless the user specifically instructs you to in that request.
-- Editing and reading files is fine. Do not build, test, or inspect git state on your own initiative.
-- If a build or test would help verify a change, say so and ask the user to run it or to give the go-ahead.
+- Build and test freely to check your own work: `xcodebuild`, `swift build`/`swift test`, `xcrun simctl` and the Simulator tools are all fine (changed 2026-11-27, Workflow rule 6). Git is limited to committing steps (see Workflow).
+- Don't change Xcode settings, signing or the active developer directory (`xcode-select -s`) without asking.
 
-## Workflow: pause after every piece of work (read first)
+## Workflow: one step, one commit, a handoff log (read first)
 
-The user reviews, builds, tests and commits every change themselves. Claude's job ends at edited files.
+Changed on 2026-11-27 at the user's request. The user drives sessions from a phone and
+clears them often to save usage, so any agent must be able to pick up where the last
+one died.
 
-1. Do **one** piece of work at a time: one plan step, or one milestone sub-step, never several in a row.
-2. When it is done, **stop**. Summarise what changed (the files, and why), say what has not been verified, and give a **suggested commit message** that explains the work.
-3. **Wait for the user's explicit approval** before starting the next piece. "Carry on", "continue" or "that's the process" approve the *next single piece*, not a run of several.
-4. **No git commands of any kind**: no commits, no branches, no `git status`, `git log`, `git diff`, `git mv`. Not even to undo a mistake, unless the user asks for that exact action in that message. If git matters, ask the user or give them the commands to run. Use plain file operations (Write, Edit, `mv`) for moving files.
-5. Wording like "incremental commits are the process" describes **the user's** commits. It is never permission for Claude to commit.
-6. **No Xcode or Swift commands of any kind**, unless the user asks for that exact command in that message. This includes `xcodebuild`, `xcrun` (including `xcrun simctl`), `swift`, `swiftc`, `swift build`/`swift test`/`swift package`, `swift-format`, `xcode-select`, `xed` and `agvtool`. It also includes any tool that builds, runs, tests or launches the app or the Simulator on Claude's behalf, such as the iOS Simulator build and launch tools. Building, running and testing are the user's job. When verification would help, say what should be checked, and the user will do it in Xcode. **Allowed:** `plutil -lint` and `xmllint --noout` to check the syntax of files Claude has edited by hand, such as `project.pbxproj`, schemes and plists.
+1. Work from the checklist in `docs/parity-plan.md`, "Phase H: order, roadmap and
+   progress (handoff log)". Do the next unticked step.
+2. Each step is **one commit** on the current feature branch (today
+   `feature/web-parity`): the code, the ticked box and a dated line in that log, all in
+   the same commit. The message explains the work. No `Co-Authored-By` trailer.
+3. Claude may run the git commands this needs: `git status`, `git diff`, `git log`,
+   `git add`, `git commit`. **Not** without asking: push, branch, merge, rebase, reset,
+   checkout of other branches, amend of a commit already made in an earlier session,
+   or anything that discards work.
+4. Carry on to the next step after committing, unless the step needs a decision only
+   the user can make. Then
+   stop and say so in the log and the reply.
+5. Keep steps small enough that a session dying mid-step loses little. Never leave
+   uncommitted work across steps.
+6. **Build and test each step before committing it** (changed 2026-11-27: the user drives from a phone, so a ban on building was a blocker). Use `xcodebuild` on the workspace (scheme `Battlecruiser`, an iPhone Simulator destination) and the package's tests; the Simulator tools are fine too. Fix what breaks within the step. Each log line says what was built and tested, and what still needs a person (signed-in flows against production, how it looks and feels). Not without asking: changing build settings, signing, the deployment target, or `xcode-select`.
 
-Why this exists: on 2026-10-16 Claude took "incremental commits with explanations of work done is the process" as permission. It created a branch, made three commits and pushed on through several steps without pausing for review, against both this file and what the user asked.
+History: on 2026-10-16 Claude took "incremental commits with explanations of work done is the process" as permission. It created a branch, made three commits and pushed on through several steps without pausing for review, against both this file and what the user asked. That is why commits stayed the user's until 2026-11-27, and why push and branch changes still need asking.
 
 ## Project overview
 
-Battlecruiser is a native iOS app written in Swift and SwiftUI. It is at an early stage: the app currently shows a placeholder `ContentView` ("Hello, world!").
+Battlecruiser is a native iOS app written in Swift and SwiftUI: the PubDB web client's features on the iPhone (docs/parity-plan.md). A map of pubs with a bottom sheet (list or pub panel), and tabs for Social, Lists and Me.
 
 - Bundle target: `Battlecruiser` (application), scheme `Battlecruiser`
 - Project: `Battlecruiser.xcodeproj`, opened through `Battlecruiser.xcworkspace`
@@ -36,31 +46,35 @@ Battlecruiser is a native iOS app written in Swift and SwiftUI. It is at an earl
 
 ```
 Battlecruiser.xcworkspace/   # Open this, not the .xcodeproj: it holds the app project and the local packages
-Battlecruiser.xcodeproj/     # The app target only: entry point, composition, assets, Info.plist settings. Links BattlecruiserKit's products (PubDBClient, PubsFeature)
+Battlecruiser.xcodeproj/     # The app target only: entry point, composition, assets, Info.plist settings. Links BattlecruiserKit's Root product
 Sources/
   App/
     BattlecruiserApp.swift   # @main App entry point, creates WindowGroup
-    ContentView.swift        # Composition root: PubsMapScreen(source: PubDBClient.live()), plus #Preview and #Playground
+    ContentView.swift        # Composition root: RootView(dependencies: .live(...)), plus #Preview and #Playground
+    AppConfig.swift          # Per-build settings that aren't secret (the WorkOS client id)
   Assets.xcassets/           # Asset catalog (AccentColor)
   PrivacyInfo.xcprivacy      # Privacy manifest for the whole binary (see Working conventions)
 Tests/                       # BattlecruiserTests: app-level tests only (Swift Testing)
-BattlecruiserKit/            # The one local package (decision D24), at the top level; modules added as they are built
+BattlecruiserKit/            # The one local package (decision D24); module graph in docs/parity-plan.md
   Package.swift
-  Sources/PubDBModels/       # API response types
-  Sources/PubDBClient/       # Talks to the v1 API: requests, response checks, PubDBError; saves/reads responses via ResponseCache; live() for the app
+  Sources/PubDBModels/       # API types by area: Pub/, Pins/, Meta/, Account/, Community/, Writes/, Shared/, Errors/
+  Sources/PubDBClient/       # Endpoint (Request/), one factory file per area (Endpoints/), PubQuery, ETags (Conditional/), TokenProvider (Auth/), PubDBClient+<Area>.swift
   Sources/ResponseCache/     # Raw responses on disk (Caches/), fetch time = file date, bounded (actor)
+  Sources/Auth/              # WorkOS AuthKit with PKCE, tokens in the Keychain, refresh (AuthSession)
   Sources/UserLocation/      # Location permission + current coordinate (main actor)
-  Sources/DesignSystem/      # Shared SwiftUI pieces: ShipPin, OpenPill, FreshnessLabel, PinEmphasis + its tint (main actor)
-  Sources/PubsFeature/       # PubsMapScreen (Map/List switch) + PubMap (MapKit, tappable pins), PubListView + PubRow, PubsModel, PubOrdering, Freshness (stale/refresh rules), PubsNotice (outside London / offline / failed / empty) (main actor)
-  Sources/PubDetailFeature/  # PubDetailModel (selected pub: instant summary, cached + fresh detail) + PubDetailSheet and its Sections/ (main actor)
-  Tests/PubDBModelsTests/    # Decoding tests + Fixtures/ (real production responses; docs/test-fixtures.md)
-  Tests/PubDBClientTests/    # Request-building and error tests against a fake transport
-  Tests/ResponseCacheTests/  # Store/load/evict tests in a temporary folder
-  Tests/UserLocationTests/   # Permission-flow tests against a fake location manager
-  Tests/DesignSystemTests/   # Pin emphasis rules
-  Tests/PubsFeatureTests/    # Ordering + PubsModel timing/error tests against a fake PubSource
-  Tests/PubDetailFeatureTests/ # PubDetailModel tests against a fake PubDetailSource
-docs/                        # Backend guide, decisions, MVP plan
+  Sources/AppEnvironment/    # App-wide state: MetaStore (/meta), SessionModel (/me), MarksModel, Loadable, RemoteValue, LRUCache
+  Sources/DesignSystem/      # The web's theme (Theme/), components (Components/), PubCard, BottomSheet (Sheet/), bundled artwork
+  Sources/PubsMap/           # MKMapView: dots overlay (Dots/), full pins (FullPins/), PinsModel (/pins with ETags)
+  Sources/PubsFeature/       # The Map tab: search, filters (Filters/), results list (List/), sheet, PubsModel
+  Sources/PubDetailFeature/  # The pub panel: Panel/, Overview/, Reviews/, About/, Writes/ (reviews, photos, reports, facts)
+  Sources/Account/           # Sign-in card, signed-in card, handle, avatar, delete account
+  Sources/Me/                # The Me tab: account, Appearance, About
+  Sources/Social/            # The Social tab: latest updates, leaderboard, boards
+  Sources/Profile/           # Someone's page, follow
+  Sources/Lists/             # The Lists tab: hit list and Been here
+  Sources/Root/              # RootView: owns shared state, tab bar, wires features together (the only module importing features)
+  Tests/<Module>Tests/       # One test target per module; PubDBModelsTests/Fixtures holds real production responses (docs/test-fixtures.md)
+docs/                        # Backend guide, decisions, MVP plan, parity plan, server asks
 ```
 
 ## Modularisation (decision D24)
@@ -72,7 +86,7 @@ The app is modular from the outset. **Code lives in local Swift packages inside 
 - A module's API for other modules is `public`. Everything else stays `internal`.
 - Each module gets its own test target in its package.
 - **Local packages are our own code, so they are not "adding dependencies".** Creating or changing modules inside `BattlecruiserKit/` is normal work, done one piece at a time under the Workflow rules. Adding a **third-party** package still needs the user's explicit approval (decision D8: first-party only).
-- The module layout is in `docs/mvp-plan.md` ("Modules").
+- The module layout is in `docs/parity-plan.md` ("Target architecture").
 
 ## Environment
 
@@ -84,19 +98,19 @@ The app is modular from the outset. **Code lives in local Swift packages inside 
 
 - Use SwiftUI for UI. Keep views small and composable; split a view into its own file once it stops being trivial.
 - Accessibility is part of done: custom controls get a VoiceOver label (and a hint if tapping does something), layouts stack at accessibility text sizes (`dynamicTypeSize.isAccessibilitySize`), animations respect Reduce Motion, and colour never carries meaning alone. Where server text reads badly aloud, rephrase it for VoiceOver only (see `Spoken` in PubDetailFeature); the screen still shows the server's label.
-- Keep `Sources/PrivacyInfo.xcprivacy` in step with the code, in the same change: it declares every required-reason API used anywhere in the binary (today only file timestamps, in ResponseCache) and every kind of data sent off the device (today only location, to the PubDB API). Adding `UserDefaults`, sign-in, analytics or anything similar means updating it.
+- Keep `Sources/PrivacyInfo.xcprivacy` in step with the code, in the same change: it declares every required-reason API used anywhere in the binary (today file timestamps, in ResponseCache, and UserDefaults, for settings) and every kind of data sent off the device (today location, and with sign-in a user ID, email address and photos). Adding `UserDefaults`, sign-in, analytics or anything similar means updating it.
 - Follow standard Swift API design guidelines: `UpperCamelCase` for types, `lowerCamelCase` for everything else, and clear argument labels.
 - Prefer Swift's modern concurrency (`async`/`await`, `@MainActor` for UI state) over callbacks.
-- Write code that should compile, but do not run a build to check it unless instructed (see Command rules).
+- Build to check that code compiles (Workflow rule 6).
 - Keep changes minimal and focused on the request. Do not add third-party dependencies, packages or libraries without asking first. Local packages of our own code are expected (see Modularisation).
-- Do not commit or push unless asked.
+- Commit each step (Workflow). Do not push unless asked.
 
 ## Testing
 
 - Use Swift Testing (`import Testing`). Add tests for new logic where practical.
 - Module tests live in each local package's own test target. The app's `BattlecruiserTests` target (in `Tests/`, wired into the `Battlecruiser` scheme) is for app-level tests only.
 - Fixtures are real production responses (see `docs/test-fixtures.md`). Test shapes and chosen cases, not exact numbers that drift.
-- Do not run tests. When a change needs verifying, say it has not been built or tested and what to check. The user runs it in Xcode (Workflow rule 6).
+- Run the tests for the modules a step touches before committing it (Workflow rule 6). Say in the log what passed and what still needs checking by hand.
 
 ## Things to avoid
 

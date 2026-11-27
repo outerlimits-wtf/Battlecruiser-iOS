@@ -12,14 +12,14 @@ import PubDBModels
 @Observable
 public final class PubsModel {
     /// In display order: open, unknown, closed, each nearest first.
-    public private(set) var pubs: [PubSummary] = []
-    public private(set) var isLoading = false
+    public internal(set) var pubs: [PubSummary] = []
+    public internal(set) var isLoading = false
     /// The last fetch's failure, cleared by the next success. `pubs` is kept.
-    public private(set) var lastError: PubDBError? = nil
+    public internal(set) var lastError: PubDBError? = nil
     /// When `pubs` was fetched. Open states are true only for that moment.
-    public private(set) var fetchedAt: Date? = nil
+    public internal(set) var fetchedAt: Date? = nil
     /// True while `pubs` came from the disk cache rather than this session's fetch.
-    public private(set) var isShowingCached = false
+    public internal(set) var isShowingCached = false
 
     /// How many of `pubs` can serve you right now.
     public var openCount: Int {
@@ -29,7 +29,6 @@ public final class PubsModel {
     /// What, if anything, the screen should tell the user about these pubs.
     public var notice: PubsNotice? {
         PubsNotice.current(
-            area: requestedArea,
             pubCount: pubs.count,
             hasFreshResult: fetchedAt != nil && !isShowingCached,
             isLoading: isLoading,
@@ -37,15 +36,17 @@ public final class PubsModel {
         )
     }
 
-    @ObservationIgnored private let source: any PubSource
-    @ObservationIgnored private let debounce: Duration
-    @ObservationIgnored private let sleep: @Sendable (Duration) async throws -> Void
-    @ObservationIgnored private let now: () -> Date
+    @ObservationIgnored let source: any PubSource
+    @ObservationIgnored let debounce: Duration
+    @ObservationIgnored let sleep: @Sendable (Duration) async throws -> Void
+    @ObservationIgnored let now: () -> Date
     /// The area most recently asked for: being fetched, or fetched.
-    public private(set) var requestedArea: BoundingBox? = nil
-    @ObservationIgnored private var userLocation: Coordinate?
+    public internal(set) var requestedArea: BoundingBox? = nil
+    /// The search and filters the list is for.
+    public internal(set) var query = PubQuery()
+    @ObservationIgnored var userLocation: Coordinate?
     /// The pending or running load. Internal so tests can await it.
-    @ObservationIgnored private(set) var loadTask: Task<Void, Never>?
+    @ObservationIgnored var loadTask: Task<Void, Never>?
 
     public convenience init(source: any PubSource, debounce: Duration = .milliseconds(300)) {
         self.init(
@@ -80,17 +81,29 @@ public final class PubsModel {
         guard fetchedAt == nil else {
             return
         }
-        pubs = PubOrdering.forDisplay(cached.value.pubs)
+        pubs = PubOrdering.forDisplay(cached.value.pubs, keepingServerOrder: query.latestClose)
         fetchedAt = cached.fetchedAt
         isShowingCached = true
     }
 
-    /// The map settled on a new area.
+    /// The map settled on a new area. A search or "everywhere" ignores it.
     public func areaChanged(to area: BoundingBox) {
+        guard query.usesArea else {
+            requestedArea = area
+            return
+        }
         guard shouldFetch(area) else {
             return
         }
         load(area, debounced: true)
+    }
+
+    /// The search or filters changed: fetch again with them.
+    public func queryChanged(_ query: PubQuery) {
+        guard query != self.query else { return }
+        self.query = query
+        lastError = nil
+        load(requestedArea, debounced: true)
     }
 
     /// Fetch `area` only if nothing has been asked for yet: a fallback for when
@@ -104,10 +117,10 @@ public final class PubsModel {
 
     /// Fetch the current area again now, e.g. on returning to the foreground.
     public func refresh() {
-        guard let area = requestedArea else {
+        guard requestedArea != nil || !query.usesArea else {
             return
         }
-        load(area, debounced: false)
+        load(requestedArea, debounced: false)
     }
 
     /// The user's position changed. The first fix refetches, so distances appear.
@@ -116,54 +129,6 @@ public final class PubsModel {
         userLocation = location
         if isFirstFix {
             refresh()
-        }
-    }
-
-    // MARK: - Loading
-
-    /// Whether `area` needs a fetch. An area inside the one already asked for
-    /// is covered, unless it is less than half as wide: the server returns the
-    /// pubs nearest the centre, so zooming well in can reveal pubs the wider
-    /// fetch left out. After a failure, any change retries.
-    func shouldFetch(_ area: BoundingBox) -> Bool {
-        guard let requested = requestedArea, lastError == nil else {
-            return true
-        }
-        let zoomedWellIn = (area.east - area.west) < (requested.east - requested.west) / 2
-        return !requested.contains(area) || zoomedWellIn
-    }
-
-    private func load(_ area: BoundingBox, debounced: Bool) {
-        loadTask?.cancel()
-        requestedArea = area
-        let location = userLocation
-        loadTask = Task { [debounce, sleep] in
-            do {
-                if debounced {
-                    try await sleep(debounce)
-                }
-                isLoading = true
-                let list = try await source.fetchPubs(in: area, near: location)
-                // A newer request may have started while this one was in flight.
-                try Task.checkCancellation()
-                pubs = PubOrdering.forDisplay(list.pubs)
-                fetchedAt = now()
-                isShowingCached = false
-                lastError = nil
-                isLoading = false
-            } catch is CancellationError {
-                // Superseded: the newer load owns `isLoading`. If nothing
-                // superseded it, stop showing a spinner.
-                if !Task.isCancelled {
-                    isLoading = false
-                }
-            } catch let error as PubDBError {
-                lastError = error
-                isLoading = false
-            } catch {
-                lastError = .transport(URLError(.unknown))
-                isLoading = false
-            }
         }
     }
 }

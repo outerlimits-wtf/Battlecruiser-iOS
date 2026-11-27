@@ -1,0 +1,523 @@
+{
+  "id": "fhrs/925741",
+  "name": "British Legion",
+  "area": "Clapham",
+  "amenity": {
+    "key": "pub",
+    "kind": "social_club",
+    "label": "Social club",
+    "symbol": {
+      "key": "amenity.social_club",
+      "type": "emoji",
+      "emoji": "👥",
+      "url": null
+    }
+  },
+  "lat": 51.465389,
+  "lon": -0.148374,
+  "address": "154 Victoria Rise, London",
+  "postcode": "SW4 0NW",
+  "addressLine": "154 Victoria Rise, London, SW4 0NW",
+  "brand": null,
+  "distance": {
+    "metres": 2495,
+    "label": "2.5 km"
+  },
+  "status": {
+    "key": "open",
+    "label": "Open",
+    "symbol": {
+      "key": "status.open",
+      "type": "emoji",
+      "emoji": "🍺",
+      "url": null
+    },
+    "serving": true,
+    "permanent": false,
+    "since": null,
+    "became": null
+  },
+  "open": {
+    "state": "unknown",
+    "label": "Hours unknown",
+    "closesAt": null,
+    "closesAtLabel": null,
+    "minutesUntilClose": null,
+    "countdownLabel": null,
+    "closingSoon": false
+  },
+  "tonight": null,
+  "guinness": null,
+  "rating": null,
+  "ratingLabel": null,
+  "reviewCount": 0,
+  "quote": null,
+  "photo": null,
+  "features": [
+    {
+      "key": "garden",
+      "label": "Garden",
+      "symbol": {
+        "key": "feature.garden",
+        "type": "emoji",
+        "emoji": "🌳",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "real_ale",
+      "label": "Real ale",
+      "symbol": {
+        "key": "feature.real_ale",
+        "type": "emoji",
+        "emoji": "🛢️",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "craft_beer",
+      "label": "Craft beer",
+      "symbol": {
+        "key": "feature.craft_beer",
+        "type": "emoji",
+        "emoji": "🍺",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "food",
+      "label": "Kitchen",
+      "symbol": {
+        "key": "feature.food",
+        "type": "emoji",
+        "emoji": "🍴",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "live_music",
+      "label": "Live music",
+      "symbol": {
+        "key": "feature.live_music",
+        "type": "emoji",
+        "emoji": "🎸",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "sports_tv",
+      "label": "Live sports",
+      "symbol": {
+        "key": "feature.sports_tv",
+        "type": "emoji",
+        "emoji": "📺",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "pool_table",
+      "label": "Pool table",
+      "symbol": {
+        "key": "feature.pool_table",
+        "type": "emoji",
+        "emoji": "🎱",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "darts",
+      "label": "Dart board",
+      "symbol": {
+        "key": "feature.darts",
+        "type": "emoji",
+        "emoji": "🎯",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "pinball",
+      "label": "Pinball",
+      "symbol": {
+        "key": "feature.pinball",
+        "type": "emoji",
+        "emoji": "🕹️",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "open_fire",
+      "label": "Open fire",
+      "symbol": {
+        "key": "feature.open_fire",
+        "type": "emoji",
+        "emoji": "🔥",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "vinyl",
+      "label": "Vinyl",
+      "symbol": {
+        "key": "feature.vinyl",
+        "type": "emoji",
+        "emoji": "💿",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "irish_pub",
+      "label": "Irish pub",
+      "symbol": {
+        "key": "feature.irish_pub",
+        "type": "emoji",
+        "emoji": "☘️",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "quiz_night",
+      "label": "Quiz night",
+      "symbol": {
+        "key": "feature.quiz_night",
+        "type": "emoji",
+        "emoji": "🧠",
+        "url": null
+      },
+      "value": "unknown"
+    },
+    {
+      "key": "karaoke",
+      "label": "Karaoke",
+      "symbol": {
+        "key": "feature.karaoke",
+        "type": "emoji",
+        "emoji": "🎤",
+        "url": null
+      },
+      "value": "unknown"
+    }
+  ],
+  "listed": false,
+  "description": null,
+  "city": null,
+  "checkedAt": "2026-08-26",
+  "checkedAtLabel": "26 Aug 2026",
+  "lastScrapedAt": "2026-08-26T10:55:09.647Z",
+  "lastScrapedAtLabel": "26 Aug 2026",
+  "contributorCount": 1,
+  "contributorLabel": "Crowd-sourced by 1 person",
+  "contact": {
+    "phone": null,
+    "website": null,
+    "email": null,
+    "facebook": null,
+    "instagram": null
+  },
+  "operator": null,
+  "brewery": null,
+  "hours": {
+    "raw": null,
+    "source": null,
+    "attribution": null,
+    "sourceLabel": null
+  },
+  "weekTable": [
+    {
+      "day": 0,
+      "dayLabel": "Mon",
+      "dayLongLabel": "Monday",
+      "isTonight": false,
+      "doorSays": null,
+      "state": null,
+      "sessions": [],
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 1,
+      "dayLabel": "Tue",
+      "dayLongLabel": "Tuesday",
+      "isTonight": false,
+      "doorSays": null,
+      "state": null,
+      "sessions": [],
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 2,
+      "dayLabel": "Wed",
+      "dayLongLabel": "Wednesday",
+      "isTonight": false,
+      "doorSays": null,
+      "state": null,
+      "sessions": [],
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 3,
+      "dayLabel": "Thu",
+      "dayLongLabel": "Thursday",
+      "isTonight": true,
+      "doorSays": null,
+      "state": null,
+      "sessions": [],
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 4,
+      "dayLabel": "Fri",
+      "dayLongLabel": "Friday",
+      "isTonight": false,
+      "doorSays": null,
+      "state": null,
+      "sessions": [],
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 5,
+      "dayLabel": "Sat",
+      "dayLongLabel": "Saturday",
+      "isTonight": false,
+      "doorSays": null,
+      "state": null,
+      "sessions": [],
+      "bell": null,
+      "out": null
+    },
+    {
+      "day": 6,
+      "dayLabel": "Sun",
+      "dayLongLabel": "Sunday",
+      "isTonight": false,
+      "doorSays": null,
+      "state": null,
+      "sessions": [],
+      "bell": null,
+      "out": null
+    }
+  ],
+  "gardenCloses": null,
+  "quizNightDay": null,
+  "karaokeNightDay": null,
+  "photos": [],
+  "priceHistory": {
+    "points": [],
+    "minPence": null,
+    "maxPence": null,
+    "band": null,
+    "window": {
+      "from": "2024-10-15T23:00:00.000Z",
+      "to": "2026-10-15T23:00:00.000Z",
+      "years": [
+        {
+          "at": "2025-01-01T00:00:00.000Z",
+          "label": "2025"
+        },
+        {
+          "at": "2026-01-01T00:00:00.000Z",
+          "label": "2026"
+        }
+      ]
+    },
+    "summaryLabel": null,
+    "change": null
+  },
+  "timeline": [
+    {
+      "name": "British Legion",
+      "fromLabel": null,
+      "untilLabel": null,
+      "spanLabel": null,
+      "owner": null,
+      "isCurrent": true,
+      "attribution": {
+        "kind": "source",
+        "label": "OpenStreetMap",
+        "sourceKey": "osm"
+      },
+      "contributionId": null,
+      "canRemove": false,
+      "hideValue": null
+    }
+  ],
+  "heritage": null,
+  "reviews": [],
+  "contributions": [
+    {
+      "id": 4129,
+      "field": "amenity",
+      "fieldLabel": "Kind",
+      "value": "social_club",
+      "displayValue": "Pub",
+      "createdAt": "2026-11-25T12:05:26.119Z",
+      "createdAtLabel": "25 Nov 2026",
+      "attribution": {
+        "kind": "user",
+        "label": "@goatloaf",
+        "sourceKey": null
+      },
+      "canRemove": false
+    }
+  ],
+  "sources": [
+    {
+      "key": "fhrs",
+      "label": "Food Standards Agency",
+      "url": null,
+      "license": "OGL v3.0"
+    }
+  ],
+  "osmTags": {},
+  "osmFacts": [],
+  "editable": {
+    "garden": {
+      "value": "unknown",
+      "display": "Not sure"
+    },
+    "real_ale": {
+      "value": "unknown",
+      "display": "Not sure"
+    },
+    "craft_beer": {
+      "value": "unknown",
+      "display": "Not sure"
+    },
+    "food": {
+      "value": "unknown",
+      "display": "Not sure"
+    },
+    "live_music": {
+      "value": "unknown",
+      "display": "Not sure"
+    },
+    "sports_tv": {
+      "value": "unknown",
+      "display": "Not sure"
+    },
+    "pool_table": {
+      "value": "unknown",
+      "display": "Not sure"
+    },
+    "darts": {
+      "value": "unknown",
+      "display": "Not sure"
+    },
+    "pinball": {
+      "value": "unknown",
+      "display": "Not sure"
+    },
+    "open_fire": {
+      "value": "unknown",
+      "display": "Not sure"
+    },
+    "vinyl": {
+      "value": "unknown",
+      "display": "Not sure"
+    },
+    "irish_pub": {
+      "value": "unknown",
+      "display": "Not sure"
+    },
+    "quiz_night": {
+      "value": "unknown",
+      "display": "Not sure"
+    },
+    "karaoke": {
+      "value": "unknown",
+      "display": "Not sure"
+    },
+    "opening_hours": {
+      "value": null,
+      "display": null
+    },
+    "website": {
+      "value": null,
+      "display": null
+    },
+    "phone": {
+      "value": null,
+      "display": null
+    },
+    "description": {
+      "value": null,
+      "display": null
+    },
+    "brewery": {
+      "value": null,
+      "display": null
+    },
+    "guinness_price": {
+      "value": null,
+      "display": null
+    },
+    "garden_closes": {
+      "value": null,
+      "display": null
+    },
+    "quiz_night_day": {
+      "value": null,
+      "display": null
+    },
+    "karaoke_night_day": {
+      "value": null,
+      "display": null
+    },
+    "last_orders": {
+      "value": null,
+      "display": null
+    },
+    "kicked_out": {
+      "value": null,
+      "display": null
+    },
+    "photo_url": {
+      "value": null,
+      "display": null
+    },
+    "previous_name": {
+      "value": null,
+      "display": null
+    },
+    "previous_name_removed": {
+      "value": null,
+      "display": null
+    },
+    "name": {
+      "value": "British Legion",
+      "display": "British Legion"
+    },
+    "amenity": {
+      "value": "social_club",
+      "display": "Social club"
+    },
+    "brand": {
+      "value": null,
+      "display": null
+    },
+    "status": {
+      "value": "open",
+      "display": "Open"
+    }
+  },
+  "session": {
+    "day": 3,
+    "short": "Thu",
+    "long": "Thursday"
+  }
+}

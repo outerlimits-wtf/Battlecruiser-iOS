@@ -1,0 +1,16 @@
+import Foundation
+
+public struct APIErrorDetail: Decodable, Hashable, Sendable {
+    /// What to switch on: "invalid_request", "not_found", "rate_limited", …
+    public let code: String
+    /// Written for people; safe to show. Never match on it, it gets reworded.
+    public let message: String
+    /// The input at fault, when there was one.
+    public let field: String?
+
+    public init(code: String, message: String, field: String? = nil) {
+        self.code = code
+        self.message = message
+        self.field = field
+    }
+}

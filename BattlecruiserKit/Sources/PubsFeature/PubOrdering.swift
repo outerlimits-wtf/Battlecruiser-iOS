@@ -6,9 +6,13 @@ import PubDBModels
 /// open-first as the v1 spec says (docs/backend/03-api-reference.md), so the
 /// app sorts: open, then hours unknown, then closed, each nearest-first. Only
 /// values the server sent are used (decision D12).
+///
+/// A sort the user asked for (Latest close) is the server's job, so its order
+/// is kept as sent.
 public nonisolated enum PubOrdering {
-    public static func forDisplay(_ pubs: [PubSummary]) -> [PubSummary] {
-        pubs.enumerated()
+    public static func forDisplay(_ pubs: [PubSummary], keepingServerOrder: Bool = false) -> [PubSummary] {
+        guard !keepingServerOrder else { return pubs }
+        return pubs.enumerated()
             .sorted { first, second in
                 let firstRank = rank(first.element)
                 let secondRank = rank(second.element)
