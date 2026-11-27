@@ -542,6 +542,9 @@ the step lives in one place.
   eye: raise the sheet to full and compare the two gaps; check the grabber is still
   easy to catch without hitting a filter pill. UX feedback done but U1 (waits on S23).
   **Next: H11.**
+- 2026-11-27 · branch · With the user's go-ahead, the commits above moved off `develop`
+  onto `feature/ux-feedback-1127`, which is pushed; `develop` is back at origin. Keep
+  committing there. **Next: H11.**
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 

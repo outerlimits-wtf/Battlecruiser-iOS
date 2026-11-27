@@ -16,7 +16,7 @@ one died.
 1. Work from the checklist in `docs/parity-plan.md`, "Phase H: order, roadmap and
    progress (handoff log)". Do the next unticked step.
 2. Each step is **one commit** on the current feature branch (today
-   `feature/web-parity`): the code, the ticked box and a dated line in that log, all in
+   `feature/ux-feedback-1127`): the code, the ticked box and a dated line in that log, all in
    the same commit. The message explains the work. No `Co-Authored-By` trailer.
 3. Claude may run the git commands this needs: `git status`, `git diff`, `git log`,
    `git add`, `git commit`. **Not** without asking: push, branch, merge, rebase, reset,
