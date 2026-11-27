@@ -1,0 +1,986 @@
+{
+  "amenities": [
+    {
+      "key": "pub",
+      "kind": "pub",
+      "label": "Pub",
+      "symbol": {
+        "key": "amenity.pub",
+        "type": "emoji",
+        "emoji": "🍺",
+        "url": null
+      }
+    },
+    {
+      "key": "bar",
+      "kind": "bar",
+      "label": "Bar",
+      "symbol": {
+        "key": "amenity.bar",
+        "type": "emoji",
+        "emoji": "🍸",
+        "url": null
+      }
+    }
+  ],
+  "venueKinds": [
+    {
+      "key": "pub",
+      "group": "pub",
+      "label": "Pub",
+      "symbol": {
+        "key": "amenity.pub",
+        "type": "emoji",
+        "emoji": "🍺",
+        "url": null
+      },
+      "note": null
+    },
+    {
+      "key": "gastropub",
+      "group": "pub",
+      "label": "Gastropub",
+      "symbol": {
+        "key": "amenity.gastropub",
+        "type": "emoji",
+        "emoji": "🍽️",
+        "url": null
+      },
+      "note": "We mean pub-themed restaurants, not just a pub with a kitchen."
+    },
+    {
+      "key": "taproom",
+      "group": "pub",
+      "label": "Taproom",
+      "symbol": {
+        "key": "amenity.taproom",
+        "type": "emoji",
+        "emoji": "🍻",
+        "url": null
+      },
+      "note": "A brewery's own bar, usually at the brewery. Often shorter hours than a pub."
+    },
+    {
+      "key": "bar",
+      "group": "bar",
+      "label": "Bar",
+      "symbol": {
+        "key": "amenity.bar",
+        "type": "emoji",
+        "emoji": "🍸",
+        "url": null
+      },
+      "note": null
+    },
+    {
+      "key": "wine_bar",
+      "group": "bar",
+      "label": "Wine bar",
+      "symbol": {
+        "key": "amenity.wine_bar",
+        "type": "emoji",
+        "emoji": "🍷",
+        "url": null
+      },
+      "note": null
+    },
+    {
+      "key": "club",
+      "group": "bar",
+      "label": "Club",
+      "symbol": {
+        "key": "amenity.club",
+        "type": "emoji",
+        "emoji": "🪩",
+        "url": null
+      },
+      "note": null
+    },
+    {
+      "key": "live_music_venue",
+      "group": "pub",
+      "label": "Live music venue",
+      "symbol": {
+        "key": "amenity.live_music_venue",
+        "type": "emoji",
+        "emoji": "🎸",
+        "url": null
+      },
+      "note": null
+    },
+    {
+      "key": "comedy_club",
+      "group": "pub",
+      "label": "Comedy club",
+      "symbol": {
+        "key": "amenity.comedy_club",
+        "type": "emoji",
+        "emoji": "🎤",
+        "url": null
+      },
+      "note": null
+    },
+    {
+      "key": "social_club",
+      "group": "pub",
+      "label": "Social club",
+      "symbol": {
+        "key": "amenity.social_club",
+        "type": "emoji",
+        "emoji": "👥",
+        "url": null
+      },
+      "note": "A members' club — working men's, British Legion, bowls, dominoes. You may need to join or be signed in."
+    },
+    {
+      "key": "snooker_hall",
+      "group": "bar",
+      "label": "Snooker & pool",
+      "symbol": {
+        "key": "amenity.snooker_hall",
+        "type": "emoji",
+        "emoji": "🎱",
+        "url": null
+      },
+      "note": null
+    },
+    {
+      "key": "oddity",
+      "group": "bar",
+      "label": "Oddity",
+      "symbol": {
+        "key": "amenity.oddity",
+        "type": "emoji",
+        "emoji": "🦄",
+        "url": null
+      },
+      "note": "Somewhere you would never expect a pint — a gym, a student bar, a theatre — that will still pour one for anyone who walks in."
+    }
+  ],
+  "features": [
+    {
+      "key": "garden",
+      "label": "Garden",
+      "symbol": {
+        "key": "feature.garden",
+        "type": "emoji",
+        "emoji": "🌳",
+        "url": null
+      }
+    },
+    {
+      "key": "real_ale",
+      "label": "Real ale",
+      "symbol": {
+        "key": "feature.real_ale",
+        "type": "emoji",
+        "emoji": "🛢️",
+        "url": null
+      }
+    },
+    {
+      "key": "craft_beer",
+      "label": "Craft beer",
+      "symbol": {
+        "key": "feature.craft_beer",
+        "type": "emoji",
+        "emoji": "🍺",
+        "url": null
+      }
+    },
+    {
+      "key": "food",
+      "label": "Kitchen",
+      "symbol": {
+        "key": "feature.food",
+        "type": "emoji",
+        "emoji": "🍴",
+        "url": null
+      }
+    },
+    {
+      "key": "live_music",
+      "label": "Live music",
+      "symbol": {
+        "key": "feature.live_music",
+        "type": "emoji",
+        "emoji": "🎸",
+        "url": null
+      }
+    },
+    {
+      "key": "sports_tv",
+      "label": "Live sports",
+      "symbol": {
+        "key": "feature.sports_tv",
+        "type": "emoji",
+        "emoji": "📺",
+        "url": null
+      }
+    },
+    {
+      "key": "pool_table",
+      "label": "Pool table",
+      "symbol": {
+        "key": "feature.pool_table",
+        "type": "emoji",
+        "emoji": "🎱",
+        "url": null
+      }
+    },
+    {
+      "key": "darts",
+      "label": "Dart board",
+      "symbol": {
+        "key": "feature.darts",
+        "type": "emoji",
+        "emoji": "🎯",
+        "url": null
+      }
+    },
+    {
+      "key": "pinball",
+      "label": "Pinball",
+      "symbol": {
+        "key": "feature.pinball",
+        "type": "emoji",
+        "emoji": "🕹️",
+        "url": null
+      }
+    },
+    {
+      "key": "open_fire",
+      "label": "Open fire",
+      "symbol": {
+        "key": "feature.open_fire",
+        "type": "emoji",
+        "emoji": "🔥",
+        "url": null
+      }
+    },
+    {
+      "key": "vinyl",
+      "label": "Vinyl",
+      "symbol": {
+        "key": "feature.vinyl",
+        "type": "emoji",
+        "emoji": "💿",
+        "url": null
+      }
+    },
+    {
+      "key": "irish_pub",
+      "label": "Irish pub",
+      "symbol": {
+        "key": "feature.irish_pub",
+        "type": "emoji",
+        "emoji": "☘️",
+        "url": null
+      }
+    },
+    {
+      "key": "quiz_night",
+      "label": "Quiz night",
+      "symbol": {
+        "key": "feature.quiz_night",
+        "type": "emoji",
+        "emoji": "🧠",
+        "url": null
+      }
+    },
+    {
+      "key": "karaoke",
+      "label": "Karaoke",
+      "symbol": {
+        "key": "feature.karaoke",
+        "type": "emoji",
+        "emoji": "🎤",
+        "url": null
+      }
+    }
+  ],
+  "weekdays": [
+    {
+      "day": 0,
+      "short": "Mon",
+      "long": "Monday"
+    },
+    {
+      "day": 1,
+      "short": "Tue",
+      "long": "Tuesday"
+    },
+    {
+      "day": 2,
+      "short": "Wed",
+      "long": "Wednesday"
+    },
+    {
+      "day": 3,
+      "short": "Thu",
+      "long": "Thursday"
+    },
+    {
+      "day": 4,
+      "short": "Fri",
+      "long": "Friday"
+    },
+    {
+      "day": 5,
+      "short": "Sat",
+      "long": "Saturday"
+    },
+    {
+      "day": 6,
+      "short": "Sun",
+      "long": "Sunday"
+    }
+  ],
+  "contributableFields": [
+    {
+      "key": "garden",
+      "label": "Garden",
+      "kind": "tri",
+      "corroborating": false,
+      "section": "features",
+      "order": 9,
+      "placeholder": null,
+      "maxLength": null
+    },
+    {
+      "key": "real_ale",
+      "label": "Real ale",
+      "kind": "tri",
+      "corroborating": false,
+      "section": "features",
+      "order": 10,
+      "placeholder": null,
+      "maxLength": null
+    },
+    {
+      "key": "craft_beer",
+      "label": "Craft beer",
+      "kind": "tri",
+      "corroborating": false,
+      "section": "features",
+      "order": 11,
+      "placeholder": null,
+      "maxLength": null
+    },
+    {
+      "key": "food",
+      "label": "Kitchen",
+      "kind": "tri",
+      "corroborating": false,
+      "section": "features",
+      "order": 12,
+      "placeholder": null,
+      "maxLength": null
+    },
+    {
+      "key": "live_music",
+      "label": "Live music",
+      "kind": "tri",
+      "corroborating": false,
+      "section": "features",
+      "order": 13,
+      "placeholder": null,
+      "maxLength": null
+    },
+    {
+      "key": "sports_tv",
+      "label": "Live sports",
+      "kind": "tri",
+      "corroborating": false,
+      "section": "features",
+      "order": 14,
+      "placeholder": null,
+      "maxLength": null
+    },
+    {
+      "key": "pool_table",
+      "label": "Pool table",
+      "kind": "tri",
+      "corroborating": false,
+      "section": "features",
+      "order": 15,
+      "placeholder": null,
+      "maxLength": null
+    },
+    {
+      "key": "darts",
+      "label": "Dart board",
+      "kind": "tri",
+      "corroborating": false,
+      "section": "features",
+      "order": 16,
+      "placeholder": null,
+      "maxLength": null
+    },
+    {
+      "key": "pinball",
+      "label": "Pinball",
+      "kind": "tri",
+      "corroborating": false,
+      "section": "features",
+      "order": 17,
+      "placeholder": null,
+      "maxLength": null
+    },
+    {
+      "key": "open_fire",
+      "label": "Open fire",
+      "kind": "tri",
+      "corroborating": false,
+      "section": "features",
+      "order": 18,
+      "placeholder": null,
+      "maxLength": null
+    },
+    {
+      "key": "vinyl",
+      "label": "Vinyl",
+      "kind": "tri",
+      "corroborating": false,
+      "section": "features",
+      "order": 19,
+      "placeholder": null,
+      "maxLength": null
+    },
+    {
+      "key": "irish_pub",
+      "label": "Irish pub",
+      "kind": "tri",
+      "corroborating": false,
+      "section": "features",
+      "order": 20,
+      "placeholder": null,
+      "maxLength": null
+    },
+    {
+      "key": "quiz_night",
+      "label": "Quiz night",
+      "kind": "tri",
+      "corroborating": false,
+      "section": "features",
+      "order": 21,
+      "placeholder": null,
+      "maxLength": null
+    },
+    {
+      "key": "karaoke",
+      "label": "Karaoke",
+      "kind": "tri",
+      "corroborating": false,
+      "section": "features",
+      "order": 22,
+      "placeholder": null,
+      "maxLength": null
+    },
+    {
+      "key": "opening_hours",
+      "label": "Opening hours",
+      "kind": "hours",
+      "corroborating": false,
+      "section": "details",
+      "placeholder": "Mo-Sa 12:00-23:00; Su 12:00-22:30",
+      "maxLength": 2000,
+      "order": 3
+    },
+    {
+      "key": "website",
+      "label": "Website",
+      "kind": "url",
+      "corroborating": false,
+      "section": "details",
+      "placeholder": "https://…",
+      "maxLength": 2000,
+      "order": 4
+    },
+    {
+      "key": "phone",
+      "label": "Phone",
+      "kind": "phone",
+      "corroborating": false,
+      "section": "details",
+      "placeholder": "+44 1273 000000",
+      "maxLength": 2000,
+      "order": 5
+    },
+    {
+      "key": "description",
+      "label": "Description",
+      "kind": "text",
+      "corroborating": false,
+      "section": "details",
+      "placeholder": "What is it like inside?",
+      "maxLength": 2000,
+      "order": 6
+    },
+    {
+      "key": "brewery",
+      "label": "Brewery",
+      "kind": "text",
+      "corroborating": false,
+      "section": "details",
+      "placeholder": "Harvey's",
+      "maxLength": 2000,
+      "order": 7
+    },
+    {
+      "key": "guinness_price",
+      "label": "Guinness price",
+      "kind": "price",
+      "corroborating": true,
+      "section": "tonight",
+      "placeholder": "5.60",
+      "maxLength": null,
+      "order": 26,
+      "min": 200,
+      "max": 1500
+    },
+    {
+      "key": "garden_closes",
+      "label": "Garden closes",
+      "kind": "hours",
+      "corroborating": false,
+      "section": "features",
+      "placeholder": "21:30",
+      "maxLength": 5,
+      "order": 25
+    },
+    {
+      "key": "quiz_night_day",
+      "label": "Quiz night",
+      "kind": "weekday",
+      "corroborating": false,
+      "section": "features",
+      "placeholder": null,
+      "maxLength": null,
+      "order": 23
+    },
+    {
+      "key": "karaoke_night_day",
+      "label": "Karaoke night",
+      "kind": "weekday",
+      "corroborating": false,
+      "section": "features",
+      "placeholder": null,
+      "maxLength": null,
+      "order": 24
+    },
+    {
+      "key": "last_orders",
+      "label": "Last orders",
+      "kind": "night",
+      "corroborating": true,
+      "section": "tonight",
+      "placeholder": "23:15",
+      "maxLength": null,
+      "order": 27
+    },
+    {
+      "key": "kicked_out",
+      "label": "Kicked out",
+      "kind": "night",
+      "corroborating": true,
+      "section": "tonight",
+      "placeholder": "23:40",
+      "maxLength": null,
+      "order": 28
+    },
+    {
+      "key": "photo_url",
+      "label": "Photo",
+      "kind": "url",
+      "corroborating": false,
+      "section": "details",
+      "placeholder": "https://…",
+      "maxLength": 500,
+      "order": 8
+    },
+    {
+      "key": "previous_name",
+      "label": "Previous name",
+      "kind": "previous_name",
+      "corroborating": false,
+      "section": "history",
+      "placeholder": "The Old Larrik",
+      "maxLength": 80,
+      "order": 29,
+      "parts": [
+        {
+          "key": "name",
+          "label": "Former name",
+          "kind": "text",
+          "optional": false
+        },
+        {
+          "key": "year",
+          "label": "Year it stopped being called that",
+          "kind": "year",
+          "optional": true
+        },
+        {
+          "key": "owner",
+          "label": "Owner",
+          "kind": "text",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "key": "previous_name_removed",
+      "label": "Removed a former name",
+      "kind": "previous_name",
+      "corroborating": false,
+      "section": "history",
+      "placeholder": null,
+      "maxLength": 80,
+      "order": 30
+    },
+    {
+      "key": "name",
+      "label": "Name",
+      "kind": "text",
+      "corroborating": false,
+      "section": "details",
+      "placeholder": "Pub name",
+      "maxLength": 120,
+      "order": 1
+    },
+    {
+      "key": "amenity",
+      "label": "Kind",
+      "kind": "amenity",
+      "corroborating": false,
+      "section": "listing",
+      "placeholder": null,
+      "maxLength": null,
+      "order": 31
+    },
+    {
+      "key": "brand",
+      "label": "Owner",
+      "kind": "text",
+      "corroborating": false,
+      "section": "details",
+      "placeholder": "Young's",
+      "maxLength": 2000,
+      "order": 2
+    },
+    {
+      "key": "status",
+      "label": "Still there?",
+      "kind": "status",
+      "corroborating": false,
+      "section": "listing",
+      "placeholder": null,
+      "maxLength": null,
+      "order": 32,
+      "parts": [
+        {
+          "key": "state",
+          "label": "What happened",
+          "kind": "status",
+          "optional": false
+        },
+        {
+          "key": "year",
+          "label": "Year",
+          "kind": "year",
+          "optional": true
+        },
+        {
+          "key": "became",
+          "label": "What it is now",
+          "kind": "text",
+          "optional": true
+        }
+      ]
+    }
+  ],
+  "boards": [
+    {
+      "key": "top_rated",
+      "title": "Best rated",
+      "blurb": "The ones people actually rate",
+      "emoji": "⭐",
+      "note": "Out of 10, and ranked on the average pulled toward the middle until enough people have said so, which is why a lone 10/10 sits below a pub a dozen drinkers agreed on. Closed pubs are left off."
+    },
+    {
+      "key": "cheapest",
+      "title": "Cheapest pint",
+      "blurb": "Where the Guinness still costs the least",
+      "emoji": "🪙",
+      "note": "Only prices somebody has reported in the last 12 months count, and the date shown is that price's own. The cheapest pint anyone ever wrote down is by definition the oldest one, so a pub whose last word on the subject was in 2022 is left off rather than ranked at the top. Closed pubs too."
+    },
+    {
+      "key": "worst_rated",
+      "title": "Worst rated",
+      "blurb": "The hall of shame",
+      "emoji": "💩",
+      "note": "Only pubs the reviews actually put below average. This is not the good board upside down, or every pub nobody has got round to praising would be on it. Ranked the same way too: the average pulled toward the middle until enough people have said so, so one furious review is one person's night out and a pub earns the top of this by being disliked repeatedly. Check the review count beside each before you believe it. Closed pubs are left off."
+    },
+    {
+      "key": "most_expensive",
+      "title": "Priciest pint",
+      "blurb": "Daylight robbery, ranked",
+      "emoji": "💸",
+      "note": "Same 12 months rule as the cheapest board, and for the same reason: the price shown is dated by its own report. If anything this one understates things (an old price is a price before the last increase), so a pub here is charging at least this much. Closed pubs are left off."
+    }
+  ],
+  "photoKinds": [
+    {
+      "key": "pint",
+      "label": "Pint"
+    },
+    {
+      "key": "front",
+      "label": "Front"
+    },
+    {
+      "key": "garden",
+      "label": "Garden"
+    },
+    {
+      "key": "inside",
+      "label": "Inside"
+    },
+    {
+      "key": "bar",
+      "label": "Bar"
+    },
+    {
+      "key": "menu",
+      "label": "Menu"
+    },
+    {
+      "key": "toilets",
+      "label": "Toilets"
+    },
+    {
+      "key": "vibe",
+      "label": "Vibe"
+    },
+    {
+      "key": "other",
+      "label": "Other"
+    }
+  ],
+  "reportReasons": [
+    {
+      "key": "offensive",
+      "label": "Offensive or abusive",
+      "types": [
+        "photo",
+        "review",
+        "contribution"
+      ]
+    },
+    {
+      "key": "spam",
+      "label": "Spam or advertising",
+      "types": [
+        "photo",
+        "review",
+        "contribution"
+      ]
+    },
+    {
+      "key": "wrong",
+      "label": "Wrong or made up",
+      "types": [
+        "photo",
+        "review",
+        "contribution"
+      ]
+    },
+    {
+      "key": "me_in_photo",
+      "label": "I'm in this photo",
+      "types": [
+        "photo"
+      ]
+    },
+    {
+      "key": "other",
+      "label": "Something else",
+      "types": [
+        "photo",
+        "review",
+        "contribution"
+      ]
+    }
+  ],
+  "clients": {
+    "ios": {
+      "minVersion": null
+    }
+  },
+  "levels": [
+    {
+      "key": "walk_in",
+      "name": "Walk-in",
+      "line": "Never seen you before mate",
+      "emoji": "🚪",
+      "minXp": 0
+    },
+    {
+      "key": "half_pinter",
+      "name": "Half Pint Hero",
+      "line": "Just in for a swift one",
+      "emoji": "🍺",
+      "minXp": 50
+    },
+    {
+      "key": "pub_crawler",
+      "name": "Pub Crawler",
+      "line": "Just passing through mate",
+      "emoji": "🗺️",
+      "minXp": 100
+    },
+    {
+      "key": "punter",
+      "name": "Punter",
+      "line": "Knows where the toilets are",
+      "emoji": "🍻",
+      "minXp": 500
+    },
+    {
+      "key": "regular",
+      "name": "Regular",
+      "line": "Staff know your order",
+      "emoji": "🥂",
+      "minXp": 1000
+    },
+    {
+      "key": "lock_in",
+      "name": "Lock-in",
+      "line": "Still here when the shutters come down",
+      "emoji": "🔒",
+      "minXp": 1500
+    }
+  ],
+  "xpRules": [
+    {
+      "key": "review_words",
+      "label": "A review with words",
+      "xp": 25
+    },
+    {
+      "key": "review_score",
+      "label": "A score on its own",
+      "xp": 10
+    },
+    {
+      "key": "photo",
+      "label": "A photo, once approved",
+      "xp": 30
+    },
+    {
+      "key": "opening_hours",
+      "label": "Opening hours",
+      "xp": 20
+    },
+    {
+      "key": "closing_times",
+      "label": "Last orders or kicked out",
+      "xp": 15
+    },
+    {
+      "key": "guinness_price",
+      "label": "A Guinness price",
+      "xp": 15
+    },
+    {
+      "key": "fact",
+      "label": "Any other fact",
+      "xp": 10
+    },
+    {
+      "key": "like_received",
+      "label": "A like on your review",
+      "xp": 5
+    }
+  ],
+  "filters": {
+    "ratingSteps": [
+      {
+        "value": 6,
+        "label": "6+"
+      },
+      {
+        "value": 7,
+        "label": "7+"
+      },
+      {
+        "value": 8,
+        "label": "8+"
+      },
+      {
+        "value": 9,
+        "label": "9+"
+      }
+    ],
+    "guinnessSteps": [
+      {
+        "pence": 500,
+        "label": "£5.00"
+      },
+      {
+        "pence": 550,
+        "label": "£5.50"
+      },
+      {
+        "pence": 600,
+        "label": "£6.00"
+      },
+      {
+        "pence": 650,
+        "label": "£6.50"
+      },
+      {
+        "pence": 700,
+        "label": "£7.00"
+      }
+    ]
+  },
+  "limits": {
+    "maxLimit": 2000,
+    "defaultLimit": 500,
+    "maxReviewBody": 2000,
+    "maxAuthor": 60,
+    "minRating": 1,
+    "maxRating": 10,
+    "maxUploadBytes": 15728640,
+    "minPhotoSide": 400,
+    "clientMaxSide": 2000,
+    "maxCaption": 140,
+    "dailyPhotoLimit": 10,
+    "photoLicense": "CC BY-SA 4.0",
+    "maxReportNote": 500,
+    "maxAvatarBytes": 5242880,
+    "username": {
+      "min": 2,
+      "max": 22,
+      "pattern": "^[a-z0-9][a-z0-9_]*$"
+    },
+    "feed": {
+      "defaultLimit": 50,
+      "maxLimit": 200
+    },
+    "boards": {
+      "defaultLimit": 25,
+      "maxLimit": 100
+    },
+    "notifications": {
+      "defaultLimit": 50,
+      "maxLimit": 200
+    },
+    "guinnessFilter": {
+      "minPence": 1,
+      "maxPence": 5000
+    }
+  }
+}

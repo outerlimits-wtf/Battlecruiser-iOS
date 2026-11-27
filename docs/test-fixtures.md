@@ -37,6 +37,21 @@ one consistent evening:
 | `pins-pub-thu-2130.json` | `GET /pins?amenity=pub&at=2026-11-26T21:30:00+00:00` (captured 2026-11-26) | 200 | `application/geo+json` with a weak `ETag`. **Trimmed**: the full response is about 3,400 features (890 KB); this keeps the first 15 of each state (open, closing, unknown, closed), sorted by rank as the server sends them. Includes Brighton pubs, so coverage is wider than London. |
 | `meta.json` | `GET /meta` (captured 2026-11-26, no `at`) | 200 | Every list the UI is driven by: amenities, venue kinds, features, weekdays, contributable fields and their kinds, boards, photo kinds, report reasons, `clients.ios.minVersion`, limits |
 
+### After the server asks (2026-11-27)
+
+Captured with the same requests on **2026-11-27**, after S1–S16 were deployed, and saved
+beside the originals with a `-1127` suffix so the old shapes keep decoding too:
+`pub-detail-earl-ferrers-1127`, `pub-detail-the-bedford-1127`,
+`pub-detail-sparse-british-legion-1127`, `pubs-list-thu-2230-1127`, `meta-1127`,
+`leaderboard-1127`, `profile-1127` (`GET /users/goatloaf`), `feed-1127` (`GET /feed`) and
+`username-random-1127` (`GET /usernames/random`). They carry the new fields: `editable`,
+`session`, `osmFacts`, the S7 labels, `counts`/`headerLabel`, `filters`, `levels`,
+`summaryLines` and so on. `ServerAsksFixtureTests` decodes them; each Phase H step adds
+checks for the fields it models.
+
+Not captured: `/me` and `/me/blocks` need a signed-in session (curl without one gets
+`{"user":null,"authRequired":true}`).
+
 ## Things to know
 
 - **Earl Ferrers' night reports look like test data.** Last orders "10:30" and kicked out

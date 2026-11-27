@@ -301,7 +301,7 @@ log line says a step was started but not committed, check `git status` first.
 1. [x] **X1 · Sheet bug.** Searching with the sheet at peek raises the sheet to full,
    but its content stays hidden as if still at peek. The results must show at the new
    detent. (`DesignSystem/Sheet`, `PubsFeature/Search`.)
-2. [ ] **H0** · fixtures and decoding tests for the new fields (all optional).
+2. [x] **H0** · fixtures and decoding tests for the new fields (all optional).
 3. [ ] **H7** · writes use what comes back. The plumbing every editor below sits on.
 4. [ ] **H8** · Fix-panel editors from `editable` and meta (`section`, `order`,
    `placeholder`, `maxLength`, `status`, `weekday`, `parts`). Likely two or three steps:
@@ -334,6 +334,10 @@ the step lives in one place.
   `.peek`). `BottomSheet` now ignores the keyboard and scrolling dismisses it; typing a
   search raises the sheet to `.full`. Not built. Check: search from peek, half and an
   open pub; results show above the keyboard; scrolling hides the keyboard.
+- 2026-11-27 · H0 · Fresh `-1127` fixtures beside the old ones (docs/test-fixtures.md) and
+  `ServerAsksFixtureTests`, which decodes them with today's models. New fields are
+  modelled by the step that uses them, not here. `/me` and `/me/blocks` not captured
+  (need sign-in). Not run. Check: PubDBModelsTests pass.
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 
