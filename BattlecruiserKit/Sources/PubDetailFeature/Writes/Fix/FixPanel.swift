@@ -6,12 +6,14 @@ import PubDBModels
 /// order, each with what the pub has now. Shown in place of the tabs while
 /// fixing.
 ///
-/// Each row gets an editor by `kind`. `status` (H8d), `hours` (H10) and
-/// `night` (H9) only show the current value for now.
+/// Each row gets an editor by `kind`. `hours` (H10) and `night` (H9) only
+/// show the current value for now.
 struct FixPanel: View {
     let layout: FixLayout
     let venueKinds: [VenueKind]
     let weekdays: [Weekday]
+    /// The pub's state now, for the status editor.
+    let status: PubStatus?
     let writer: FactWriter
 
     var body: some View {
@@ -25,7 +27,7 @@ struct FixPanel: View {
                 VStack(alignment: .leading, spacing: Metrics.m) {
                     SectionHeader(group.title)
                     ForEach(group.items) { item in
-                        FixRow(item: item, venueKinds: venueKinds, weekdays: weekdays) { writer.send(item.field.key, $0) }
+                        FixRow(item: item, venueKinds: venueKinds, weekdays: weekdays, status: status) { writer.send(item.field.key, $0) }
                     }
                 }
             }
@@ -38,6 +40,7 @@ struct FixRow: View {
     let item: FixLayout.Item
     let venueKinds: [VenueKind]
     let weekdays: [Weekday]
+    let status: PubStatus?
     let send: (String) -> Void
 
     var body: some View {
@@ -66,7 +69,9 @@ struct FixRow: View {
             AmenityEditor(field: field, current: current, kinds: venueKinds, send: send)
         case .weekday:
             WeekdayEditor(field: field, current: current, weekdays: weekdays, send: send)
-        case .status, .hours, .night, .previousName:
+        case .status:
+            StatusEditor(field: field, status: status, send: send)
+        case .hours, .night, .previousName:
             CurrentValue(label: field.label, current: current)
         }
     }

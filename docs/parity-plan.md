@@ -309,7 +309,7 @@ log line says a step was started but not committed, check `git status` first.
    detent. (`DesignSystem/Sheet`, `PubsFeature/Search`.)
 2. [x] **H0** · fixtures and decoding tests for the new fields (all optional).
 3. [x] **H7** · writes use what comes back. The plumbing every editor below sits on.
-4. [ ] **H8** · Fix-panel editors from `editable` and meta (`section`, `order`,
+4. [x] **H8** · Fix-panel editors from `editable` and meta (`section`, `order`,
    `placeholder`, `maxLength`, `status`, `weekday`, `parts`). Likely two or three steps:
    (a) models and the panel's layout by `section`/`order`; (b) the simple kinds;
    (c) `status`, `weekday` and `parts`.
@@ -398,6 +398,16 @@ the step lives in one place.
 - 2026-11-27 · S21 · User chose both: ask the server for `meta.statuses` (S21 in
   server-asks.md, roadmapped above as step 15) and copy the web's seven states for now.
   Docs only. **Next: finish H8d** with the copied list.
+- 2026-11-27 · H8d · `StatusEditor`: "Still there?" and "Listing problem" chips from
+  `StatusStates` (the web's seven, copied until S21), the pub's `status.key` picked;
+  a tap sends the state. Once it isn't serving (and isn't a listing error), meta's
+  other `parts` (year, what it became) are asked for and sent as one JSON object
+  (`StructuredValue`, year as a number, empty optional parts null). No parts from the
+  server, no form. H8 done: every kind but `hours`, `night` (H10, H9) and
+  `previous_name` (history, H11) has an editor. Not built or run. Check: mark a pub
+  closed, add "2019" and "flats", and see the panel's status update; StructuredValueTests
+  pass. **Next: H10**, the hours editor (read "Time pickers" above and the web's
+  `panel/HoursEditor.tsx` first).
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 
