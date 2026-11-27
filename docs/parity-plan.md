@@ -378,6 +378,16 @@ the step lives in one place.
   the new value after saving; FixLayoutTests pass. **Next: H8d**, `status` (state chips
   plus `parts`: year and what it became, sent as a JSON object) and `weekday` (meta's
   `weekdays` as chips).
+- 2026-11-27 · H8d (part) · `WeekdayEditor`: meta's `weekdays` as chips, sending the
+  short form ("Tue"). Not built or run. Check: set a quiz night day and karaoke night
+  day in Fix mode. **Stopped for a decision on `status`:** meta doesn't publish the list
+  of states (`open`, `temporarily_closed`, `closed`, `demolished`, `converted`,
+  `duplicate`, `broken`); the spec only names them in prose, and says more will be
+  added. Either (1) a new server ask, S21, for `meta.statuses` (`key`, `label`,
+  `symbol`, `serving`, `permanent`, plus whether it's a listing error), or (2) copy the
+  web's seven states and labels into the app for now. The rest of the status editor
+  (the `year` and `became` parts, sent as a JSON object, and only once the pub isn't
+  serving) doesn't depend on which.
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 
