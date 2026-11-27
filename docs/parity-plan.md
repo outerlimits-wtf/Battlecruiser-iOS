@@ -20,7 +20,8 @@ has more than two of them.
 **Server asks (2026-11-27):** S1–S10 and S12–S16 are **deployed** to production,
 along with six reworked levels. See "Where they stand" in
 [server-asks.md](server-asks.md). The work they unblock is in
-[Phase H](#phase-h-picking-up-the-server-asks). Still open: S11, S17, S18.
+[Phase H](#phase-h-picking-up-the-server-asks). Still open: S11, S17, S18, and S21
+(asked 2026-11-27).
 
 This plan follows on from [mvp-plan.md](mvp-plan.md), which is built. It covers bringing
 the iPhone app level with the PubDB web client (`../pubdb/src`) in features and look, on
@@ -295,6 +296,11 @@ log line says a step was started but not committed, check `git status` first.
   [App Store blockers](#app-store-blockers). The app isn't going to the App Store yet,
   so it waits until those are tackled together.
 - **H13 (sources) is low priority.** After everything below.
+- **S21 (status states in `/meta`)** asked 2026-11-27. Until it's deployed, the Fix
+  panel's status editor uses a copy of the web's seven states (`StatusStates` in
+  `PubDetailFeature/Writes/Fix/Editors`). Once it lands: model `meta.statuses`, draw the
+  chips from it, keep the copy only as the fallback for an older server, and add
+  fixtures. Step 15 below.
 
 **Working order** (pub editing first, as asked):
 
@@ -320,6 +326,7 @@ log line says a step was started but not committed, check `git status` first.
 12. [ ] **H6** · conditional GETs.
 13. [ ] **H12** · limits from meta, and the 🎲 handle.
 14. [ ] **H13** · sources (low priority).
+15. [ ] **S21** · status states from `/meta`, once deployed (see above).
 
 **Time pickers (H9, H10):** closing times are picked in **5-minute steps**. Every
 time picker in the hours editor and the night forms uses the same shared control, so
@@ -388,6 +395,9 @@ the step lives in one place.
   web's seven states and labels into the app for now. The rest of the status editor
   (the `year` and `became` parts, sent as a JSON object, and only once the pub isn't
   serving) doesn't depend on which.
+- 2026-11-27 · S21 · User chose both: ask the server for `meta.statuses` (S21 in
+  server-asks.md, roadmapped above as step 15) and copy the web's seven states for now.
+  Docs only. **Next: finish H8d** with the copied list.
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 
@@ -464,6 +474,7 @@ server-asks.md; S19 and S20 are proposed in Phase L.
 | S18 | `kinds=` (venue kind keys) on `/pubs` and `/pins`, and `q` matching kind labels. | No filtering or searching by type (taproom, oddity…). | B8 |
 | S19 | Write responses carry the writer's XP gained and their `level`. | A level-up moment without device maths. | L4 |
 | S20 | The short `level { key, name, emoji }` on review authors and feed entries. | Badges beside names. | L5 |
+| S21 | `meta.statuses [{ key, label, symbol, serving, permanent, listingError }]`. | The status picker without a copied list. | H8 |
 
 The surveys also found two bugs on the web side to pass on:
 - `OwnerPicker` expects `/brands` to be a bare array, but it is `{ brands: [...] }`, so
