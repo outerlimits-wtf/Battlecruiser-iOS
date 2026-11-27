@@ -19,18 +19,21 @@ extension Endpoint {
         let note: String?
     }
 
-    static func contribute(to pubID: String, field: String, value: String) -> Endpoint {
-        Endpoint(method: .post, path: ["pubs", pubID, "contributions"],
-                 body: .json(ContributionBody(field: field, value: value)), sendsClock: false)
+    /// Sends `at` and the location like `GET /pubs/{id}`, because the `201`
+    /// carries the updated pub as that GET would draw it (S12).
+    static func contribute(to pubID: String, field: String, value: String, near location: Coordinate? = nil) -> Endpoint {
+        Endpoint(method: .post, path: ["pubs", pubID, "contributions"], query: QueryItems.location(location),
+                 body: .json(ContributionBody(field: field, value: value)))
     }
 
     static func removeContribution(_ id: Int, from pubID: String) -> Endpoint {
         Endpoint(method: .delete, path: ["pubs", pubID, "contributions", String(id)], sendsClock: false)
     }
 
-    static func review(_ pubID: String, rating: Int, body: String?) -> Endpoint {
-        Endpoint(method: .post, path: ["pubs", pubID, "reviews"],
-                 body: .json(ReviewBody(rating: rating, body: body)), sendsClock: false)
+    /// `at` and the location, as for a contribution.
+    static func review(_ pubID: String, rating: Int, body: String?, near location: Coordinate? = nil) -> Endpoint {
+        Endpoint(method: .post, path: ["pubs", pubID, "reviews"], query: QueryItems.location(location),
+                 body: .json(ReviewBody(rating: rating, body: body)))
     }
 
     static func removeReview(_ id: Int, from pubID: String) -> Endpoint {

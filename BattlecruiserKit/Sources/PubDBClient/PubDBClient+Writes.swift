@@ -5,8 +5,9 @@ import PubDBModels
 extension PubDBClient {
     /// One fact: `field` is a `/meta` contributable field key, `value` as its
     /// kind takes it. A repeat of a non-corroborating value is `409`.
-    public func contribute(to pubID: String, field: String, value: String) async throws -> WriteResult {
-        try await send(.contribute(to: pubID, field: field, value: value))
+    /// `location` is for the distances in the updated pub that comes back.
+    public func contribute(to pubID: String, field: String, value: String, near location: Coordinate? = nil) async throws -> WriteResult {
+        try await send(.contribute(to: pubID, field: field, value: value, near: location))
     }
 
     public func removeContribution(_ id: Int, from pubID: String) async throws -> WriteResult {
@@ -14,8 +15,8 @@ extension PubDBClient {
     }
 
     /// A score within `/meta`'s rating limits, and optionally some words.
-    public func review(_ pubID: String, rating: Int, body: String?) async throws -> WriteResult {
-        try await send(.review(pubID, rating: rating, body: body))
+    public func review(_ pubID: String, rating: Int, body: String?, near location: Coordinate? = nil) async throws -> WriteResult {
+        try await send(.review(pubID, rating: rating, body: body, near: location))
     }
 
     public func removeReview(_ id: Int, from pubID: String) async throws -> WriteResult {

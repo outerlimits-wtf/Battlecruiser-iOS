@@ -1,5 +1,6 @@
 import SwiftUI
 import AppEnvironment
+import PubDBClient
 import PubDBModels
 
 /// What the panel needs beyond the pub: who is signed in, their lists, the
@@ -9,6 +10,9 @@ public struct PanelContext {
     public let marks: MarksModel
     public let meta: Meta?
     public let writer: any PubWriteSource
+    /// Where the person is, sent with writes so the pub that comes back has
+    /// its distance (S12).
+    public let location: Coordinate?
     /// Show someone's profile (a reviewer's); nil where that can't be done.
     public let onOpenProfile: ((ProfileLink) -> Void)?
 
@@ -17,12 +21,14 @@ public struct PanelContext {
         marks: MarksModel,
         meta: Meta?,
         writer: any PubWriteSource,
+        location: Coordinate? = nil,
         onOpenProfile: ((ProfileLink) -> Void)? = nil
     ) {
         self.session = session
         self.marks = marks
         self.meta = meta
         self.writer = writer
+        self.location = location
         self.onOpenProfile = onOpenProfile
     }
 

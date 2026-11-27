@@ -302,7 +302,7 @@ log line says a step was started but not committed, check `git status` first.
    but its content stays hidden as if still at peek. The results must show at the new
    detent. (`DesignSystem/Sheet`, `PubsFeature/Search`.)
 2. [x] **H0** · fixtures and decoding tests for the new fields (all optional).
-3. [ ] **H7** · writes use what comes back. The plumbing every editor below sits on.
+3. [x] **H7** · writes use what comes back. The plumbing every editor below sits on.
 4. [ ] **H8** · Fix-panel editors from `editable` and meta (`section`, `order`,
    `placeholder`, `maxLength`, `status`, `weekday`, `parts`). Likely two or three steps:
    (a) models and the panel's layout by `section`/`order`; (b) the simple kinds;
@@ -338,6 +338,12 @@ the step lives in one place.
   `ServerAsksFixtureTests`, which decodes them with today's models. New fields are
   modelled by the step that uses them, not here. `/me` and `/me/blocks` not captured
   (need sign-in). Not run. Check: PubDBModelsTests pass.
+- 2026-11-27 · H7 · `WriteResult.pub` (decoded leniently); contribution and review POSTs
+  send `at`/`lat`/`lon` (`PanelContext.location`, from the root); `PubDetailModel.apply`
+  shows the returned pub, falling back to `refresh()` when absent (removals, 202s). The
+  disk copy of the pub isn't updated by a write (next GET does it). `entry` not modelled:
+  the pub already holds it. Not built or run. Check: add a fact and a review signed in;
+  the panel updates with one request; WriteEndpointTests and ServerAsksFixtureTests pass.
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 

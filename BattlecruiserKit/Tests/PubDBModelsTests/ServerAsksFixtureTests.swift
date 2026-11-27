@@ -37,4 +37,18 @@ struct ServerAsksFixtureTests {
         _ = try Fixture.decode(Profile.self, from: "profile-1127")
         _ = try Fixture.decode(Feed.self, from: "feed-1127")
     }
+
+    /// H7 (S12): a write's `201` with the pub under `pub`, built from the detail
+    /// fixture as the server sends it. A `202` has neither key.
+    @Test func aWriteCarriesTheUpdatedPub() throws {
+        let pub = try JSONSerialization.jsonObject(with: Fixture.data("pub-detail-earl-ferrers-1127"))
+        let body: [String: Any] = ["id": 2053, "field": "guinness_price", "value": "620", "pub": pub]
+        let data = try JSONSerialization.data(withJSONObject: body)
+        let result = try JSONDecoder().decode(WriteResult.self, from: data)
+        #expect(result.pub?.id == "way/1223071579")
+        #expect(!result.queued)
+
+        let queued = try JSONDecoder().decode(WriteResult.self, from: Data(#"{"queued":true,"message":"Sent to an admin."}"#.utf8))
+        #expect(queued.pub == nil)
+    }
 }
