@@ -262,8 +262,8 @@ What else earns a tab is still open. Today Lists and Me fill the last two slots.
 ### Phase H: picking up the server asks
 
 Unblocked: the server work was deployed on 2026-11-27. Keep every new field optional
-in the models, so old cached responses still decode. The order puts
-App Store needs first, then deleting device-side workarounds, then the rest.
+in the models, so old cached responses still decode. The table is by number; the
+order they're built in is in [the handoff log](#phase-h-order-roadmap-and-progress-handoff-log) below it.
 
 | # | Work | Needs | Done when |
 |---|---|---|---|
@@ -282,6 +282,54 @@ App Store needs first, then deleting device-side workarounds, then the rest.
 | H12 | Limits from meta (S13): the report note, avatar size, handle rules and page sizes; `Retry-After` on the photo 429. Plus the 🎲 random handle (S14) in the handle editor. | S13, S14 | No hard-coded limits. |
 | H13 | Sources (C5): draw `sources[]` with each `license`. | S15 | Credits as the server sends them. |
 
+#### Phase H: order, roadmap and progress (handoff log)
+
+Decided with the user on 2026-11-27. **Any agent picking this up: read this section
+first, then do the next unticked step** (CLAUDE.md Workflow). Each step is one commit
+holding the code, its ticked box and a dated log line. Nothing is built or tested by
+the agent; the user checks in Xcode, so each log line says what to check. If the last
+log line says a step was started but not committed, check `git status` first.
+
+**Roadmapped, not now:**
+- **H1 (block a user) is an App Store blocker**, parked with the others: see
+  [App Store blockers](#app-store-blockers). The app isn't going to the App Store yet,
+  so it waits until those are tackled together.
+- **H13 (sources) is low priority.** After everything below.
+
+**Working order** (pub editing first, as asked):
+
+1. [ ] **X1 · Sheet bug.** Searching with the sheet at peek raises the sheet to full,
+   but its content stays hidden as if still at peek. The results must show at the new
+   detent. (`DesignSystem/Sheet`, `PubsFeature/Search`.)
+2. [ ] **H0** · fixtures and decoding tests for the new fields (all optional).
+3. [ ] **H7** · writes use what comes back. The plumbing every editor below sits on.
+4. [ ] **H8** · Fix-panel editors from `editable` and meta (`section`, `order`,
+   `placeholder`, `maxLength`, `status`, `weekday`, `parts`). Likely two or three steps:
+   (a) models and the panel's layout by `section`/`order`; (b) the simple kinds;
+   (c) `status`, `weekday` and `parts`.
+5. [ ] **H10** · hours editor. See "Time pickers" below.
+6. [ ] **H9** · night forms (last orders, kicked out, garden). **Not the web's form**,
+   which the user finds a poor experience: build them as the hours editor's
+   sibling, the same day rows and the same picker, but with a closing time only (no
+   open time). The night comes from `session`; post `{ at }`.
+7. [ ] **H11** · history editing.
+8. [ ] **H2** · the list from the server.
+9. [ ] **H3** · labels from the server, one area per step.
+10. [ ] **H4** · price graph.
+11. [ ] **H5** · filters from meta.
+12. [ ] **H6** · conditional GETs.
+13. [ ] **H12** · limits from meta, and the 🎲 handle.
+14. [ ] **H13** · sources (low priority).
+
+**Time pickers (H9, H10):** closing times are picked in **5-minute steps**. Every
+time picker in the hours editor and the night forms uses the same shared control, so
+the step lives in one place.
+
+**Log** (newest last; one line per step: date, step, what changed, what wasn't verified):
+
+- 2026-11-27 · plan · This section added; Leaderboard row layout fixed beforehand
+  (`Social/LeaderboardRow.swift`).
+
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 
 The app already decodes and draws `level`: `LevelBadge` on leaderboard rows,
@@ -298,6 +346,16 @@ yours to decide before L2.
 | L3 | Leaderboard shows `xp` beside `total` (it still ranks on `total`). | S16 | |
 | L4 | A level-up moment: after a write, say what it earned and when someone reaches a new level (respecting Reduce Motion). **Needs a new server ask (S19):** write responses carry the writer's XP gained and their `level`, or the app refetches `/me`. | S19 | No XP maths on the device. |
 | L5 | Badges beside names on reviews, the feed and profiles in lists. **Needs a new server ask (S20):** the short `level` on review authors and feed entries. | S20 | |
+
+### App Store blockers
+
+The app isn't going to the App Store yet (2026-11-27). These must all be done before
+it does, and are parked until then:
+
+- **H1 / G1: block a user** (Guideline 1.2). The server side (S10) is live.
+- **S11: universal links** need a paid Apple developer account (team id, D15).
+- **Push notifications** need the capability added in Xcode, under that account.
+- **Sign-in checked end to end** with a real account against production.
 
 ### Loose ends
 

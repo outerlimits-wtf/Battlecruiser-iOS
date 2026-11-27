@@ -4,22 +4,33 @@ Guidance for Claude Code when working in this repository.
 
 ## Command rules (read first)
 
-- Never run `xcodebuild`, `swift`, `xcrun`, or any `git` command unless the user specifically instructs you to in that request.
-- Editing and reading files is fine. Do not build, test, or inspect git state on your own initiative.
-- If a build or test would help verify a change, say so and ask the user to run it or to give the go-ahead.
+- Never run `xcodebuild`, `swift` or `xcrun` unless the user specifically instructs you to in that request. Git is limited to committing steps (see Workflow).
+- Editing and reading files is fine. Do not build or test on your own initiative.
+- If a build or test would help verify a change, note it in the handoff log for the user.
 
-## Workflow: pause after every piece of work (read first)
+## Workflow: one step, one commit, a handoff log (read first)
 
-The user reviews, builds, tests and commits every change themselves. Claude's job ends at edited files.
+Changed on 2026-11-27 at the user's request. The user drives sessions from a phone and
+clears them often to save usage, so any agent must be able to pick up where the last
+one died.
 
-1. Do **one** piece of work at a time: one plan step, or one milestone sub-step, never several in a row.
-2. When it is done, **stop**. Summarise what changed (the files, and why), say what has not been verified, and give a **suggested commit message** that explains the work.
-3. **Wait for the user's explicit approval** before starting the next piece. "Carry on", "continue" or "that's the process" approve the *next single piece*, not a run of several.
-4. **No git commands of any kind**: no commits, no branches, no `git status`, `git log`, `git diff`, `git mv`. Not even to undo a mistake, unless the user asks for that exact action in that message. If git matters, ask the user or give them the commands to run. Use plain file operations (Write, Edit, `mv`) for moving files.
-5. Wording like "incremental commits are the process" describes **the user's** commits. It is never permission for Claude to commit.
-6. **No Xcode or Swift commands of any kind**, unless the user asks for that exact command in that message. This includes `xcodebuild`, `xcrun` (including `xcrun simctl`), `swift`, `swiftc`, `swift build`/`swift test`/`swift package`, `swift-format`, `xcode-select`, `xed` and `agvtool`. It also includes any tool that builds, runs, tests or launches the app or the Simulator on Claude's behalf, such as the iOS Simulator build and launch tools. Building, running and testing are the user's job. When verification would help, say what should be checked, and the user will do it in Xcode. **Allowed:** `plutil -lint` and `xmllint --noout` to check the syntax of files Claude has edited by hand, such as `project.pbxproj`, schemes and plists.
+1. Work from the checklist in `docs/parity-plan.md`, "Phase H: order, roadmap and
+   progress (handoff log)". Do the next unticked step.
+2. Each step is **one commit** on the current feature branch (today
+   `feature/web-parity`): the code, the ticked box and a dated line in that log, all in
+   the same commit. The message explains the work. No `Co-Authored-By` trailer.
+3. Claude may run the git commands this needs: `git status`, `git diff`, `git log`,
+   `git add`, `git commit`. **Not** without asking: push, branch, merge, rebase, reset,
+   checkout of other branches, amend of a commit already made in an earlier session,
+   or anything that discards work.
+4. Carry on to the next step after committing, unless the step needs a decision only
+   the user can make, or the change can't sensibly be written without a build. Then
+   stop and say so in the log and the reply.
+5. Keep steps small enough that a session dying mid-step loses little. Never leave
+   uncommitted work across steps.
+6. **No Xcode or Swift commands of any kind**, unless the user asks for that exact command in that message. This includes `xcodebuild`, `xcrun` (including `xcrun simctl`), `swift`, `swiftc`, `swift build`/`swift test`/`swift package`, `swift-format`, `xcode-select`, `xed` and `agvtool`. It also includes any tool that builds, runs, tests or launches the app or the Simulator on Claude's behalf, such as the iOS Simulator build and launch tools. Building, running and testing are the user's job. Each log line says what wasn't verified, so the user knows what to check in Xcode. **Allowed:** `plutil -lint` and `xmllint --noout` to check the syntax of files Claude has edited by hand, such as `project.pbxproj`, schemes and plists.
 
-Why this exists: on 2026-10-16 Claude took "incremental commits with explanations of work done is the process" as permission. It created a branch, made three commits and pushed on through several steps without pausing for review, against both this file and what the user asked.
+History: on 2026-10-16 Claude took "incremental commits with explanations of work done is the process" as permission. It created a branch, made three commits and pushed on through several steps without pausing for review, against both this file and what the user asked. That is why commits stayed the user's until 2026-11-27, and why push and branch changes still need asking.
 
 ## Project overview
 
@@ -93,7 +104,7 @@ The app is modular from the outset. **Code lives in local Swift packages inside 
 - Prefer Swift's modern concurrency (`async`/`await`, `@MainActor` for UI state) over callbacks.
 - Write code that should compile, but do not run a build to check it unless instructed (see Command rules).
 - Keep changes minimal and focused on the request. Do not add third-party dependencies, packages or libraries without asking first. Local packages of our own code are expected (see Modularisation).
-- Do not commit or push unless asked.
+- Commit each step (Workflow). Do not push unless asked.
 
 ## Testing
 
