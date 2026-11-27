@@ -4,7 +4,7 @@ Guidance for Claude Code when working in this repository.
 
 ## Command rules (read first)
 
-- Build and test freely to check your own work: `xcodebuild`, `swift build`/`swift test`, `xcrun simctl` and the Simulator tools are all fine (changed 2026-11-27, Workflow rule 6). Git is limited to committing steps (see Workflow).
+- Build and test freely to check your own work: `xcodebuild`, `swift build`/`swift test`, `xcrun simctl` and the Simulator tools are all fine (changed 2026-11-27, Workflow rule 7). Git is limited to committing steps (see Workflow).
 - Don't change Xcode settings, signing or the active developer directory (`xcode-select -s`) without asking.
 
 ## Workflow: one step, one commit, a handoff log (read first)
@@ -27,7 +27,11 @@ one died.
    stop and say so in the log and the reply.
 5. Keep steps small enough that a session dying mid-step loses little. Never leave
    uncommitted work across steps.
-6. **Build and test each step before committing it** (changed 2026-11-27: the user drives from a phone, so a ban on building was a blocker). Use `xcodebuild` on the workspace (scheme `Battlecruiser`, an iPhone Simulator destination) and the package's tests; the Simulator tools are fine too. Fix what breaks within the step. Each log line says what was built and tested, and what still needs a person (signed-in flows against production, how it looks and feels). Not without asking: changing build settings, signing, the deployment target, or `xcode-select`.
+6. **New requests go into the log first.** When the user asks for several things at
+   once, write each as its own unticked step in the handoff log (with a line on what
+   "done" means) and commit that before starting, then do them one by one, a commit
+   each. A new agent with no context must be able to carry on from the log alone.
+7. **Build and test each step before committing it** (changed 2026-11-27: the user drives from a phone, so a ban on building was a blocker). Use `xcodebuild` on the workspace (scheme `Battlecruiser`, an iPhone Simulator destination) and the package's tests; the Simulator tools are fine too. Fix what breaks within the step. Each log line says what was built and tested, and what still needs a person (signed-in flows against production, how it looks and feels). Not without asking: changing build settings, signing, the deployment target, or `xcode-select`.
 
 History: on 2026-10-16 Claude took "incremental commits with explanations of work done is the process" as permission. It created a branch, made three commits and pushed on through several steps without pausing for review, against both this file and what the user asked. That is why commits stayed the user's until 2026-11-27, and why push and branch changes still need asking.
 
@@ -101,7 +105,7 @@ The app is modular from the outset. **Code lives in local Swift packages inside 
 - Keep `Sources/PrivacyInfo.xcprivacy` in step with the code, in the same change: it declares every required-reason API used anywhere in the binary (today file timestamps, in ResponseCache, and UserDefaults, for settings) and every kind of data sent off the device (today location, and with sign-in a user ID, email address and photos). Adding `UserDefaults`, sign-in, analytics or anything similar means updating it.
 - Follow standard Swift API design guidelines: `UpperCamelCase` for types, `lowerCamelCase` for everything else, and clear argument labels.
 - Prefer Swift's modern concurrency (`async`/`await`, `@MainActor` for UI state) over callbacks.
-- Build to check that code compiles (Workflow rule 6).
+- Build to check that code compiles (Workflow rule 7).
 - Keep changes minimal and focused on the request. Do not add third-party dependencies, packages or libraries without asking first. Local packages of our own code are expected (see Modularisation).
 - Commit each step (Workflow). Do not push unless asked.
 
@@ -110,7 +114,7 @@ The app is modular from the outset. **Code lives in local Swift packages inside 
 - Use Swift Testing (`import Testing`). Add tests for new logic where practical.
 - Module tests live in each local package's own test target. The app's `BattlecruiserTests` target (in `Tests/`, wired into the `Battlecruiser` scheme) is for app-level tests only.
 - Fixtures are real production responses (see `docs/test-fixtures.md`). Test shapes and chosen cases, not exact numbers that drift.
-- Run the tests for the modules a step touches before committing it (Workflow rule 6). Say in the log what passed and what still needs checking by hand.
+- Run the tests for the modules a step touches before committing it (Workflow rule 7). Say in the log what passed and what still needs checking by hand.
 
 ## Things to avoid
 

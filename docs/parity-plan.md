@@ -297,6 +297,11 @@ log line says a step was started but not committed, check `git status` first.
   [App Store blockers](#app-store-blockers). The app isn't going to the App Store yet,
   so it waits until those are tackled together.
 - **H13 (sources) is low priority.** After everything below.
+- **Replies to reviews.** Reply under a review, shown threaded on the pub's Reviews.
+  **Blocked by notifications:** a reply is only useful if the reviewer hears about it,
+  so it waits for notifications to work end to end (the reply kind in S15b's feed and
+  push, which needs the Push Notifications capability: see App Store blockers). Needs
+  a server ask for reply endpoints and a `replies` field on reviews. Added 2026-11-27.
 - **S21 (status states in `/meta`)** asked 2026-11-27. Until it's deployed, the Fix
   panel's status editor uses a copy of the web's seven states (`StatusStates` in
   `PubDetailFeature/Writes/Fix/Editors`). Once it lands: model `meta.statuses`, draw the
@@ -322,6 +327,19 @@ the things people do are done; technical steps wait until after it):
    which the user finds a poor experience: build them as the hours editor's
    sibling, the same day rows and the same picker, but with a closing time only (no
    open time). The night comes from `session`; post `{ at }`.
+**UX feedback (asked 2026-11-27, done before H11):**
+
+- [ ] **U1 · Guinness price "when".** Adding a price has a When row, today by default;
+  tapping it picks an earlier date (never the future). Sent as the write's `at`.
+- [ ] **U2 · List keeps its place.** Scroll the results, open a pub, go back: the list
+  is where it was.
+- [ ] **U3 · Owner → Operator.** Renamed everywhere the user sees it. The editor lists
+  the known operators with counts ("Wetherspoons (132)", "Young's (52)"), most first;
+  typing filters them, and if nothing matches, what was typed (trailing spaces
+  stripped) can be saved as a new one.
+- [ ] **U4 · Sheet spacing.** The gap between the filters and the sheet matches the gap
+  between the search box and the filters.
+
 7. [ ] **H11** · history editing.
 8. [ ] **H12a** · the 🎲 random handle (S14) in the handle editor. The limits half of
    H12 waits (step 14).
@@ -475,6 +493,10 @@ the step lives in one place.
   `docs/release-notes.md`. Its merge into `main` runs the Deploy workflow to TestFlight
   (paid team `CT75TQXWJP`, `wtf.outerlimits.Battlecruiser`, from the CI secrets). After
   this, new work goes on a new `feature/*` branch from `develop`. **Next: H11.**
+- 2026-11-27 · feedback · The user asked for U1–U4 (above, before H11) and put review
+  replies on the roadmap, blocked by notifications. Docs only. Making a feature branch
+  was refused by the permission check, so these commits sit on local `develop`
+  (unpushed); move them to a `feature/*` branch before a PR. **Next: U1.**
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 
