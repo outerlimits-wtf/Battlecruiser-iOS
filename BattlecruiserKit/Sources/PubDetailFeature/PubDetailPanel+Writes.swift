@@ -26,8 +26,9 @@ extension PubDetailPanel {
         }
     }
 
-    /// After a write: say so, and show what the server now has. A change held
-    /// for an admin shows the server's message and changes nothing yet.
+    /// After a write: say so, and show what the server now has, from the
+    /// write's own response when it carries the pub (S12), else by fetching.
+    /// A change held for an admin shows the server's message and changes nothing yet.
     func changed(_ result: WriteResult) {
         if result.queued {
             toast = ToastMessage(result.message ?? "Sent to an admin to check.")
@@ -35,7 +36,7 @@ extension PubDetailPanel {
         }
         toast = ToastMessage(result.message ?? "Saved. The next person through the door gets that.")
         if let id = model.selectedID { context.marks.noteVisited(id) }
-        model.refresh()
+        if let pub = result.pub { model.apply(pub) } else { model.refresh() }
         Task { await context.session.load() }
     }
 }

@@ -66,7 +66,7 @@ struct ReviewComposer: View {
         Task {
             defer { isPosting = false }
             do {
-                let result = try await context.writer.postReview(pubID, rating: rating, body: body.isEmpty ? nil : body)
+                let result = try await context.writer.postReview(pubID, rating: rating, body: body.isEmpty ? nil : body, near: context.location)
                 self.rating = nil
                 text = ""
                 onPosted(result)

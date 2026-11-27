@@ -37,4 +37,19 @@ struct WriteEndpointTests {
         #expect(sent["id"] as? String == "74")
         #expect(sent["reason"] as? String == "spam")
     }
+
+    /// S12: the 201 carries the pub as the GET would draw it, so the POST sends
+    /// the same `at`, `lat` and `lon`.
+    @Test func contributionsAndReviewsSendTheClockAndLocation() throws {
+        let here = Coordinate(latitude: 51.4431, longitude: -0.1525)
+        for endpoint in [
+            Endpoint.contribute(to: "node/1", field: "guinness_price", value: "620", near: here),
+            Endpoint.review("node/1", rating: 8, body: nil, near: here),
+        ] {
+            let request = try #require(endpoint.request(baseURL: base, now: .now))
+            let items = try #require(request.url.flatMap { URLComponents(url: $0, resolvingAgainstBaseURL: false)?.queryItems })
+            let names = Set(items.map(\.name))
+            #expect(names.isSuperset(of: ["at", "lat", "lon"]))
+        }
+    }
 }

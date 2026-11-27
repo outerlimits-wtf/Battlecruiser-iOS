@@ -69,6 +69,10 @@ public struct BottomSheet<Header: View, Content: View>: View {
                 .onGeometryChange(for: CGFloat.self) { $0.safeAreaInsets.bottom } action: { bottomInset = $0 }
             sheet
         }
+        // The keyboard is not part of the sheet's space. Without this its
+        // height joined `bottomInset`, so at peek the sheet grew to the
+        // keyboard's top while its content stayed hidden as if still at peek.
+        .ignoresSafeArea(.keyboard)
         .onChange(of: resetKey) {
             if detent == .peek { move(to: .half) }
         }
@@ -136,6 +140,8 @@ public struct BottomSheet<Header: View, Content: View>: View {
             // otherwise bounce the content down inside the sheet as it moves.
             // Switching it off mid-pull settles the content back at its top.
             .scrollDisabled(detent != .full || pullOrigin != nil)
+            // The keyboard covers the sheet's lower rows; scrolling puts it away.
+            .scrollDismissesKeyboard(.immediately)
             .environment(scroll)
             .gesture(dragGesture(layout), including: detent == .full ? .subviews : .all)
             .simultaneousGesture(pullGesture(layout), including: detent == .full ? .all : .subviews)

@@ -36,6 +36,11 @@ public struct PubDetail: Decodable, Hashable, Sendable, Identifiable {
     public let lastScrapedAt: String?
     /// The raw OpenStreetMap tags, for "Everything else we know".
     public let osmTags: [String: String]
+    /// Each contributable field's current value, by key, for prefilling the
+    /// Fix panel (S4). Empty from an older server.
+    public let editable: [String: EditableValue]
+    /// The night a report made now belongs to (S3).
+    public let session: NightSession?
 
     public var id: String { summary.id }
 
@@ -43,7 +48,7 @@ public struct PubDetail: Decodable, Hashable, Sendable, Identifiable {
         case description, city, `operator`, brewery, contact, hours, weekTable,
              gardenCloses, timeline, features, reviews, sources, photos, priceHistory,
              heritage, contributions, quizNightDay, karaokeNightDay, checkedAt,
-             lastScrapedAt, osmTags
+             lastScrapedAt, osmTags, editable, session
     }
 
     public init(from decoder: any Decoder) throws {
@@ -70,6 +75,8 @@ public struct PubDetail: Decodable, Hashable, Sendable, Identifiable {
         checkedAt = try? container.decodeIfPresent(String.self, forKey: .checkedAt)
         lastScrapedAt = try? container.decodeIfPresent(String.self, forKey: .lastScrapedAt)
         osmTags = (try? container.decodeIfPresent([String: String].self, forKey: .osmTags)) ?? [:]
+        editable = (try? container.decodeIfPresent([String: EditableValue].self, forKey: .editable)) ?? [:]
+        session = try? container.decodeIfPresent(NightSession.self, forKey: .session)
 
         // The detail payload's `features` carries every answer, so decoding a
         // summary from it would wrongly list "no" and "unknown" as features the

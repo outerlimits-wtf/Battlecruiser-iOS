@@ -12,11 +12,21 @@ public struct ContributableField: Decodable, Hashable, Sendable, Identifiable {
     /// Bounds for `price` fields, in pence.
     public let min: Int?
     public let max: Int?
+    /// Which part of the Fix panel it goes in (S4). Nil from an older server.
+    public let section: FieldSection?
+    /// Its place across every section, lower first.
+    public let order: Int?
+    /// Hint text for an empty input; nil where there is no free input.
+    public let placeholder: String?
+    /// The longest value accepted by a free-text editor.
+    public let maxLength: Int?
+    /// The pieces of a structured value (`status`, `previous_name`; S5), in order.
+    public let parts: [FieldPart]
 
     public var id: String { key }
 
     private enum CodingKeys: String, CodingKey {
-        case key, label, kind, corroborating, min, max
+        case key, label, kind, corroborating, min, max, section, order, placeholder, maxLength, parts
     }
 
     public init(from decoder: any Decoder) throws {
@@ -27,5 +37,10 @@ public struct ContributableField: Decodable, Hashable, Sendable, Identifiable {
         corroborating = try container.decodeIfPresent(Bool.self, forKey: .corroborating) ?? false
         min = try container.decodeIfPresent(Int.self, forKey: .min)
         max = try container.decodeIfPresent(Int.self, forKey: .max)
+        section = try? container.decodeIfPresent(FieldSection.self, forKey: .section)
+        order = try? container.decodeIfPresent(Int.self, forKey: .order)
+        placeholder = try? container.decodeIfPresent(String.self, forKey: .placeholder)
+        maxLength = try? container.decodeIfPresent(Int.self, forKey: .maxLength)
+        parts = (try? container.decodeIfPresent([FieldPart].self, forKey: .parts)) ?? []
     }
 }

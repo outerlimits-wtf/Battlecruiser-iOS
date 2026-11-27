@@ -13,7 +13,7 @@ struct FactWriter {
     func send(_ field: String, _ value: String) {
         Task {
             do {
-                onChanged(try await context.writer.addFact(to: pubID, field: field, value: value))
+                onChanged(try await context.writer.addFact(to: pubID, field: field, value: value, near: context.location))
             } catch {
                 if let message = PubDBError.wrapping(error)?.userMessage { onError(message) }
             }

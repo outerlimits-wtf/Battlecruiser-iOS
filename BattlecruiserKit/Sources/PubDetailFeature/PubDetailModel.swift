@@ -93,6 +93,18 @@ public final class PubDetailModel {
         load(id: id)
     }
 
+    /// The pub as a write left it (S12): shown at once, with no fetch. Ignored
+    /// if another pub has been opened since the write was sent.
+    public func apply(_ fresh: PubDetail) {
+        guard fresh.id == selectedID else { return }
+        loadTask?.cancel()
+        cache.store(fresh, for: fresh.id)
+        detail = fresh
+        showingCachedFrom = nil
+        isLoading = false
+        lastError = nil
+    }
+
     /// The sheet was dismissed.
     public func deselect() {
         loadTask?.cancel()

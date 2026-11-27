@@ -1,0 +1,189 @@
+{
+  "contributors": [
+    {
+      "rank": 1,
+      "name": "@goatloaf",
+      "attribution": {
+        "kind": "user",
+        "label": "@goatloaf",
+        "sourceKey": null
+      },
+      "avatarUrl": "https://pubdb-photos.outerlimits.wtf/avatars/workos%253Auser_01M0ZQBYFH71TSNR41BZJNWE1G/9bd5b684-094e-491e-b821-b50bd8d31130.webp",
+      "contributions": 1306,
+      "reviews": 24,
+      "total": 1330,
+      "pubs": 1046,
+      "firstAt": "2026-08-01T23:20:51.938Z",
+      "lastAt": "2026-11-27T05:38:46.707Z",
+      "lastAtLabel": "27 Nov 2026",
+      "agoLabel": "an hour ago",
+      "xp": 14500,
+      "level": {
+        "key": "lock_in",
+        "name": "Lock-in",
+        "emoji": "🔒"
+      }
+    },
+    {
+      "rank": 2,
+      "name": "@garden_otter",
+      "attribution": {
+        "kind": "user",
+        "label": "@garden_otter",
+        "sourceKey": null
+      },
+      "avatarUrl": "https://pubdb-photos.outerlimits.wtf/avatars/workos_user_01M1MNGBC9JY8HBF69NVJJ9VJN/a4fdbabb-1e29-4190-a535-a514aa673586.webp",
+      "contributions": 31,
+      "reviews": 27,
+      "total": 58,
+      "pubs": 26,
+      "firstAt": "2026-09-03T22:17:26.781Z",
+      "lastAt": "2026-11-26T17:19:09.040Z",
+      "lastAtLabel": "26 Nov 2026",
+      "agoLabel": "14 hours ago",
+      "xp": 1045,
+      "level": {
+        "key": "regular",
+        "name": "Regular",
+        "emoji": "🥂"
+      }
+    },
+    {
+      "rank": 3,
+      "name": "@abbyhorsegirl",
+      "attribution": {
+        "kind": "user",
+        "label": "@abbyhorsegirl",
+        "sourceKey": null
+      },
+      "avatarUrl": "https://pubdb-photos.outerlimits.wtf/avatars/workos_user_01M1C35M5GBBPWSFMJJFNCFPR7/c0ad28f9-2e78-4ede-9b49-d1beb64c898e.webp",
+      "contributions": 20,
+      "reviews": 7,
+      "total": 27,
+      "pubs": 19,
+      "firstAt": "2026-08-31T14:26:22.191Z",
+      "lastAt": "2026-11-27T07:25:37.928Z",
+      "lastAtLabel": "27 Nov 2026",
+      "agoLabel": "just now",
+      "xp": 375,
+      "level": {
+        "key": "pub_crawler",
+        "name": "Pub Crawler",
+        "emoji": "🗺️"
+      }
+    },
+    {
+      "rank": 4,
+      "name": "@wassy",
+      "attribution": {
+        "kind": "user",
+        "label": "@wassy",
+        "sourceKey": null
+      },
+      "avatarUrl": null,
+      "contributions": 11,
+      "reviews": 6,
+      "total": 17,
+      "pubs": 6,
+      "firstAt": "2026-09-16T17:07:13.435Z",
+      "lastAt": "2026-09-24T21:43:35.173Z",
+      "lastAtLabel": "24 Sept 2026",
+      "agoLabel": "24 Sept 2026",
+      "xp": 265,
+      "level": {
+        "key": "pub_crawler",
+        "name": "Pub Crawler",
+        "emoji": "🗺️"
+      }
+    },
+    {
+      "rank": 5,
+      "name": "@your_mum_is_a_heron",
+      "attribution": {
+        "kind": "user",
+        "label": "@your_mum_is_a_heron",
+        "sourceKey": null
+      },
+      "avatarUrl": null,
+      "contributions": 12,
+      "reviews": 3,
+      "total": 15,
+      "pubs": 3,
+      "firstAt": "2026-10-15T15:26:33.213Z",
+      "lastAt": "2026-10-15T15:47:40.792Z",
+      "lastAtLabel": "15 Oct 2026",
+      "agoLabel": "15 Oct 2026",
+      "xp": 195,
+      "level": {
+        "key": "pub_crawler",
+        "name": "Pub Crawler",
+        "emoji": "🗺️"
+      }
+    },
+    {
+      "rank": 6,
+      "name": "@glurpl",
+      "attribution": {
+        "kind": "user",
+        "label": "@glurpl",
+        "sourceKey": null
+      },
+      "avatarUrl": null,
+      "contributions": 0,
+      "reviews": 6,
+      "total": 6,
+      "pubs": 6,
+      "firstAt": "2026-08-28T19:43:11.685Z",
+      "lastAt": "2026-08-28T19:46:50.255Z",
+      "lastAtLabel": "28 Aug 2026",
+      "agoLabel": "28 Aug 2026",
+      "xp": 150,
+      "level": {
+        "key": "pub_crawler",
+        "name": "Pub Crawler",
+        "emoji": "🗺️"
+      }
+    },
+    {
+      "rank": 7,
+      "name": "@i_hate_standing77",
+      "attribution": {
+        "kind": "user",
+        "label": "@i_hate_standing77",
+        "sourceKey": null
+      },
+      "avatarUrl": null,
+      "contributions": 1,
+      "reviews": 1,
+      "total": 2,
+      "pubs": 1,
+      "firstAt": "2026-08-28T19:41:22.640Z",
+      "lastAt": "2026-08-28T19:43:19.351Z",
+      "lastAtLabel": "28 Aug 2026",
+      "agoLabel": "28 Aug 2026",
+      "xp": 35,
+      "level": {
+        "key": "walk_in",
+        "name": "Walk-in",
+        "emoji": "🚪"
+      }
+    }
+  ],
+  "imported": {
+    "label": "PubDB",
+    "total": 3271
+  },
+  "anonymous": {
+    "total": 148
+  },
+  "totals": {
+    "people": 7,
+    "contributions": 1381,
+    "reviews": 74
+  },
+  "summaryLines": [
+    "7 people have added 1,455 things between them.",
+    "Another 3,271 came from PubDB’s own imports.",
+    "148 more were added before anyone had to say who they were. Oh those were the days."
+  ]
+}

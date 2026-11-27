@@ -64,6 +64,7 @@ extension RootView {
                     marks: marks,
                     meta: meta.meta,
                     writer: client,
+                    location: userCoordinate,
                     onOpenProfile: { presentedProfile = $0 }
                 ),
                 onClose: detail.deselect,

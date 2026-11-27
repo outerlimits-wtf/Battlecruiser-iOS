@@ -20,7 +20,8 @@ has more than two of them.
 **Server asks (2026-11-27):** S1–S10 and S12–S16 are **deployed** to production,
 along with six reworked levels. See "Where they stand" in
 [server-asks.md](server-asks.md). The work they unblock is in
-[Phase H](#phase-h-picking-up-the-server-asks). Still open: S11, S17, S18.
+[Phase H](#phase-h-picking-up-the-server-asks). Still open: S11, S17, S18, and S21
+(asked 2026-11-27).
 
 This plan follows on from [mvp-plan.md](mvp-plan.md), which is built. It covers bringing
 the iPhone app level with the PubDB web client (`../pubdb/src`) in features and look, on
@@ -262,8 +263,8 @@ What else earns a tab is still open. Today Lists and Me fill the last two slots.
 ### Phase H: picking up the server asks
 
 Unblocked: the server work was deployed on 2026-11-27. Keep every new field optional
-in the models, so old cached responses still decode. The order puts
-App Store needs first, then deleting device-side workarounds, then the rest.
+in the models, so old cached responses still decode. The table is by number; the
+order they're built in is in [the handoff log](#phase-h-order-roadmap-and-progress-handoff-log) below it.
 
 | # | Work | Needs | Done when |
 |---|---|---|---|
@@ -282,6 +283,193 @@ App Store needs first, then deleting device-side workarounds, then the rest.
 | H12 | Limits from meta (S13): the report note, avatar size, handle rules and page sizes; `Retry-After` on the photo 429. Plus the 🎲 random handle (S14) in the handle editor. | S13, S14 | No hard-coded limits. |
 | H13 | Sources (C5): draw `sources[]` with each `license`. | S15 | Credits as the server sends them. |
 
+#### Phase H: order, roadmap and progress (handoff log)
+
+Decided with the user on 2026-11-27. **Any agent picking this up: read this section
+first, then do the next unticked step** (CLAUDE.md Workflow). Each step is one commit
+holding the code, its ticked box and a dated log line. The agent builds and tests each
+step before committing (from 2026-11-27); each log line says what passed and what still
+needs a person to check. If the last
+log line says a step was started but not committed, check `git status` first.
+
+**Roadmapped, not now:**
+- **H1 (block a user) is an App Store blocker**, parked with the others: see
+  [App Store blockers](#app-store-blockers). The app isn't going to the App Store yet,
+  so it waits until those are tackled together.
+- **H13 (sources) is low priority.** After everything below.
+- **S21 (status states in `/meta`)** asked 2026-11-27. Until it's deployed, the Fix
+  panel's status editor uses a copy of the web's seven states (`StatusStates` in
+  `PubDetailFeature/Writes/Fix/Editors`). Once it lands: model `meta.statuses`, draw the
+  chips from it, keep the copy only as the fallback for an older server, and add
+  fixtures. Step 16 below.
+
+**Working order** (pub editing first, as asked):
+
+1. [x] **X1 · Sheet bug.** Searching with the sheet at peek raises the sheet to full,
+   but its content stays hidden as if still at peek. The results must show at the new
+   detent. (`DesignSystem/Sheet`, `PubsFeature/Search`.)
+2. [x] **H0** · fixtures and decoding tests for the new fields (all optional).
+3. [x] **H7** · writes use what comes back. The plumbing every editor below sits on.
+4. [x] **H8** · Fix-panel editors from `editable` and meta (`section`, `order`,
+   `placeholder`, `maxLength`, `status`, `weekday`, `parts`). Likely two or three steps:
+   (a) models and the panel's layout by `section`/`order`; (b) the simple kinds;
+   (c) `status`, `weekday` and `parts`.
+**UX test build** (reordered 2026-11-27: the user wants a build out to UX testers once
+the things people do are done; technical steps wait until after it):
+
+5. [x] **H10** · hours editor. See "Time pickers" below.
+6. [x] **H9** · night forms (last orders, kicked out, garden). **Not the web's form**,
+   which the user finds a poor experience: build them as the hours editor's
+   sibling, the same day rows and the same picker, but with a closing time only (no
+   open time). The night comes from `session`; post `{ at }`.
+7. [ ] **H11** · history editing.
+8. [ ] **H12a** · the 🎲 random handle (S14) in the handle editor. The limits half of
+   H12 waits (step 14).
+9. [ ] **UX build** · stop here and tell the user it's ready to send. Archiving and
+   uploading need their signing, so that part is theirs.
+
+**After the UX build** (technical; the user sees little or no change):
+
+10. [ ] **H2** · the list from the server.
+11. [ ] **H3** · labels from the server, one area per step.
+12. [ ] **H4** · price graph.
+13. [ ] **H5** · filters from meta.
+14. [ ] **H12b** · limits from meta (report note, avatar size, handle rules, page
+    sizes; `Retry-After` on the photo 429).
+15. [ ] **H6** · conditional GETs.
+16. [ ] **S21** · status states from `/meta`, once deployed (see above).
+    **S22** likewise: once `garden_closes` is `kind: time`, drop `FixRow.weekHoursKey`
+    and give `time` the shared `TimeStepPicker`.
+17. [ ] **H13** · sources (low priority).
+
+**Time pickers (H9, H10):** closing times are picked in **5-minute steps**. Every
+time picker in the hours editor and the night forms uses the same shared control, so
+the step lives in one place.
+
+**Log** (newest last; one line per step: date, step, what changed, what wasn't verified):
+
+- 2026-11-27 · plan · This section added; Leaderboard row layout fixed beforehand
+  (`Social/LeaderboardRow.swift`).
+- 2026-11-27 · X1 · Cause: the keyboard's height went into the sheet's bottom inset, so
+  at peek the sheet grew to the keyboard while its content stayed hidden (detent still
+  `.peek`). `BottomSheet` now ignores the keyboard and scrolling dismisses it; typing a
+  search raises the sheet to `.full`. Not built. Check: search from peek, half and an
+  open pub; results show above the keyboard; scrolling hides the keyboard.
+- 2026-11-27 · H0 · Fresh `-1127` fixtures beside the old ones (docs/test-fixtures.md) and
+  `ServerAsksFixtureTests`, which decodes them with today's models. New fields are
+  modelled by the step that uses them, not here. `/me` and `/me/blocks` not captured
+  (need sign-in). Not run. Check: PubDBModelsTests pass.
+- 2026-11-27 · H7 · `WriteResult.pub` (decoded leniently); contribution and review POSTs
+  send `at`/`lat`/`lon` (`PanelContext.location`, from the root); `PubDetailModel.apply`
+  shows the returned pub, falling back to `refresh()` when absent (removals, 202s). The
+  disk copy of the pub isn't updated by a write (next GET does it). `entry` not modelled:
+  the pub already holds it. Not built or run. Check: add a fact and a review signed in;
+  the panel updates with one request; WriteEndpointTests and ServerAsksFixtureTests pass.
+- 2026-11-27 · H8a · Models only: `FieldKind.weekday` (unknown kinds are now meant to
+  get a text editor, per the spec; the UI change is H8b), `ContributableField.section`,
+  `order`, `placeholder`, `maxLength`, `parts` (`FieldSection`, `FieldPart`),
+  `PubDetail.editable` (`EditableValue`) and `session` (`NightSession`). All optional.
+  Not built or run. Check: PubDBModelsTests pass. **Next: H8b**, the Fix panel laid out
+  from `section`/`order` and prefilled from `editable`; read `PubDetailFeature/Writes`
+  and the Fix-mode views first.
+- 2026-11-27 · H8b · iOS had no Fix mode, so this adds it read-only: a Fix/Done round
+  button (signed in, once the detail has loaded) swaps the tabs for `FixPanel`, laid
+  out by `FixLayout` (`PubDetailFeature/Writes/Fix/`) from meta's `section`/`order`,
+  each row showing `editable[key].display`. Unknown sections go last, under their key;
+  fields with no section go in Details. History is left out (it's H11, on the
+  timeline). Leaving the pub or signing out ends Fix mode. **Design call for the
+  user:** the web keeps Name/Type/Status/Owner under the title and the rest inside the
+  tabs; on the phone the whole Fix panel replaces the tabs instead. Not built or run.
+  Check: Fix and Done on a signed-in pub, sections in order (Details, What's there,
+  Tonight, Listing), current values shown; FixLayoutTests pass. **Next: H8c**, editors
+  for `tri`, `text`, `url`, `phone`, `price`, `amenity` and unknown kinds (text), one
+  file each, sending through `FactWriter`, prefilled from `editable[key].value`, with
+  `placeholder` and `maxLength`. Then **H8d**: `status`, `weekday` and `parts`. `hours`
+  and `night` rows stay read-only until H10 and H9.
+- 2026-11-27 · H8c · Editors by kind in `Writes/Fix/Editors/`, chosen in `FixRow` by
+  `kind` only: `TriEditor` (Yes / No / Not sure), `TextValueEditor` (`text`, `url`,
+  `phone` and unknown kinds; prefilled from `editable[key].value`, `placeholder`,
+  capped at `maxLength`, Save only once it differs), `PriceEditor` (£, the field's own
+  `min`/`max`, "Report" when it corroborates) and `AmenityEditor` (meta's venue kinds,
+  note read as a hint). All send through `FactWriter`; a saved value comes back in the
+  pub and resets the box. `status`, `weekday`, `hours` and `night` show the current
+  value read only. The Overview's old price report and feature answers are untouched.
+  Not built or run. Check: rename a pub, set a website and phone (keyboards), answer a
+  feature, change the type, report a price out of range then in range; the box shows
+  the new value after saving; FixLayoutTests pass. **Next: H8d**, `status` (state chips
+  plus `parts`: year and what it became, sent as a JSON object) and `weekday` (meta's
+  `weekdays` as chips).
+- 2026-11-27 · H8d (part) · `WeekdayEditor`: meta's `weekdays` as chips, sending the
+  short form ("Tue"). Not built or run. Check: set a quiz night day and karaoke night
+  day in Fix mode. **Stopped for a decision on `status`:** meta doesn't publish the list
+  of states (`open`, `temporarily_closed`, `closed`, `demolished`, `converted`,
+  `duplicate`, `broken`); the spec only names them in prose, and says more will be
+  added. Either (1) a new server ask, S21, for `meta.statuses` (`key`, `label`,
+  `symbol`, `serving`, `permanent`, plus whether it's a listing error), or (2) copy the
+  web's seven states and labels into the app for now. The rest of the status editor
+  (the `year` and `became` parts, sent as a JSON object, and only once the pub isn't
+  serving) doesn't depend on which.
+- 2026-11-27 · S21 · User chose both: ask the server for `meta.statuses` (S21 in
+  server-asks.md, roadmapped above as step 15) and copy the web's seven states for now.
+  Docs only. **Next: finish H8d** with the copied list.
+- 2026-11-27 · H8d · `StatusEditor`: "Still there?" and "Listing problem" chips from
+  `StatusStates` (the web's seven, copied until S21), the pub's `status.key` picked;
+  a tap sends the state. Once it isn't serving (and isn't a listing error), meta's
+  other `parts` (year, what it became) are asked for and sent as one JSON object
+  (`StructuredValue`, year as a number, empty optional parts null). No parts from the
+  server, no form. H8 done: every kind but `hours`, `night` (H10, H9) and
+  `previous_name` (history, H11) has an editor. Not built or run. Check: mark a pub
+  closed, add "2019" and "flats", and see the panel's status update; StructuredValueTests
+  pass. **Next: H10**, the hours editor (read "Time pickers" above and the web's
+  `panel/HoursEditor.tsx` first).
+- 2026-11-27 · build · Agents now build and test (CLAUDE.md). Xcode's at
+  `/Applications/Xcode.app` but `xcode-select` points at the command-line tools, so
+  commands run with `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer` (the
+  system setting is left alone). Commands: from the repo, `xcodebuild -workspace
+  Battlecruiser.xcworkspace -scheme Battlecruiser -destination 'platform=iOS
+  Simulator,name=iPhone 18 Pro' build`; from `BattlecruiserKit/`, `xcodebuild -scheme
+  BattlecruiserKit-Package -destination <same> test` (the per-module schemes have no
+  test action). H8a–H8d checked: **the app builds and all 253 package tests pass**,
+  including FixLayoutTests and StructuredValueTests. Still unchecked by hand: Fix mode
+  on a signed-in pub against production. Order reordered for the UX test build (above).
+  **Next: H10.**
+- 2026-11-27 · H10 · Hours editor. `WeekRow` gains `state` (`DayState`) and `sessions`
+  (`HoursSession`), both optional. In Fix mode the opening-hours row lists the week
+  (`doorSays`) with Edit, which opens `HoursEditorSheet`: a row a day with Open /
+  Closed / Don't know, every session's open and close on the shared `TimeStepPicker`
+  (`Writes/Time/`, 5-minute steps, hour and minute wheels, an off-step server time kept),
+  "Late" for no fixed close, add/remove a session, and "Same every day". Save sends
+  `{ "days": [...] }` (`WeekHours.value`) through `FactWriter`; a `400` shows the
+  server's message as a toast. `garden_closes` is also `kind: hours` but a single time,
+  so the week editor is picked **by key** for now (`FixRow.weekHoursKey`) and garden
+  keeps a text box; server ask S22 asks for a `time` kind. **Built; all package tests
+  pass** (new WeekHoursTests and a fixture check). Not checked by hand: it needs a
+  signed-in account. Check: edit a pub's hours, a split shift, a late close, Same every
+  day, and that the panel's week updates after Save. **Next: H9**, night forms, as the
+  hours editor's sibling with `TimeStepPicker`.
+- 2026-11-27 · H9 · Night forms. `night` rows (last orders, kicked out) open
+  `NightFormSheet`: "It just happened" for tonight (`session`), sending `{ "at": <now> }`,
+  then a row per night starting from tonight, each a closing time on `TimeStepPicker`
+  and Report, sending `"Thu 23:15"` (meta's short weekday for the night the session
+  started; the spec's string form for a picked night). No 06:00 maths on the device.
+  `garden_closes` (single time) gets `SingleTimeEditor` on the same picker; a non-time
+  value such as "With the pub" is shown above it. The web's form was not copied.
+  **Built; all package tests pass** (new NightReportTests). Not checked by hand (needs
+  sign-in). Check: report last orders "just now" and for another night, kicked out
+  past midnight, and a garden time. **Next: H11**, history editing (`timeline[]`'s
+  `contributionId`/`canRemove`/`hideValue`; read the web's `panel/History.tsx` first).
+- 2026-11-27 · TestFlight · The user asked for a TestFlight build of H0–H10 (H11 and
+  the 🎲 handle wait). The Release archive builds and signs (`xcodebuild ... -configuration
+  Release -destination 'generic/platform=iOS' -allowProvisioningUpdates archive`), and is
+  in Xcode's Organizer (Archives, 27 Nov 15:08). **Upload failed:** "App Store Connect
+  access for FMN472KPDF is required", so Xcode has no Apple account with App Store
+  Connect access for that team. The upload waits for the user: a paid Developer Program
+  team signed in under Xcode → Settings → Accounts, and an app record for
+  `wtf.outerlimits.BattlecruiserZach` in App Store Connect. Or an App Store Connect API
+  key (`.p8`, key id, issuer id), which lets an agent upload with `-exportArchive
+  -authenticationKeyPath`. Export options used: `app-store-connect`, `upload`, automatic
+  signing, `manageAppVersionAndBuildNumber`. Build number in the project is still 1.
+
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 
 The app already decodes and draws `level`: `LevelBadge` on leaderboard rows,
@@ -298,6 +486,16 @@ yours to decide before L2.
 | L3 | Leaderboard shows `xp` beside `total` (it still ranks on `total`). | S16 | |
 | L4 | A level-up moment: after a write, say what it earned and when someone reaches a new level (respecting Reduce Motion). **Needs a new server ask (S19):** write responses carry the writer's XP gained and their `level`, or the app refetches `/me`. | S19 | No XP maths on the device. |
 | L5 | Badges beside names on reviews, the feed and profiles in lists. **Needs a new server ask (S20):** the short `level` on review authors and feed entries. | S20 | |
+
+### App Store blockers
+
+The app isn't going to the App Store yet (2026-11-27). These must all be done before
+it does, and are parked until then:
+
+- **H1 / G1: block a user** (Guideline 1.2). The server side (S10) is live.
+- **S11: universal links** need a paid Apple developer account (team id, D15).
+- **Push notifications** need the capability added in Xcode, under that account.
+- **Sign-in checked end to end** with a real account against production.
 
 ### Loose ends
 
@@ -347,6 +545,8 @@ server-asks.md; S19 and S20 are proposed in Phase L.
 | S18 | `kinds=` (venue kind keys) on `/pubs` and `/pins`, and `q` matching kind labels. | No filtering or searching by type (taproom, oddity…). | B8 |
 | S19 | Write responses carry the writer's XP gained and their `level`. | A level-up moment without device maths. | L4 |
 | S20 | The short `level { key, name, emoji }` on review authors and feed entries. | Badges beside names. | L5 |
+| S21 | `meta.statuses [{ key, label, symbol, serving, permanent, listingError }]`. | The status picker without a copied list. | H8 |
+| S22 | `kind: time` for single times (`garden_closes`), apart from `hours`. | Editors picked by kind, not key. | H10 |
 
 The surveys also found two bugs on the web side to pass on:
 - `OwnerPicker` expects `/brands` to be a bare array, but it is `{ brands: [...] }`, so
