@@ -20,6 +20,8 @@ public struct PubDetailPanel: View {
     @State var reporting: ReportTarget?
     /// The review the quote asked for, brought into view on the Reviews tab.
     @State var focusReview: Int?
+    /// Fix mode: the Fix panel in place of the tabs.
+    @State var isFixing = false
 
     public init(
         model: PubDetailModel,
@@ -52,7 +54,11 @@ public struct PubDetailPanel: View {
                             FreshnessLabel(fetchedAt: savedAt)
                         }
                         PanelHeader(summary: summary, city: model.detail?.city, kindNote: kindNote(summary))
-                        ActionsRow(summary: summary, context: context)
+                        ActionsRow(
+                            summary: summary,
+                            context: context,
+                            isFixing: context.session.isSignedIn && model.detail != nil ? $isFixing : nil
+                        )
                         // Above the tabs, so it shows whichever tab is open.
                         if let quote = summary.quote {
                             QuoteCard(
@@ -66,12 +72,18 @@ public struct PubDetailPanel: View {
                         }
                     }
                     .padding(Metrics.l)
-                    Section {
+                    if isFixing, let detail = model.detail {
                         PanelStatus(model: model)
-                        tabContent(summary)
+                        FixPanel(layout: FixLayout(fields: context.meta?.contributableFields ?? [], editable: detail.editable))
                             .padding(Metrics.l)
-                    } header: {
-                        PanelTabBar(selection: $tab, reviewCount: model.detail?.reviews.count ?? summary.reviewCount)
+                    } else {
+                        Section {
+                            PanelStatus(model: model)
+                            tabContent(summary)
+                                .padding(Metrics.l)
+                        } header: {
+                            PanelTabBar(selection: $tab, reviewCount: model.detail?.reviews.count ?? summary.reviewCount)
+                        }
                     }
                 } else if let name = model.placeholderName {
                     // Chosen from a map pin: the name now, the rest on arrival.
@@ -111,6 +123,10 @@ public struct PubDetailPanel: View {
         .onChange(of: model.selectedID) {
             tab = .overview
             focusReview = nil
+            isFixing = false
+        }
+        .onChange(of: context.session.isSignedIn) { _, signedIn in
+            if !signedIn { isFixing = false }
         }
     }
 

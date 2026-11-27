@@ -351,6 +351,20 @@ the step lives in one place.
   Not built or run. Check: PubDBModelsTests pass. **Next: H8b**, the Fix panel laid out
   from `section`/`order` and prefilled from `editable`; read `PubDetailFeature/Writes`
   and the Fix-mode views first.
+- 2026-11-27 · H8b · iOS had no Fix mode, so this adds it read-only: a Fix/Done round
+  button (signed in, once the detail has loaded) swaps the tabs for `FixPanel`, laid
+  out by `FixLayout` (`PubDetailFeature/Writes/Fix/`) from meta's `section`/`order`,
+  each row showing `editable[key].display`. Unknown sections go last, under their key;
+  fields with no section go in Details. History is left out (it's H11, on the
+  timeline). Leaving the pub or signing out ends Fix mode. **Design call for the
+  user:** the web keeps Name/Type/Status/Owner under the title and the rest inside the
+  tabs; on the phone the whole Fix panel replaces the tabs instead. Not built or run.
+  Check: Fix and Done on a signed-in pub, sections in order (Details, What's there,
+  Tonight, Listing), current values shown; FixLayoutTests pass. **Next: H8c**, editors
+  for `tri`, `text`, `url`, `phone`, `price`, `amenity` and unknown kinds (text), one
+  file each, sending through `FactWriter`, prefilled from `editable[key].value`, with
+  `placeholder` and `maxLength`. Then **H8d**: `status`, `weekday` and `parts`. `hours`
+  and `night` rows stay read-only until H10 and H9.
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 
