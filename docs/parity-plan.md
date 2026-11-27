@@ -317,7 +317,7 @@ log line says a step was started but not committed, check `git status` first.
 **UX test build** (reordered 2026-11-27: the user wants a build out to UX testers once
 the things people do are done; technical steps wait until after it):
 
-5. [ ] **H10** · hours editor. See "Time pickers" below.
+5. [x] **H10** · hours editor. See "Time pickers" below.
 6. [ ] **H9** · night forms (last orders, kicked out, garden). **Not the web's form**,
    which the user finds a poor experience: build them as the hours editor's
    sibling, the same day rows and the same picker, but with a closing time only (no
@@ -338,6 +338,8 @@ the things people do are done; technical steps wait until after it):
     sizes; `Retry-After` on the photo 429).
 15. [ ] **H6** · conditional GETs.
 16. [ ] **S21** · status states from `/meta`, once deployed (see above).
+    **S22** likewise: once `garden_closes` is `kind: time`, drop `FixRow.weekHoursKey`
+    and give `time` the shared `TimeStepPicker`.
 17. [ ] **H13** · sources (low priority).
 
 **Time pickers (H9, H10):** closing times are picked in **5-minute steps**. Every
@@ -431,6 +433,20 @@ the step lives in one place.
   including FixLayoutTests and StructuredValueTests. Still unchecked by hand: Fix mode
   on a signed-in pub against production. Order reordered for the UX test build (above).
   **Next: H10.**
+- 2026-11-27 · H10 · Hours editor. `WeekRow` gains `state` (`DayState`) and `sessions`
+  (`HoursSession`), both optional. In Fix mode the opening-hours row lists the week
+  (`doorSays`) with Edit, which opens `HoursEditorSheet`: a row a day with Open /
+  Closed / Don't know, every session's open and close on the shared `TimeStepPicker`
+  (`Writes/Time/`, 5-minute steps, hour and minute wheels, an off-step server time kept),
+  "Late" for no fixed close, add/remove a session, and "Same every day". Save sends
+  `{ "days": [...] }` (`WeekHours.value`) through `FactWriter`; a `400` shows the
+  server's message as a toast. `garden_closes` is also `kind: hours` but a single time,
+  so the week editor is picked **by key** for now (`FixRow.weekHoursKey`) and garden
+  keeps a text box; server ask S22 asks for a `time` kind. **Built; all package tests
+  pass** (new WeekHoursTests and a fixture check). Not checked by hand: it needs a
+  signed-in account. Check: edit a pub's hours, a split shift, a late close, Same every
+  day, and that the panel's week updates after Save. **Next: H9**, night forms, as the
+  hours editor's sibling with `TimeStepPicker`.
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 
@@ -508,6 +524,7 @@ server-asks.md; S19 and S20 are proposed in Phase L.
 | S19 | Write responses carry the writer's XP gained and their `level`. | A level-up moment without device maths. | L4 |
 | S20 | The short `level { key, name, emoji }` on review authors and feed entries. | Badges beside names. | L5 |
 | S21 | `meta.statuses [{ key, label, symbol, serving, permanent, listingError }]`. | The status picker without a copied list. | H8 |
+| S22 | `kind: time` for single times (`garden_closes`), apart from `hours`. | Editors picked by kind, not key. | H10 |
 
 The surveys also found two bugs on the web side to pass on:
 - `OwnerPicker` expects `/brands` to be a bare array, but it is `{ brands: [...] }`, so

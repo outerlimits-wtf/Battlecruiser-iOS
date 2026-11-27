@@ -52,8 +52,8 @@ The spec now says level keys can be retired as well as added: draw a level from 
 own `name` and `emoji`, never from a table in the app.
 
 **Still open:** S11 (no Apple team id yet), S17 and S18 (not asked for in that run),
-the new S19 and S20 (levels in more places, below), and S21 (the status states in
-`/meta`, asked 2026-11-27).
+the new S19 and S20 (levels in more places, below), S21 (the status states in
+`/meta`) and S22 (a `time` kind), both asked 2026-11-27.
 Retractions are the only stub left in the spec. S17 and S18 have no stub there yet.
 
 **Not checked yet:** the web client's use of S10, S12 and S16 (levels, the `pub` a
@@ -315,6 +315,16 @@ hard-codes them (`PUB_STATUSES`, `STATUS_LABELS`, `STATUS_EMOJI`, `LISTING_ERROR
 - The `status` part of `status`'s `parts` (kind `status`) then means "a key from
   `meta.statuses`". Say so in the spec.
 - Use it in the web's `FixControls` and delete the web's own lists.
+
+### S22. A `time` kind for single times [H10, new]
+
+`kind: hours` covers both a week (`opening_hours`) and a single time of day
+(`garden_closes`, placeholder `21:30`, validated as a time). A client can't tell which
+editor to draw without knowing the key, which is what `kind` exists to avoid. iOS picks
+the week editor by key until this lands.
+- Give `garden_closes` (and any future single time) `kind: time`: one `HH:MM`, 24-hour.
+  Older clients fall back to a text editor (the spec's rule), which still works.
+- Add `time` to the spec's list of kinds.
 
 ## For the web client
 

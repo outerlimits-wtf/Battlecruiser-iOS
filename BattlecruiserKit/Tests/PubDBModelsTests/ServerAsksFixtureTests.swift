@@ -84,4 +84,14 @@ struct ServerAsksFixtureTests {
         #expect(old.editable.isEmpty)
         #expect(old.session == nil)
     }
+
+    /// S2: each day's state and sessions, for the hours editor.
+    @Test func weekTableCarriesStateAndSessions() throws {
+        let detail = try Fixture.decode(PubDetail.self, from: "pub-detail-the-bedford-1127")
+        let monday = try #require(detail.weekTable.first)
+        #expect(monday.state == .open)
+        #expect(!monday.sessions.isEmpty)
+        let sparse = try Fixture.decode(PubDetail.self, from: "pub-detail-sparse-british-legion-1127")
+        #expect(sparse.weekTable.allSatisfy { $0.sessions.isEmpty })
+    }
 }

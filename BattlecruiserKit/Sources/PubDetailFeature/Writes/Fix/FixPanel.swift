@@ -6,14 +6,12 @@ import PubDBModels
 /// order, each with what the pub has now. Shown in place of the tabs while
 /// fixing.
 ///
-/// Each row gets an editor by `kind`. `hours` (H10) and `night` (H9) only
-/// show the current value for now.
+/// Each row gets an editor by `kind`. `night` (H9) only shows the current
+/// value for now.
 struct FixPanel: View {
     let layout: FixLayout
-    let venueKinds: [VenueKind]
-    let weekdays: [Weekday]
-    /// The pub's state now, for the status editor.
-    let status: PubStatus?
+    let detail: PubDetail
+    let meta: Meta?
     let writer: FactWriter
 
     var body: some View {
@@ -27,7 +25,7 @@ struct FixPanel: View {
                 VStack(alignment: .leading, spacing: Metrics.m) {
                     SectionHeader(group.title)
                     ForEach(group.items) { item in
-                        FixRow(item: item, venueKinds: venueKinds, weekdays: weekdays, status: status) { writer.send(item.field.key, $0) }
+                        FixRow(item: item, detail: detail, meta: meta) { writer.send(item.field.key, $0) }
                     }
                 }
             }
@@ -35,12 +33,18 @@ struct FixPanel: View {
     }
 }
 
-/// One field: its label, and its editor, picked by `kind` (never by key).
+/// One field: its label, and its editor, picked by `kind` (never by key, with
+/// one exception below).
 struct FixRow: View {
+    /// **Temporary exception to "never by key":** `kind: hours` covers both the
+    /// week (`opening_hours`) and a single time (`garden_closes`), so the week
+    /// editor is chosen by key until the server gives single times their own
+    /// kind (server ask S22).
+    static let weekHoursKey = "opening_hours"
+
     let item: FixLayout.Item
-    let venueKinds: [VenueKind]
-    let weekdays: [Weekday]
-    let status: PubStatus?
+    let detail: PubDetail
+    let meta: Meta?
     let send: (String) -> Void
 
     var body: some View {
@@ -66,12 +70,17 @@ struct FixRow: View {
         case .price:
             PriceEditor(field: field, current: current, send: send)
         case .amenity:
-            AmenityEditor(field: field, current: current, kinds: venueKinds, send: send)
+            AmenityEditor(field: field, current: current, kinds: meta?.venueKinds ?? [], send: send)
         case .weekday:
-            WeekdayEditor(field: field, current: current, weekdays: weekdays, send: send)
+            WeekdayEditor(field: field, current: current, weekdays: meta?.weekdays ?? [], send: send)
         case .status:
-            StatusEditor(field: field, status: status, send: send)
-        case .hours, .night, .previousName:
+            StatusEditor(field: field, status: detail.summary.status, send: send)
+        case .hours where field.key == Self.weekHoursKey:
+            WeekHoursEditor(field: field, current: current, weekTable: detail.weekTable, send: send)
+        case .hours:
+            // A single time (`garden_closes`), which the server validates.
+            TextValueEditor(field: field, current: current, send: send)
+        case .night, .previousName:
             CurrentValue(label: field.label, current: current)
         }
     }

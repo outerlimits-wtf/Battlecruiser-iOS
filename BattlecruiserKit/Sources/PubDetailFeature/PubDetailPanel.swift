@@ -76,9 +76,8 @@ public struct PubDetailPanel: View {
                         PanelStatus(model: model)
                         FixPanel(
                             layout: FixLayout(fields: context.meta?.contributableFields ?? [], editable: detail.editable),
-                            venueKinds: context.meta?.venueKinds ?? [],
-                            weekdays: context.meta?.weekdays ?? [],
-                            status: detail.summary.status,
+                            detail: detail,
+                            meta: context.meta,
                             writer: writer
                         )
                         .padding(Metrics.l)
