@@ -32,7 +32,7 @@ public struct ContributableField: Decodable, Hashable, Sendable, Identifiable {
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         key = try container.decode(String.self, forKey: .key)
-        label = try container.decode(String.self, forKey: .label)
+        label = OperatorLabel.label(try container.decode(String.self, forKey: .label), forKey: key, keys: ["brand"])
         kind = try container.decode(FieldKind.self, forKey: .kind)
         corroborating = try container.decodeIfPresent(Bool.self, forKey: .corroborating) ?? false
         min = try container.decodeIfPresent(Int.self, forKey: .min)

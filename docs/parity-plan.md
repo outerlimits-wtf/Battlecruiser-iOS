@@ -343,7 +343,7 @@ the things people do are done; technical steps wait until after it):
   - [x] **U3a** · `Brand` model, `GET /brands` in the client, fixture and tests.
   - [x] **U3b** · `OperatorEditor` in the Fix panel for the `brand` field, fed by
     `/brands` through `PubWriteSource`.
-  - [ ] **U3c** · the label: server ask S24 (`brand` labelled "Operator" with its own
+  - [x] **U3c** · the label: server ask S24 (`brand` labelled "Operator" with its own
     kind), and the app says "Operator" until it lands.
 - [ ] **U4 · Sheet spacing.** The gap between the filters and the sheet matches the gap
   between the search box and the filters.
@@ -366,6 +366,9 @@ the things people do are done; technical steps wait until after it):
 16. [ ] **S21** · status states from `/meta`, once deployed (see above).
     **S22** likewise: once `garden_closes` is `kind: time`, drop `FixRow.weekHoursKey`
     and give `time` the shared `TimeStepPicker`.
+    **S24** likewise: once `brand` is labelled "Operator" with kind `operator`, delete
+    `OperatorLabel` (PubDBModels) and `FixRow.operatorKey`, and pick `OperatorEditor`
+    by kind.
     **16b. U1** once S23 is deployed: the When row on both price forms (Overview's
     report and the Fix panel's `PriceEditor`), sending `observedOn`.
 17. [ ] **H13** · sources (low priority).
@@ -528,6 +531,11 @@ the step lives in one place.
   `weekHoursKey`) until S24. `PubWriteSource` gains `brands()`. **Built; all package
   tests pass** (new OperatorMatchesTests). Not checked by hand (needs sign-in): pick
   an operator, filter, save a new one with trailing spaces. **Next: U3c.**
+- 2026-11-27 · U3c · "Owner" now reads "Operator": `OperatorLabel` swaps that exact
+  label on decode for `brand` and `previous_name`'s `owner` part, so it switches itself
+  off once the server relabels. Asked as S24 (label and an `operator` kind; also the
+  web's picker bug); cleanup roadmapped with step 16. **Built; all package tests pass**
+  (new OperatorLabelTests). The web still says "Owner" until S24. **Next: U4.**
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 
@@ -607,6 +615,7 @@ server-asks.md; S19 and S20 are proposed in Phase L.
 | S21 | `meta.statuses [{ key, label, symbol, serving, permanent, listingError }]`. | The status picker without a copied list. | H8 |
 | S22 | `kind: time` for single times (`garden_closes`), apart from `hours`. | Editors picked by kind, not key. | H10 |
 | S23 | An optional `observedOn` date on price contributions; history uses it. | Backdated Guinness prices. | U1 |
+| S24 | `brand` labelled "Operator", with its own `operator` kind (suggestions from `/brands`). | No label swap or key check on the device. | U3 |
 
 The surveys also found two bugs on the web side to pass on:
 - `OwnerPicker` expects `/brands` to be a bare array, but it is `{ brands: [...] }`, so

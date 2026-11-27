@@ -53,8 +53,8 @@ own `name` and `emoji`, never from a table in the app.
 
 **Still open:** S11 (no Apple team id yet), S17 and S18 (not asked for in that run),
 the new S19 and S20 (levels in more places, below), S21 (the status states in
-`/meta`), S22 (a `time` kind) and S23 (a date on a reported price), all asked
-2026-11-27.
+`/meta`), S22 (a `time` kind), S23 (a date on a reported price) and S24 (the
+operator field), all asked 2026-11-27.
 Retractions are the only stub left in the spec. S17 and S18 have no stub there yet.
 
 **Not checked yet:** the web client's use of S10, S12 and S16 (levels, the `pub` a
@@ -340,6 +340,18 @@ can't be sent.
 - `priceHistory` and the latest price use that date rather than when the row was
   written; the timeline and `checkedAtLabel` say the paid date.
 - Absent means today, so older clients are unchanged.
+
+### S24. The operator field [U3, new]
+
+The user wants a pub's company called its **operator**, picked from the known ones.
+`brand` is `kind: text` labelled "Owner", so iOS picks its editor by key and swaps the
+label on decode (`OperatorLabel`, `FixRow.operatorKey`) until this lands.
+- Label `brand` "Operator", and `previous_name`'s `owner` part too (keep the keys).
+- Give it its own kind, `operator`: a free name, with suggestions from `GET /brands`
+  (`{ name, count }`, most pubs first). Say in the spec that a name not in the list is
+  accepted, trimmed. Older clients fall back to a text editor.
+- The web's `OwnerPicker` reads `/brands` as a bare array (see Bugs below); fix it at
+  the same time and rename it.
 
 ## For the web client
 
