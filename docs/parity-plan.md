@@ -330,7 +330,9 @@ the things people do are done; technical steps wait until after it):
 **UX feedback (asked 2026-11-27, done before H11):**
 
 - [ ] **U1 · Guinness price "when".** Adding a price has a When row, today by default;
-  tapping it picks an earlier date (never the future). Sent as the write's `at`.
+  tapping it picks an earlier date (never the future). **Blocked on S23** (the server
+  stamps every contribution with its own time and reads no date from the body), so it
+  moves to after the UX build: step 16b.
 - [ ] **U2 · List keeps its place.** Scroll the results, open a pub, go back: the list
   is where it was.
 - [ ] **U3 · Owner → Operator.** Renamed everywhere the user sees it. The editor lists
@@ -358,6 +360,8 @@ the things people do are done; technical steps wait until after it):
 16. [ ] **S21** · status states from `/meta`, once deployed (see above).
     **S22** likewise: once `garden_closes` is `kind: time`, drop `FixRow.weekHoursKey`
     and give `time` the shared `TimeStepPicker`.
+    **16b. U1** once S23 is deployed: the When row on both price forms (Overview's
+    report and the Fix panel's `PriceEditor`), sending `observedOn`.
 17. [ ] **H13** · sources (low priority).
 
 **Time pickers (H9, H10):** closing times are picked in **5-minute steps**. Every
@@ -575,6 +579,7 @@ server-asks.md; S19 and S20 are proposed in Phase L.
 | S20 | The short `level { key, name, emoji }` on review authors and feed entries. | Badges beside names. | L5 |
 | S21 | `meta.statuses [{ key, label, symbol, serving, permanent, listingError }]`. | The status picker without a copied list. | H8 |
 | S22 | `kind: time` for single times (`garden_closes`), apart from `hours`. | Editors picked by kind, not key. | H10 |
+| S23 | An optional `observedOn` date on price contributions; history uses it. | Backdated Guinness prices. | U1 |
 
 The surveys also found two bugs on the web side to pass on:
 - `OwnerPicker` expects `/brands` to be a bare array, but it is `{ brands: [...] }`, so
@@ -606,3 +611,7 @@ Taken on 2026-11-26.
 - **WorkOS setup** (redirect and client id) is outside this repo and gates Phase D.
 - **Production is a Pi.** Pins are about 155 KB gzipped per minute per phone, mostly
   answered 304. Fine at TestFlight scale.
+- 2026-11-27 · U1 · Blocked: the spec says a contribution's time is the server's and no
+  date is read from the body, so the app can't backdate a price without the server.
+  Asked as S23 (`observedOn`, server-asks.md); U1 moved to step 16b. Docs only.
+  **Next: U2.**

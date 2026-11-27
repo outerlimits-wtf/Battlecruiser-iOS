@@ -53,7 +53,8 @@ own `name` and `emoji`, never from a table in the app.
 
 **Still open:** S11 (no Apple team id yet), S17 and S18 (not asked for in that run),
 the new S19 and S20 (levels in more places, below), S21 (the status states in
-`/meta`) and S22 (a `time` kind), both asked 2026-11-27.
+`/meta`), S22 (a `time` kind) and S23 (a date on a reported price), all asked
+2026-11-27.
 Retractions are the only stub left in the spec. S17 and S18 have no stub there yet.
 
 **Not checked yet:** the web client's use of S10, S12 and S16 (levels, the `pub` a
@@ -325,6 +326,20 @@ the week editor by key until this lands.
 - Give `garden_closes` (and any future single time) `kind: time`: one `HH:MM`, 24-hour.
   Older clients fall back to a text editor (the spec's rule), which still works.
 - Add `time` to the spec's list of kinds.
+
+### S23. When a price was paid [U1, new]
+
+Someone often reports a Guinness price later than they paid it. The app wants a When
+row, today by default, that can be set to an earlier day. Today the server reads no
+`at` from a contribution body and stamps the row with server time, so a past date
+can't be sent.
+- Accept an optional `observedOn` (`YYYY-MM-DD`, the device's local date) on
+  `POST /pubs/{id}/contributions` for `guinness_price`, and say in meta which fields
+  take it (`contributableFields[].datable: true`). Refuse a future date or one older
+  than a limit published in meta (`400`, `field: "observedOn"`).
+- `priceHistory` and the latest price use that date rather than when the row was
+  written; the timeline and `checkedAtLabel` say the paid date.
+- Absent means today, so older clients are unchanged.
 
 ## For the web client
 
