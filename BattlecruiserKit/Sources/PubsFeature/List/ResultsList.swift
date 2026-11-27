@@ -17,6 +17,9 @@ struct ResultsList: View {
     let onIncludeBars: (() -> Void)?
     /// Nil when no filters are set.
     let onClearFilters: (() -> Void)?
+    /// The pub at the top of the list. Kept by the screen, so opening a pub
+    /// and coming back finds the list where it was.
+    @Binding var scrolledID: String?
 
     var body: some View {
         ScrollView {
@@ -42,8 +45,10 @@ struct ResultsList: View {
                     )
                 }
             }
+            .scrollTargetLayout()
             .padding(.bottom, 120)
         }
+        .scrollPosition(id: $scrolledID, anchor: .top)
         // A pull down at the top moves the sheet, so no pull to refresh: the
         // list refreshes itself as it goes stale.
         .sheetScrollable()

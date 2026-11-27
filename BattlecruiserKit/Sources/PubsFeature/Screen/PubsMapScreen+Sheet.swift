@@ -36,7 +36,8 @@ extension PubsMapScreen {
                     onSelect: onSelectPub,
                     onSearchEverywhere: query.everywhere ? nil : { query.everywhere = true },
                     onIncludeBars: query.amenity == "pub" ? { query.amenity = nil } : nil,
-                    onClearFilters: query.activeFilterCount > 0 ? { query = PubQuery() } : nil
+                    onClearFilters: query.activeFilterCount > 0 ? { query = PubQuery() } : nil,
+                    scrolledID: $listScrolledID
                 )
             }
         }

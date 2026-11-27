@@ -40,6 +40,9 @@ public struct PubsMapScreen<Panel: View>: View {
     /// The height of the search bar and filter pills: the sheet stops below
     /// them at full, so the grabber is never tucked under the filters.
     @State var controlsHeight: CGFloat = 0
+    /// Where the results list was scrolled to, kept while a pub is open in
+    /// its place. A new search or filter starts the list from the top.
+    @State var listScrolledID: String?
     @Environment(\.accessibilityReduceMotion) var reduceMotion
 
     public init(
@@ -123,6 +126,7 @@ public struct PubsMapScreen<Panel: View>: View {
             }
         }
         .onChange(of: query) { _, query in
+            listScrolledID = nil
             pubs.queryChanged(query)
             pins.queryChanged(query)
         }

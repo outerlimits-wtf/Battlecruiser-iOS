@@ -333,7 +333,7 @@ the things people do are done; technical steps wait until after it):
   tapping it picks an earlier date (never the future). **Blocked on S23** (the server
   stamps every contribution with its own time and reads no date from the body), so it
   moves to after the UX build: step 16b.
-- [ ] **U2 · List keeps its place.** Scroll the results, open a pub, go back: the list
+- [x] **U2 · List keeps its place.** Scroll the results, open a pub, go back: the list
   is where it was.
 - [ ] **U3 · Owner → Operator.** Renamed everywhere the user sees it. The editor lists
   the known operators with counts ("Wetherspoons (132)", "Young's (52)"), most first;
@@ -505,6 +505,12 @@ the step lives in one place.
   date is read from the body, so the app can't backdate a price without the server.
   Asked as S23 (`observedOn`, server-asks.md); U1 moved to step 16b. Docs only.
   **Next: U2.**
+- 2026-11-27 · U2 · The results list was rebuilt from the top each time the pub panel
+  left the sheet. `ResultsList` now binds `.scrollPosition(id:)` (anchor top) to
+  `PubsMapScreen.listScrolledID`, which outlives the panel; a new query clears it.
+  **Built; all package tests pass.** Not checked by hand: scroll down at full, open a
+  pub, go back (and at half: the list shows where it was, scrolling waits for full).
+  **Next: U3.**
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 
