@@ -458,6 +458,17 @@ the step lives in one place.
   sign-in). Check: report last orders "just now" and for another night, kicked out
   past midnight, and a garden time. **Next: H11**, history editing (`timeline[]`'s
   `contributionId`/`canRemove`/`hideValue`; read the web's `panel/History.tsx` first).
+- 2026-11-27 · TestFlight · The user asked for a TestFlight build of H0–H10 (H11 and
+  the 🎲 handle wait). The Release archive builds and signs (`xcodebuild ... -configuration
+  Release -destination 'generic/platform=iOS' -allowProvisioningUpdates archive`), and is
+  in Xcode's Organizer (Archives, 27 Nov 15:08). **Upload failed:** "App Store Connect
+  access for FMN472KPDF is required", so Xcode has no Apple account with App Store
+  Connect access for that team. The upload waits for the user: a paid Developer Program
+  team signed in under Xcode → Settings → Accounts, and an app record for
+  `wtf.outerlimits.BattlecruiserZach` in App Store Connect. Or an App Store Connect API
+  key (`.p8`, key id, issuer id), which lets an agent upload with `-exportArchive
+  -authenticationKeyPath`. Export options used: `app-store-connect`, `upload`, automatic
+  signing, `manageAppVersionAndBuildNumber`. Build number in the project is still 1.
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 
