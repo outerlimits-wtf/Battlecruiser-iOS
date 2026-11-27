@@ -287,8 +287,9 @@ order they're built in is in [the handoff log](#phase-h-order-roadmap-and-progre
 
 Decided with the user on 2026-11-27. **Any agent picking this up: read this section
 first, then do the next unticked step** (CLAUDE.md Workflow). Each step is one commit
-holding the code, its ticked box and a dated log line. Nothing is built or tested by
-the agent; the user checks in Xcode, so each log line says what to check. If the last
+holding the code, its ticked box and a dated log line. The agent builds and tests each
+step before committing (from 2026-11-27); each log line says what passed and what still
+needs a person to check. If the last
 log line says a step was started but not committed, check `git status` first.
 
 **Roadmapped, not now:**

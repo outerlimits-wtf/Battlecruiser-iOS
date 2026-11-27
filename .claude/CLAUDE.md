@@ -4,9 +4,8 @@ Guidance for Claude Code when working in this repository.
 
 ## Command rules (read first)
 
-- Never run `xcodebuild`, `swift` or `xcrun` unless the user specifically instructs you to in that request. Git is limited to committing steps (see Workflow).
-- Editing and reading files is fine. Do not build or test on your own initiative.
-- If a build or test would help verify a change, note it in the handoff log for the user.
+- Build and test freely to check your own work: `xcodebuild`, `swift build`/`swift test`, `xcrun simctl` and the Simulator tools are all fine (changed 2026-11-27, Workflow rule 6). Git is limited to committing steps (see Workflow).
+- Don't change Xcode settings, signing or the active developer directory (`xcode-select -s`) without asking.
 
 ## Workflow: one step, one commit, a handoff log (read first)
 
@@ -24,11 +23,11 @@ one died.
    checkout of other branches, amend of a commit already made in an earlier session,
    or anything that discards work.
 4. Carry on to the next step after committing, unless the step needs a decision only
-   the user can make, or the change can't sensibly be written without a build. Then
+   the user can make. Then
    stop and say so in the log and the reply.
 5. Keep steps small enough that a session dying mid-step loses little. Never leave
    uncommitted work across steps.
-6. **No Xcode or Swift commands of any kind**, unless the user asks for that exact command in that message. This includes `xcodebuild`, `xcrun` (including `xcrun simctl`), `swift`, `swiftc`, `swift build`/`swift test`/`swift package`, `swift-format`, `xcode-select`, `xed` and `agvtool`. It also includes any tool that builds, runs, tests or launches the app or the Simulator on Claude's behalf, such as the iOS Simulator build and launch tools. Building, running and testing are the user's job. Each log line says what wasn't verified, so the user knows what to check in Xcode. **Allowed:** `plutil -lint` and `xmllint --noout` to check the syntax of files Claude has edited by hand, such as `project.pbxproj`, schemes and plists.
+6. **Build and test each step before committing it** (changed 2026-11-27: the user drives from a phone, so a ban on building was a blocker). Use `xcodebuild` on the workspace (scheme `Battlecruiser`, an iPhone Simulator destination) and the package's tests; the Simulator tools are fine too. Fix what breaks within the step. Each log line says what was built and tested, and what still needs a person (signed-in flows against production, how it looks and feels). Not without asking: changing build settings, signing, the deployment target, or `xcode-select`.
 
 History: on 2026-10-16 Claude took "incremental commits with explanations of work done is the process" as permission. It created a branch, made three commits and pushed on through several steps without pausing for review, against both this file and what the user asked. That is why commits stayed the user's until 2026-11-27, and why push and branch changes still need asking.
 
@@ -102,7 +101,7 @@ The app is modular from the outset. **Code lives in local Swift packages inside 
 - Keep `Sources/PrivacyInfo.xcprivacy` in step with the code, in the same change: it declares every required-reason API used anywhere in the binary (today file timestamps, in ResponseCache, and UserDefaults, for settings) and every kind of data sent off the device (today location, and with sign-in a user ID, email address and photos). Adding `UserDefaults`, sign-in, analytics or anything similar means updating it.
 - Follow standard Swift API design guidelines: `UpperCamelCase` for types, `lowerCamelCase` for everything else, and clear argument labels.
 - Prefer Swift's modern concurrency (`async`/`await`, `@MainActor` for UI state) over callbacks.
-- Write code that should compile, but do not run a build to check it unless instructed (see Command rules).
+- Build to check that code compiles (Workflow rule 6).
 - Keep changes minimal and focused on the request. Do not add third-party dependencies, packages or libraries without asking first. Local packages of our own code are expected (see Modularisation).
 - Commit each step (Workflow). Do not push unless asked.
 
@@ -111,7 +110,7 @@ The app is modular from the outset. **Code lives in local Swift packages inside 
 - Use Swift Testing (`import Testing`). Add tests for new logic where practical.
 - Module tests live in each local package's own test target. The app's `BattlecruiserTests` target (in `Tests/`, wired into the `Battlecruiser` scheme) is for app-level tests only.
 - Fixtures are real production responses (see `docs/test-fixtures.md`). Test shapes and chosen cases, not exact numbers that drift.
-- Do not run tests. When a change needs verifying, say it has not been built or tested and what to check. The user runs it in Xcode (Workflow rule 6).
+- Run the tests for the modules a step touches before committing it (Workflow rule 6). Say in the log what passed and what still needs checking by hand.
 
 ## Things to avoid
 
