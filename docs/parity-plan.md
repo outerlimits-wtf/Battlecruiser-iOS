@@ -345,7 +345,7 @@ the things people do are done; technical steps wait until after it):
     `/brands` through `PubWriteSource`.
   - [x] **U3c** · the label: server ask S24 (`brand` labelled "Operator" with its own
     kind), and the app says "Operator" until it lands.
-- [ ] **U4 · Sheet spacing.** The gap between the filters and the sheet matches the gap
+- [x] **U4 · Sheet spacing.** The gap between the filters and the sheet matches the gap
   between the search box and the filters.
 
 7. [ ] **H11** · history editing.
@@ -536,6 +536,12 @@ the step lives in one place.
   off once the server relabels. Asked as S24 (label and an `operator` kind; also the
   web's picker bug); cleanup roadmapped with step 16. **Built; all package tests pass**
   (new OperatorLabelTests). The web still says "Owner" until S24. **Next: U4.**
+- 2026-11-27 · U4 · At full the sheet stopped `Metrics.xl` (24) below the filters; the
+  search box and filters are `Metrics.s` (8) apart, so the sheet now uses `Metrics.s`
+  too (`PubsMapScreen+Sheet.swift`). **Built; all package tests pass.** Not checked by
+  eye: raise the sheet to full and compare the two gaps; check the grabber is still
+  easy to catch without hitting a filter pill. UX feedback done but U1 (waits on S23).
+  **Next: H11.**
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 
