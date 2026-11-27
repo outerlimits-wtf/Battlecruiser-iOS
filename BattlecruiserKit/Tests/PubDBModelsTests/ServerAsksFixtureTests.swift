@@ -51,4 +51,37 @@ struct ServerAsksFixtureTests {
         let queued = try JSONDecoder().decode(WriteResult.self, from: Data(#"{"queued":true,"message":"Sent to an admin."}"#.utf8))
         #expect(queued.pub == nil)
     }
+
+    /// H8a (S4, S5): meta says where each editor goes and how to hint it.
+    @Test func fieldsCarrySectionOrderHintsAndParts() throws {
+        let meta = try Fixture.decode(Meta.self, from: "meta-1127")
+        let fields = meta.contributableFields
+        #expect(fields.allSatisfy { $0.section != nil && $0.order != nil })
+        #expect(fields.allSatisfy { if case .other = $0.kind { false } else { true } })
+
+        let quiz = try #require(fields.first { $0.key == "quiz_night_day" })
+        #expect(quiz.kind == .weekday)
+        let status = try #require(fields.first { $0.key == "status" })
+        #expect(status.section == .listing)
+        #expect(status.parts.map(\.key) == ["state", "year", "became"])
+        #expect(status.parts.first?.optional == false)
+        let website = try #require(fields.first { $0.key == "website" })
+        #expect(website.placeholder != nil && website.maxLength != nil)
+    }
+
+    /// H8a (S3, S4): the pub says what each field holds now, and which night it is.
+    @Test func detailCarriesEditableValuesAndTheNight() throws {
+        let detail = try Fixture.decode(PubDetail.self, from: "pub-detail-earl-ferrers-1127")
+        let meta = try Fixture.decode(Meta.self, from: "meta-1127")
+        #expect(Set(detail.editable.keys) == Set(meta.contributableFields.map(\.key)))
+        #expect(detail.editable["guinness_price"]?.display?.hasPrefix("£") == true)
+        #expect(detail.editable["last_orders"]?.value == nil)
+        // Captured for a Thursday evening.
+        #expect(detail.session?.day == 3)
+        #expect(detail.session?.short == "Thu")
+
+        let old = try Fixture.decode(PubDetail.self, from: "pub-detail-earl-ferrers")
+        #expect(old.editable.isEmpty)
+        #expect(old.session == nil)
+    }
 }

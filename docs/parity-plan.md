@@ -344,6 +344,13 @@ the step lives in one place.
   disk copy of the pub isn't updated by a write (next GET does it). `entry` not modelled:
   the pub already holds it. Not built or run. Check: add a fact and a review signed in;
   the panel updates with one request; WriteEndpointTests and ServerAsksFixtureTests pass.
+- 2026-11-27 · H8a · Models only: `FieldKind.weekday` (unknown kinds are now meant to
+  get a text editor, per the spec; the UI change is H8b), `ContributableField.section`,
+  `order`, `placeholder`, `maxLength`, `parts` (`FieldSection`, `FieldPart`),
+  `PubDetail.editable` (`EditableValue`) and `session` (`NightSession`). All optional.
+  Not built or run. Check: PubDBModelsTests pass. **Next: H8b**, the Fix panel laid out
+  from `section`/`order` and prefilled from `editable`; read `PubDetailFeature/Writes`
+  and the Fix-mode views first.
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 

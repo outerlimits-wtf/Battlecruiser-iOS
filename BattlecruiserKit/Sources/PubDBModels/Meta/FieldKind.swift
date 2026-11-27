@@ -16,7 +16,9 @@ public enum FieldKind: Hashable, Sendable, Decodable {
     case amenity
     case previousName
     case status
-    /// A kind this build doesn't know. The field is left out rather than drawn wrong.
+    /// A short weekday from meta's `weekdays` ("Tue"): quiz and karaoke night.
+    case weekday
+    /// A kind this build doesn't know. The spec says to edit it as plain text.
     case other(String)
 
     public init(from decoder: any Decoder) throws {
@@ -32,6 +34,7 @@ public enum FieldKind: Hashable, Sendable, Decodable {
         case "amenity": .amenity
         case "previous_name": .previousName
         case "status": .status
+        case "weekday": .weekday
         default: .other(raw)
         }
     }
