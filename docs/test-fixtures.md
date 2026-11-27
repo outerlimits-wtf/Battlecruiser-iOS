@@ -44,7 +44,8 @@ beside the originals with a `-1127` suffix so the old shapes keep decoding too:
 `pub-detail-earl-ferrers-1127`, `pub-detail-the-bedford-1127`,
 `pub-detail-sparse-british-legion-1127`, `pubs-list-thu-2230-1127`, `meta-1127`,
 `leaderboard-1127`, `profile-1127` (`GET /users/goatloaf`), `feed-1127` (`GET /feed`) and
-`username-random-1127` (`GET /usernames/random`). They carry the new fields: `editable`,
+`username-random-1127` (`GET /usernames/random`). `brands-1127` (`GET /brands`, no `at`; operator names with pub
+counts, most first) was added the same day for the operator picker (U3). They carry the new fields: `editable`,
 `session`, `osmFacts`, the S7 labels, `counts`/`headerLabel`, `filters`, `levels`,
 `summaryLines` and so on. `ServerAsksFixtureTests` decodes them; each Phase H step adds
 checks for the fields it models.

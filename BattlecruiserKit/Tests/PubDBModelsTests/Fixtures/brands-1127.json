@@ -1,0 +1,288 @@
+{
+  "brands": [
+    {
+      "name": "Greene King",
+      "count": 185
+    },
+    {
+      "name": "Fuller's",
+      "count": 156
+    },
+    {
+      "name": "Wetherspoon",
+      "count": 109
+    },
+    {
+      "name": "Young's",
+      "count": 51
+    },
+    {
+      "name": "Nicholson's",
+      "count": 47
+    },
+    {
+      "name": "Ember Inns",
+      "count": 31
+    },
+    {
+      "name": "Simmons Bars",
+      "count": 21
+    },
+    {
+      "name": "Be At One",
+      "count": 20
+    },
+    {
+      "name": "Shepherd Neame",
+      "count": 20
+    },
+    {
+      "name": "Samuel Smith",
+      "count": 19
+    },
+    {
+      "name": "All Bar One",
+      "count": 17
+    },
+    {
+      "name": "Vintage Inns",
+      "count": 15
+    },
+    {
+      "name": "Hall & Woodhouse",
+      "count": 12
+    },
+    {
+      "name": "O'Neill's",
+      "count": 12
+    },
+    {
+      "name": "Slug and Lettuce",
+      "count": 10
+    },
+    {
+      "name": "BrewDog",
+      "count": 8
+    },
+    {
+      "name": "Independent",
+      "count": 8
+    },
+    {
+      "name": "Vagabond",
+      "count": 7
+    },
+    {
+      "name": "Brewers Fayre",
+      "count": 5
+    },
+    {
+      "name": "Chef & Brewer",
+      "count": 5
+    },
+    {
+      "name": "Craft Union",
+      "count": 5
+    },
+    {
+      "name": "Urban Pubs and Bars",
+      "count": 5
+    },
+    {
+      "name": "Flight Club",
+      "count": 4
+    },
+    {
+      "name": "Revolution",
+      "count": 4
+    },
+    {
+      "name": "Sizzling Pubs",
+      "count": 4
+    },
+    {
+      "name": "The Craft Beer Co.",
+      "count": 4
+    },
+    {
+      "name": "Castle",
+      "count": 3
+    },
+    {
+      "name": "Hungry Horse",
+      "count": 3
+    },
+    {
+      "name": "Marston's",
+      "count": 3
+    },
+    {
+      "name": "Slug & Lettuce",
+      "count": 3
+    },
+    {
+      "name": "The Blues Kitchen",
+      "count": 3
+    },
+    {
+      "name": "Antic",
+      "count": 2
+    },
+    {
+      "name": "Barrio",
+      "count": 2
+    },
+    {
+      "name": "Belushi's",
+      "count": 2
+    },
+    {
+      "name": "Brewhouse & Kitchen",
+      "count": 2
+    },
+    {
+      "name": "Four Quarters",
+      "count": 2
+    },
+    {
+      "name": "Metropolitan Pub Company",
+      "count": 2
+    },
+    {
+      "name": "Signature Brew",
+      "count": 2
+    },
+    {
+      "name": "Stonehouse Pizza & Carvery",
+      "count": 2
+    },
+    {
+      "name": "The Cocktail Club",
+      "count": 2
+    },
+    {
+      "name": "Toby Carvery",
+      "count": 2
+    },
+    {
+      "name": "Auntie Anne's",
+      "count": 1
+    },
+    {
+      "name": "Barbara’s Bier Haus",
+      "count": 1
+    },
+    {
+      "name": "Benskins",
+      "count": 1
+    },
+    {
+      "name": "Betfred",
+      "count": 1
+    },
+    {
+      "name": "Camden Town Brewery",
+      "count": 1
+    },
+    {
+      "name": "Castle Pubs",
+      "count": 1
+    },
+    {
+      "name": "Clays",
+      "count": 1
+    },
+    {
+      "name": "Electric Shuffle",
+      "count": 1
+    },
+    {
+      "name": "Fullers Ale and Pie House",
+      "count": 1
+    },
+    {
+      "name": "Harvey's Brewery",
+      "count": 1
+    },
+    {
+      "name": "Heineken",
+      "count": 1
+    },
+    {
+      "name": "Hive Pubs",
+      "count": 1
+    },
+    {
+      "name": "Hop Back Brewery",
+      "count": 1
+    },
+    {
+      "name": "Inda Pubs",
+      "count": 1
+    },
+    {
+      "name": "Laine",
+      "count": 1
+    },
+    {
+      "name": "McDonald's",
+      "count": 1
+    },
+    {
+      "name": "McLean Inns",
+      "count": 1
+    },
+    {
+      "name": "Miller & Carter",
+      "count": 1
+    },
+    {
+      "name": "Nicholson’s Pubs",
+      "count": 1
+    },
+    {
+      "name": "Pitcher & Piano",
+      "count": 1
+    },
+    {
+      "name": "Premier",
+      "count": 1
+    },
+    {
+      "name": "Premium Country Pubs",
+      "count": 1
+    },
+    {
+      "name": "Table Table",
+      "count": 1
+    },
+    {
+      "name": "Taylor Walker",
+      "count": 1
+    },
+    {
+      "name": "Tesco Express",
+      "count": 1
+    },
+    {
+      "name": "The Black Dog",
+      "count": 1
+    },
+    {
+      "name": "The Three Cheers",
+      "count": 1
+    },
+    {
+      "name": "Village Inn",
+      "count": 1
+    },
+    {
+      "name": "Walkabout",
+      "count": 1
+    },
+    {
+      "name": "Yummy Pub Co",
+      "count": 1
+    }
+  ]
+}

@@ -25,3 +25,12 @@ struct PeopleEndpointTests {
         #expect(follow.url?.path == "/api/v1/users/goatloaf/follow")
     }
 }
+
+struct BrandsEndpointTests {
+    @Test func brandsIsAPlainGetWithoutTheClock() throws {
+        let request = try #require(Endpoint.brands.request(baseURL: URL(string: "https://pubdb.test/api/v1")!, now: .now))
+        #expect(request.httpMethod == "GET")
+        #expect(request.url?.path == "/api/v1/brands")
+        #expect(request.url?.query == nil)
+    }
+}

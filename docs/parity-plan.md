@@ -335,10 +335,16 @@ the things people do are done; technical steps wait until after it):
   moves to after the UX build: step 16b.
 - [x] **U2 · List keeps its place.** Scroll the results, open a pub, go back: the list
   is where it was.
-- [ ] **U3 · Owner → Operator.** Renamed everywhere the user sees it. The editor lists
+- **U3 · Owner → Operator.** Renamed everywhere the user sees it. The editor lists
   the known operators with counts ("Wetherspoons (132)", "Young's (52)"), most first;
   typing filters them, and if nothing matches, what was typed (trailing spaces
-  stripped) can be saved as a new one.
+  stripped) can be saved as a new one. The `brand` field's label ("Owner") comes from
+  `/meta`, and `/brands` already lists names with counts. Three steps:
+  - [x] **U3a** · `Brand` model, `GET /brands` in the client, fixture and tests.
+  - [ ] **U3b** · `OperatorEditor` in the Fix panel for the `brand` field, fed by
+    `/brands` through `PubWriteSource`.
+  - [ ] **U3c** · the label: server ask S24 (`brand` labelled "Operator" with its own
+    kind), and the app says "Operator" until it lands.
 - [ ] **U4 · Sheet spacing.** The gap between the filters and the sheet matches the gap
   between the search box and the filters.
 
@@ -511,6 +517,9 @@ the step lives in one place.
   **Built; all package tests pass.** Not checked by hand: scroll down at full, open a
   pub, go back (and at half: the list shows where it was, scrolling waits for full).
   **Next: U3.**
+- 2026-11-27 · U3a · Split U3 into a–c (above). `Brand`/`BrandList` (PubDBModels/Meta),
+  `Endpoint.brands` and `PubDBClient.brands()`, fixture `brands-1127.json`,
+  BrandDecodingTests and BrandsEndpointTests. **Next: U3b.**
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 

@@ -11,4 +11,10 @@ extension PubDBClient {
     public func cachedMeta() async -> Cached<Meta>? {
         await cached(Meta.self, key: Endpoint.metaCacheKey)
     }
+
+    /// Every operator (`brand`) in the data with its pub count, most first.
+    public func brands() async throws -> [Brand] {
+        let list: BrandList = try await send(.brands)
+        return list.brands
+    }
 }
