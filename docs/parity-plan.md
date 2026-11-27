@@ -501,6 +501,10 @@ the step lives in one place.
   replies on the roadmap, blocked by notifications. Docs only. Making a feature branch
   was refused by the permission check, so these commits sit on local `develop`
   (unpushed); move them to a `feature/*` branch before a PR. **Next: U1.**
+- 2026-11-27 · U1 · Blocked: the spec says a contribution's time is the server's and no
+  date is read from the body, so the app can't backdate a price without the server.
+  Asked as S23 (`observedOn`, server-asks.md); U1 moved to step 16b. Docs only.
+  **Next: U2.**
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 
@@ -611,7 +615,3 @@ Taken on 2026-11-26.
 - **WorkOS setup** (redirect and client id) is outside this repo and gates Phase D.
 - **Production is a Pi.** Pins are about 155 KB gzipped per minute per phone, mostly
   answered 304. Fine at TestFlight scale.
-- 2026-11-27 · U1 · Blocked: the spec says a contribution's time is the server's and no
-  date is read from the body, so the app can't backdate a price without the server.
-  Asked as S23 (`observedOn`, server-asks.md); U1 moved to step 16b. Docs only.
-  **Next: U2.**
