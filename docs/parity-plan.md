@@ -341,7 +341,7 @@ the things people do are done; technical steps wait until after it):
   stripped) can be saved as a new one. The `brand` field's label ("Owner") comes from
   `/meta`, and `/brands` already lists names with counts. Three steps:
   - [x] **U3a** · `Brand` model, `GET /brands` in the client, fixture and tests.
-  - [ ] **U3b** · `OperatorEditor` in the Fix panel for the `brand` field, fed by
+  - [x] **U3b** · `OperatorEditor` in the Fix panel for the `brand` field, fed by
     `/brands` through `PubWriteSource`.
   - [ ] **U3c** · the label: server ask S24 (`brand` labelled "Operator" with its own
     kind), and the app says "Operator" until it lands.
@@ -520,6 +520,14 @@ the step lives in one place.
 - 2026-11-27 · U3a · Split U3 into a–c (above). `Brand`/`BrandList` (PubDBModels/Meta),
   `Endpoint.brands` and `PubDBClient.brands()`, fixture `brands-1127.json`,
   BrandDecodingTests and BrandsEndpointTests. **Next: U3b.**
+- 2026-11-27 · U3b · `OperatorEditor` (`Writes/Fix/Editors/`): a box prefilled with the
+  current operator; while it has focus, rows below list `/brands` as "Wetherspoon (109)",
+  biggest first, filtered as you type (case and accents ignored, `OperatorMatches`, up
+  to 8); a tap saves that name. A name not in the list gets "Use “…”" (and Return),
+  saving the trimmed text. Picked by key in `FixRow` (`operatorKey`, like
+  `weekHoursKey`) until S24. `PubWriteSource` gains `brands()`. **Built; all package
+  tests pass** (new OperatorMatchesTests). Not checked by hand (needs sign-in): pick
+  an operator, filter, save a new one with trailing spaces. **Next: U3c.**
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 

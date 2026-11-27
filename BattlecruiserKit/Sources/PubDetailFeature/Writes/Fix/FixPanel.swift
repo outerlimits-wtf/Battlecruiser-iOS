@@ -25,7 +25,9 @@ struct FixPanel: View {
                 VStack(alignment: .leading, spacing: Metrics.m) {
                     SectionHeader(group.title)
                     ForEach(group.items) { item in
-                        FixRow(item: item, detail: detail, meta: meta) { writer.send(item.field.key, $0) }
+                        FixRow(item: item, detail: detail, meta: meta, loadBrands: writer.context.writer.brands) {
+                            writer.send(item.field.key, $0)
+                        }
                     }
                 }
             }
@@ -41,10 +43,14 @@ struct FixRow: View {
     /// editor is chosen by key until the server gives single times their own
     /// kind (server ask S22).
     static let weekHoursKey = "opening_hours"
+    /// **Temporary, as above:** the operator (`brand`) is `kind: text`, so its
+    /// picker is chosen by key until the server gives it a kind (server ask S24).
+    static let operatorKey = "brand"
 
     let item: FixLayout.Item
     let detail: PubDetail
     let meta: Meta?
+    let loadBrands: () async throws -> [Brand]
     let send: (String) -> Void
 
     var body: some View {
@@ -63,6 +69,8 @@ struct FixRow: View {
         let field = item.field
         let current = item.current
         switch field.kind {
+        case .text where field.key == Self.operatorKey:
+            OperatorEditor(field: field, current: current, loadBrands: loadBrands, send: send)
         case .tri:
             TriEditor(field: field, current: current, send: send)
         case .text, .url, .phone, .other:

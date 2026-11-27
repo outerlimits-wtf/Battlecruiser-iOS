@@ -11,6 +11,8 @@ public protocol PubWriteSource: Sendable {
     func addFact(to pubID: String, field: String, value: String, near location: Coordinate?) async throws -> WriteResult
     func deleteFact(_ id: Int, from pubID: String) async throws -> WriteResult
     func sendPhoto(to pubID: String, jpeg: Data, kind: String, caption: String?) async throws -> PhotoUploadResult
+    /// Every known operator with its pub count, for the operator picker.
+    func brands() async throws -> [Brand]
 }
 
 extension PubDBClient: PubWriteSource {
