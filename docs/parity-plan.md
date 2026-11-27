@@ -365,6 +365,19 @@ the step lives in one place.
   file each, sending through `FactWriter`, prefilled from `editable[key].value`, with
   `placeholder` and `maxLength`. Then **H8d**: `status`, `weekday` and `parts`. `hours`
   and `night` rows stay read-only until H10 and H9.
+- 2026-11-27 · H8c · Editors by kind in `Writes/Fix/Editors/`, chosen in `FixRow` by
+  `kind` only: `TriEditor` (Yes / No / Not sure), `TextValueEditor` (`text`, `url`,
+  `phone` and unknown kinds; prefilled from `editable[key].value`, `placeholder`,
+  capped at `maxLength`, Save only once it differs), `PriceEditor` (£, the field's own
+  `min`/`max`, "Report" when it corroborates) and `AmenityEditor` (meta's venue kinds,
+  note read as a hint). All send through `FactWriter`; a saved value comes back in the
+  pub and resets the box. `status`, `weekday`, `hours` and `night` show the current
+  value read only. The Overview's old price report and feature answers are untouched.
+  Not built or run. Check: rename a pub, set a website and phone (keyboards), answer a
+  feature, change the type, report a price out of range then in range; the box shows
+  the new value after saving; FixLayoutTests pass. **Next: H8d**, `status` (state chips
+  plus `parts`: year and what it became, sent as a JSON object) and `weekday` (meta's
+  `weekdays` as chips).
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 

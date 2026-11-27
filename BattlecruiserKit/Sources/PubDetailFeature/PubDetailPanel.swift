@@ -72,10 +72,14 @@ public struct PubDetailPanel: View {
                         }
                     }
                     .padding(Metrics.l)
-                    if isFixing, let detail = model.detail {
+                    if isFixing, let detail = model.detail, let writer = factWriter(detail.id) {
                         PanelStatus(model: model)
-                        FixPanel(layout: FixLayout(fields: context.meta?.contributableFields ?? [], editable: detail.editable))
-                            .padding(Metrics.l)
+                        FixPanel(
+                            layout: FixLayout(fields: context.meta?.contributableFields ?? [], editable: detail.editable),
+                            venueKinds: context.meta?.venueKinds ?? [],
+                            writer: writer
+                        )
+                        .padding(Metrics.l)
                     } else {
                         Section {
                             PanelStatus(model: model)

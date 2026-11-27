@@ -54,4 +54,11 @@ struct FixLayoutTests {
 
         #expect(layout.groups.first?.items.first?.current?.display == "£7.30")
     }
+
+    @Test func thePriceBoxStartsFromThePenceTheServerSends() {
+        #expect(PriceEditor.pounds("730") == "7.30")
+        #expect(PriceEditor.pounds("605") == "6.05")
+        #expect(PriceEditor.pounds(nil) == "")
+        #expect(PriceEditor.pounds("With the pub") == "")
+    }
 }

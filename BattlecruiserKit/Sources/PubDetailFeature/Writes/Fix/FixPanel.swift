@@ -6,10 +6,12 @@ import PubDBModels
 /// order, each with what the pub has now. Shown in place of the tabs while
 /// fixing.
 ///
-/// For now each row only shows the current value; the editors by `kind`
-/// come next (H8c, H8d), then hours (H10) and night times (H9).
+/// Each row gets an editor by `kind`. `status` and `weekday` (H8d), `hours`
+/// (H10) and `night` (H9) only show the current value for now.
 struct FixPanel: View {
     let layout: FixLayout
+    let venueKinds: [VenueKind]
+    let writer: FactWriter
 
     var body: some View {
         VStack(alignment: .leading, spacing: Metrics.xl) {
@@ -22,7 +24,7 @@ struct FixPanel: View {
                 VStack(alignment: .leading, spacing: Metrics.m) {
                     SectionHeader(group.title)
                     ForEach(group.items) { item in
-                        FixRow(item: item)
+                        FixRow(item: item, venueKinds: venueKinds) { writer.send(item.field.key, $0) }
                     }
                 }
             }
@@ -30,22 +32,56 @@ struct FixPanel: View {
     }
 }
 
-/// One field: its label, and what the pub has now.
+/// One field: its label, and its editor, picked by `kind` (never by key).
 struct FixRow: View {
     let item: FixLayout.Item
+    let venueKinds: [VenueKind]
+    let send: (String) -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .leading, spacing: Metrics.xs) {
             Text(item.field.label)
                 .font(Typography.secondary.weight(.medium))
                 .foregroundStyle(Palette.inkMuted)
-            if let display = item.current?.display {
-                Text(display).font(Typography.body).foregroundStyle(Palette.ink)
-            } else {
-                Text("Not known yet").font(Typography.body).foregroundStyle(Palette.inkFaint)
-            }
+                .accessibilityHidden(true)
+            editor
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .accessibilityElement(children: .combine)
+    }
+
+    @ViewBuilder
+    private var editor: some View {
+        let field = item.field
+        let current = item.current
+        switch field.kind {
+        case .tri:
+            TriEditor(field: field, current: current, send: send)
+        case .text, .url, .phone, .other:
+            TextValueEditor(field: field, current: current, send: send)
+        case .price:
+            PriceEditor(field: field, current: current, send: send)
+        case .amenity:
+            AmenityEditor(field: field, current: current, kinds: venueKinds, send: send)
+        case .status, .weekday, .hours, .night, .previousName:
+            CurrentValue(label: field.label, current: current)
+        }
+    }
+}
+
+/// A field with no editor yet: what the pub has now, read only.
+struct CurrentValue: View {
+    let label: String
+    let current: EditableValue?
+
+    var body: some View {
+        Group {
+            if let display = current?.display {
+                Text(display).foregroundStyle(Palette.ink)
+            } else {
+                Text("Not known yet").foregroundStyle(Palette.inkFaint)
+            }
+        }
+        .font(Typography.body)
+        .accessibilityLabel("\(label): \(current?.display ?? "not known yet")")
     }
 }
