@@ -469,6 +469,12 @@ the step lives in one place.
   key (`.p8`, key id, issuer id), which lets an agent upload with `-exportArchive
   -authenticationKeyPath`. Export options used: `app-store-connect`, `upload`, automatic
   signing, `manageAppVersionAndBuildNumber`. Build number in the project is still 1.
+- 2026-11-27 · release · The user asked for a proper release instead (git-flow,
+  docs/branching-and-release.md). `feature/web-parity` went into `develop` as #16
+  (squash, CI green); `release/0.2.0` sets `MARKETING_VERSION` 0.2.0 and adds
+  `docs/release-notes.md`. Its merge into `main` runs the Deploy workflow to TestFlight
+  (paid team `CT75TQXWJP`, `wtf.outerlimits.Battlecruiser`, from the CI secrets). After
+  this, new work goes on a new `feature/*` branch from `develop`. **Next: H11.**
 
 ### Phase L: levels (Walk-in, Half Pint Hero, Pub Crawler, Punter, Regular, Lock-in)
 

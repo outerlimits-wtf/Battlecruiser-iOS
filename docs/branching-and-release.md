@@ -28,7 +28,7 @@ Names are lowercase, hyphenated: `feature/pub-detail-hours`, `release/1.1.0`, `h
 ## Versioning
 
 - Semantic versioning, `MAJOR.MINOR.PATCH`, stored in the Xcode project as `MARKETING_VERSION`
-  (currently `1.0.0`).
+  (currently `0.2.0`).
 - `CURRENT_PROJECT_VERSION` (the build number) is set by the deploy lane to the latest
   TestFlight build plus one. It only has to increase; it is not the same thing as the
   release number.
